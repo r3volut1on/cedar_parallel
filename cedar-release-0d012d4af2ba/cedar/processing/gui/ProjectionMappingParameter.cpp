@@ -215,6 +215,7 @@ void cedar::proc::gui::ProjectionMappingParameter::propertyChanged()
     = boost::dynamic_pointer_cast<cedar::proc::ProjectionMappingParameter>(this->getParameter());
 
   // delete all the combo boxes
+#pragma acc kernels
   for (size_t i = 0; i < this->mComboBoxes.size(); ++i)
   {
     delete this->mComboBoxes.at(i);
@@ -227,11 +228,13 @@ void cedar::proc::gui::ProjectionMappingParameter::propertyChanged()
     // including the option to drop an input
     QStringList output_dimensions;
     output_dimensions.push_back("drop");
+#pragma acc kernels
     for (unsigned int i = 0; i < parameter->getValue()->getOutputDimensionality(); ++i)
     {
       output_dimensions.push_back(cedar::aux::toString<unsigned int>(i).c_str());
     }
 
+#pragma acc kernels
     for (size_t i = 0; i < parameter->getValue()->getNumberOfMappings(); ++i)
     {
       QComboBox *p_widget = new QComboBox();
@@ -269,6 +272,7 @@ void cedar::proc::gui::ProjectionMappingParameter::currentIndexChanged(int)
   cedar::proc::ProjectionMappingParameterPtr parameter;
   parameter = boost::dynamic_pointer_cast<cedar::proc::ProjectionMappingParameter>(this->getParameter());
 
+#pragma acc kernels
   for (size_t i = 0; i < this->mComboBoxes.size(); ++i)
   {
     if (this->mComboBoxes.at(i)->currentIndex() == 0)

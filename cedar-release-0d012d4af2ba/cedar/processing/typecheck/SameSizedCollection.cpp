@@ -82,6 +82,7 @@ cedar::proc::DataSlot::VALIDITY
     // find data for comparing the size
     cedar::aux::ConstMatDataPtr data_to_compare;
 
+#pragma acc kernels
     for (size_t i = 0; i < external_slot->getDataCount(); ++i)
     {
       auto slot_mat_data = boost::dynamic_pointer_cast<cedar::aux::ConstMatData>(external_slot->getData(i));

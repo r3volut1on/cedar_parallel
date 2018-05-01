@@ -154,8 +154,10 @@ bool cedar::proc::experiment::condition::OnMatrixValue::check() const
         unsigned int counter = 0;
 
         // Iterate through all matrix elements
+#pragma acc kernels
         for (int x = 0; x < matrix.rows; x++)
         {
+#pragma acc kernels
           for (int y = 0; y < matrix.cols; y++)
           {
             double current_val =value->getValue<double>(x,y);

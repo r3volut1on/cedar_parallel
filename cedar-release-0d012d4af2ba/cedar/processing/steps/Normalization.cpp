@@ -122,6 +122,7 @@ _mNormalizedDimensions
 unsigned int cedar::proc::steps::Normalization::getNumberOfNormalizedDimensions() const
 {
   unsigned int count = 0;
+#pragma acc kernels
   for (auto value : this->_mNormalizedDimensions->getValue())
   {
     if (value)
@@ -177,6 +178,7 @@ void cedar::proc::steps::Normalization::compute(const cedar::proc::Arguments&)
   }
   else if (this->getNumberOfNormalizedDimensions() == 1)
   {
+#pragma acc kernels
     for (size_t i = 0; i < this->_mNormalizedDimensions->size(); ++i)
     {
       if (this->_mNormalizedDimensions->at(i) == true)
@@ -239,8 +241,10 @@ void cedar::proc::steps::Normalization::normalizeAlongOneDimension(int normalize
           break;
       }
 
+#pragma acc kernels
       for (int i_0 = 0; i_0 < input.size[index_0]; ++i_0)
       {
+#pragma acc kernels
         for (int i_1 = 0; i_1 < input.size[index_1]; ++i_1)
         {
           ranges[static_cast<size_t>(index_0)] = cv::Range(i_0, i_0 + 1);

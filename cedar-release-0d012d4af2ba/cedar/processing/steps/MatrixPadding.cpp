@@ -237,6 +237,7 @@ void cedar::proc::steps::MatrixPadding::compute3D()
   int top, bottom, left, right;
   top = bottom = border1;
   left = right = border2;
+#pragma acc kernels
   for (int d0 = 0; d0 < input.size[0]; ++d0)
   {
     cv::Mat input_slice (input.size[1], input.size[2], input.type(), input.data + input.step[0] * d0);
@@ -252,6 +253,7 @@ void cedar::proc::steps::MatrixPadding::compute3D()
     {
       // replicate lower border
       cv::Mat replicate_lower (output.size[1], output.size[2], output.type(), output.data + output.step[0] * border0);
+#pragma acc kernels
       for (int d0 = 0; d0 < border0; ++d0)
       {
         cv::Mat output_slice (output.size[1], output.size[2], output.type(), output.data + output.step[0] * d0);
@@ -261,6 +263,7 @@ void cedar::proc::steps::MatrixPadding::compute3D()
       // replicate upper border
       int upper_bound = border0 + input.size[0] ;
       cv::Mat replicate_upper (output.size[1], output.size[2], output.type(), output.data + output.step[0] * (upper_bound - 1));
+#pragma acc kernels
       for (int d0 = upper_bound; d0 < output.size[0]; ++d0)
       {
         cv::Mat output_slice (output.size[1], output.size[2], output.type(), output.data + output.step[0] * d0);
@@ -292,6 +295,7 @@ void cedar::proc::steps::MatrixPadding::computeND()
   do
   {
     bool zero = false;
+#pragma acc kernels
     for (size_t d = 0; d < static_cast<size_t>(input.dims) && !zero; ++d)
     {
       int offset = this->_mPaddedSize->at(d);
@@ -379,6 +383,7 @@ void cedar::proc::steps::MatrixPadding::updateOutputSize()
     std::vector<int> dest_size(static_cast<size_t>(input.dims));
     bool changed = (input.type() != this->mPadded->getData().type());
 
+#pragma acc kernels
     for (size_t d = 0; d < static_cast<size_t>(input.dims); ++d)
     {
       if (d < this->_mPaddedSize->size())

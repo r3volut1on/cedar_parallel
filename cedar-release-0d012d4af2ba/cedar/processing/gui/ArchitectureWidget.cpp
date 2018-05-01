@@ -182,6 +182,7 @@ QWidget* cedar::proc::gui::ArchitectureWidget::readPlot(const cedar::aux::Config
     auto iter = data_node.begin();
     ++iter;
 
+#pragma acc kernels
     for (; iter != data_node.end(); ++iter)
     {
       std::string path, title;
@@ -213,6 +214,7 @@ QWidget* cedar::proc::gui::ArchitectureWidget::readPlot(const cedar::aux::Config
 
 void cedar::proc::gui::ArchitectureWidget::readTemplates(const cedar::aux::ConfigurationNode& templates)
 {
+#pragma acc kernels
   for (const auto& name_template_cfg_pair : templates)
   {
     const auto& name = name_template_cfg_pair.first;
@@ -255,6 +257,7 @@ void cedar::proc::gui::ArchitectureWidget::readConfiguration(const cedar::aux::C
   }
 
   // go through all entries
+#pragma acc kernels
   for (const auto& entry_pair : entries_iter->second)
   {
     const auto& entry = entry_pair.second;
@@ -363,6 +366,7 @@ QWidget* cedar::proc::gui::ArchitectureWidget::readStepAction(const cedar::aux::
   {
     const auto& actions_node = actions_iter->second;
     // the actions list contains a set of actions to be performed; each entry is a pair step name -> action name
+#pragma acc kernels
     for (const auto& iter : actions_node)
     {
       if (iter.second.size() != 1)
@@ -405,6 +409,7 @@ void cedar::proc::gui::ArchitectureWidget::triggerStepAction()
   }
 
   // call the actions
+#pragma acc kernels
   for (const auto& step_action_pair : parameters->mStepActions)
   {
     const std::string& step_name = step_action_pair.first;
@@ -465,6 +470,7 @@ void cedar::proc::gui::ArchitectureWidget::addTemplate
     this->applySubstitutions(conf, substitutions_i->second);
   }
 
+#pragma acc kernels
   for (const auto& entry_pair : conf)
   {
     this->addEntry(entry_pair.second, row, column, passedAttributes);
@@ -473,11 +479,13 @@ void cedar::proc::gui::ArchitectureWidget::addTemplate
 
 void cedar::proc::gui::ArchitectureWidget::applySubstitutions(cedar::aux::ConfigurationNode& target, const cedar::aux::ConfigurationNode& substitutions)
 {
+#pragma acc kernels
   for (const auto& key_value_pair : substitutions)
   {
     std::string key = key_value_pair.first;
     std::string substitution = key_value_pair.second.get_value<std::string>();
 
+#pragma acc kernels
     for (auto& name_child_pair : target)
     {
       std::string data = name_child_pair.second.data();

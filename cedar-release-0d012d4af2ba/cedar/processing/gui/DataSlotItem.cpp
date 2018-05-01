@@ -126,6 +126,7 @@ bool cedar::proc::gui::DataSlotItem::canDuplicate() const
 
 void cedar::proc::gui::DataSlotItem::setHighlightedBySelection(bool highlight)
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->getConnections().size(); ++i)
   {
     this->getConnections().at(i)->setHighlightedBySelection(highlight);
@@ -272,6 +273,7 @@ void cedar::proc::gui::DataSlotItem::hoverEnterEvent(QGraphicsSceneHoverEvent* p
 
   this->cedar::proc::gui::GraphicsBase::hoverEnterEvent(pEvent);
 
+#pragma acc kernels
   for (auto connection : this->getConnections())
   {
     connection->setHighlightedByHovering(true);
@@ -282,6 +284,7 @@ void cedar::proc::gui::DataSlotItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* p
 {
   this->cedar::proc::gui::GraphicsBase::hoverLeaveEvent(pEvent);
 
+#pragma acc kernels
   for (auto connection : this->getConnections())
   {
     connection->setHighlightedByHovering(false);
@@ -329,6 +332,7 @@ void cedar::proc::gui::DataSlotItem::translateValidityChangedSignal()
 void cedar::proc::gui::DataSlotItem::updateConnectionValidity()
 {
   auto connections =  this->getConnections();
+#pragma acc kernels
   for (unsigned int i = 0; i < connections.size(); ++i)
   {
     connections.at(i)->setValidity(this->translateValidity(this->mSlot->getValidity()));

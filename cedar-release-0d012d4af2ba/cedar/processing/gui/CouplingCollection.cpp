@@ -116,6 +116,7 @@ void cedar::proc::gui::CouplingCollection::contextMenuEvent(QGraphicsSceneContex
 
 void cedar::proc::gui::CouplingCollection::unhideContents()
 {
+#pragma acc kernels
   for (const auto& component_weak : this->mComponents)
   {
     auto component = component_weak.lock();
@@ -298,6 +299,7 @@ void cedar::proc::gui::CouplingCollection::prepend(cedar::proc::ConnectablePtr c
 std::vector<cedar::proc::ConnectablePtr> cedar::proc::gui::CouplingCollection::getContents() const
 {
   std::vector<cedar::proc::ConnectablePtr> components;
+#pragma acc kernels
   for (const auto& ptr : this->mComponents)
   {
     if (auto locked = ptr.lock())
@@ -311,6 +313,7 @@ std::vector<cedar::proc::ConnectablePtr> cedar::proc::gui::CouplingCollection::g
 std::vector<cedar::aux::ConfigurablePtr> cedar::proc::gui::CouplingCollection::getContentsAsConfigurables() const
 {
   std::vector<cedar::aux::ConfigurablePtr> components;
+#pragma acc kernels
   for (const auto& ptr : this->mComponents)
   {
     if (auto locked = ptr.lock())

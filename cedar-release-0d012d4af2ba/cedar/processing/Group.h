@@ -459,6 +459,7 @@ public:
   {
     std::set<boost::shared_ptr<T> > elements;
 
+#pragma acc kernels
     for (auto name_element_pair : this->getElements())
     {
       cedar::proc::ElementPtr element = name_element_pair.second;
