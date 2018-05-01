@@ -81,6 +81,7 @@ cedar::proc::gui::AdvancedParameterLinker::~AdvancedParameterLinker()
 
 void cedar::proc::gui::AdvancedParameterLinker::disconnect()
 {
+#pragma acc kernels
   for (auto& connection : this->mSignalConnections)
   {
     connection.disconnect();
@@ -194,6 +195,7 @@ void cedar::proc::gui::AdvancedParameterLinker::linkInfoChanged()
 
 void cedar::proc::gui::AdvancedParameterLinker::fillParameterNameCompletions(cedar::aux::ConfigurablePtr configurable, QStringList& completions)
 {
+#pragma acc kernels
   for (auto parameter : configurable->getParameters())
   {
     completions << QString::fromStdString(parameter->getName());
@@ -260,6 +262,7 @@ cedar::proc::Group::ParameterLinkInfo& cedar::proc::gui::AdvancedParameterLinker
 
   auto group = this->getCurrentGroup();
 
+#pragma acc kernels
   for (auto& link : group->getParameterLinks())
   {
     if (link.mParameterLink.get() == p_link)
@@ -288,6 +291,7 @@ void cedar::proc::gui::AdvancedParameterLinker::show(const cedar::proc::Group::P
   this->mpTargetParameterName->blockSignals(false);
 
   QStringList element_names;
+#pragma acc kernels
   for (auto name_element_pair : linkInfo.mGroup.lock()->getElements())
   {
     element_names << QString::fromStdString(name_element_pair.first);
@@ -328,6 +332,7 @@ void cedar::proc::gui::AdvancedParameterLinker::addGroup(QTreeWidgetItem* pRoot,
     )
   );
 
+#pragma acc kernels
   for (const auto& link : group->getParameterLinks())
   {
     auto p_item = new QTreeWidgetItem();
@@ -335,6 +340,7 @@ void cedar::proc::gui::AdvancedParameterLinker::addGroup(QTreeWidgetItem* pRoot,
     pRoot->addChild(p_item);
   }
 
+#pragma acc kernels
   for (auto name_element_pair : group->getElements())
   {
     auto element = name_element_pair.second;
@@ -389,6 +395,7 @@ void cedar::proc::gui::AdvancedParameterLinker::fillLinkTypes()
 
   std::vector <std::string> types;
   cedar::aux::ParameterLinkFactoryManagerSingleton::getInstance()->listTypes(types);
+#pragma acc kernels
   for (auto entry : types)
   {
     this->mpLinkTypeSelector->addItem(QString::fromStdString(entry));
@@ -428,6 +435,7 @@ QTreeWidgetItem* cedar::proc::gui::AdvancedParameterLinker::getItemForGroup(ceda
     return this->mpLinkTree->invisibleRootItem();
   }
 
+#pragma acc kernels
   for (QTreeWidgetItemIterator iterator(this->mpLinkTree); *iterator; ++iterator)
   {
     QTreeWidgetItem* p_item = *iterator;
@@ -444,6 +452,7 @@ QTreeWidgetItem* cedar::proc::gui::AdvancedParameterLinker::getItemForGroup(ceda
 
 QTreeWidgetItem* cedar::proc::gui::AdvancedParameterLinker::getItemForLink(cedar::aux::ParameterLinkPtr link)
 {
+#pragma acc kernels
   for (QTreeWidgetItemIterator iterator(this->mpLinkTree); *iterator; ++iterator)
   {
     QTreeWidgetItem* p_item = *iterator;

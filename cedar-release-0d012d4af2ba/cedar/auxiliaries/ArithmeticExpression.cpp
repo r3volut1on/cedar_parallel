@@ -123,9 +123,11 @@ cedar::aux::ArithmeticExpressionPtr cedar::aux::ArithmeticExpression::solveFor(c
   ExpressionPtr expressions [] = {left, right};
 
   // sort terms: put terms containing the variable to be solved for on the left, others on the right
+#pragma acc kernels
   for (size_t i = 0; i < 2; ++i)
   {
     ExpressionPtr expression = expressions[i];
+#pragma acc kernels
     for (auto term : expression->mTerms)
     {
       auto clone = term->clone();
@@ -165,6 +167,7 @@ cedar::aux::ArithmeticExpressionPtr cedar::aux::ArithmeticExpression::solveFor(c
     // ... check if there are some factors in front of it
     if (term->mFactors.size() > 1)
     {
+#pragma acc kernels
       for (auto factor_iter = term->mFactors.begin(); factor_iter != term->mFactors.end(); )
       {
         auto factor = *factor_iter;
@@ -185,6 +188,7 @@ cedar::aux::ArithmeticExpressionPtr cedar::aux::ArithmeticExpression::solveFor(c
     {
       term->mSign = +1.0;
 
+#pragma acc kernels
       for (const auto& term : result->mRight->mTerms)
       {
         term->mSign *= -1.0;
@@ -243,6 +247,7 @@ void cedar::aux::ArithmeticExpression::Term::writeTo(std::ostream& stream, size_
 
   stream << indent << "[ Term: " << (this->mSign > 0? "+" : "-") << std::endl;
 
+#pragma acc kernels
   for (const auto& factor : this->mFactors)
   {
     factor->writeTo(stream, indentation + 1);
@@ -288,6 +293,7 @@ void cedar::aux::ArithmeticExpression::Expression::writeTo(std::ostream& stream,
 
   stream << indent << "[ Expression" << std::endl;
 
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     term->writeTo(stream, indentation + 1);
@@ -362,6 +368,7 @@ cedar::aux::ArithmeticExpression::ExpressionPtr
   FactorPtr sub_terms_factor(new Factor());
   sub_terms_factor->mValue = sub_terms;
   factorized_term->mFactors.push_back(sub_terms_factor);
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     auto sub_term = term->clone();
@@ -375,6 +382,7 @@ cedar::aux::ArithmeticExpression::ExpressionPtr
 void cedar::aux::ArithmeticExpression::Term::cancelDivisive(const std::string& variable)
 {
   // try to find a factor that is the variable
+#pragma acc kernels
   for (auto factor_it = this->mFactors.begin(); factor_it != this->mFactors.end(); ++factor_it)
   {
     auto factor = *factor_it;
@@ -397,6 +405,7 @@ void cedar::aux::ArithmeticExpression::Expression::flatten()
 {
   std::vector<ExpressionPtr> new_expressions;
   std::vector<double> new_signs;
+#pragma acc kernels
   for (auto term_it = this->mTerms.begin(); term_it != this->mTerms.end(); )
   {
     auto term = *term_it;
@@ -416,10 +425,12 @@ void cedar::aux::ArithmeticExpression::Expression::flatten()
 
   // re-add terms that were taken out
   CEDAR_DEBUG_ASSERT(new_expressions.size() == new_signs.size());
+#pragma acc kernels
   for (size_t i = 0; i < new_expressions.size(); ++i)
   {
     ExpressionPtr expr = new_expressions.at(i);
     double sign = new_signs.at(i);
+#pragma acc kernels
     for (auto term : expr->mTerms)
     {
       term->mSign *= sign;
@@ -431,6 +442,7 @@ void cedar::aux::ArithmeticExpression::Expression::flatten()
 cedar::aux::ArithmeticExpression::ExpressionPtr cedar::aux::ArithmeticExpression::Term::flattenFactors()
 {
   size_t first_expression_index;
+#pragma acc kernels
   for (first_expression_index = 0; first_expression_index < this->mFactors.size(); ++first_expression_index)
   {
     if (this->mFactors.at(first_expression_index)->containsExpression())
@@ -441,6 +453,7 @@ cedar::aux::ArithmeticExpression::ExpressionPtr cedar::aux::ArithmeticExpression
 
   auto first_expression = boost::dynamic_pointer_cast<Expression>(this->mFactors.at(first_expression_index)->mValue->clone());
 
+#pragma acc kernels
   for (size_t i = 0; i < this->mFactors.size(); ++i)
   {
     if (i != first_expression_index)
@@ -454,6 +467,7 @@ cedar::aux::ArithmeticExpression::ExpressionPtr cedar::aux::ArithmeticExpression
 
 bool cedar::aux::ArithmeticExpression::Term::isFlat() const
 {
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     if (factor->containsExpression())
@@ -474,6 +488,7 @@ cedar::aux::ArithmeticExpression::ValuePtr cedar::aux::ArithmeticExpression::Exp
 {
   ExpressionPtr clone(new Expression());
 
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     clone->mTerms.push_back(term->clone());
@@ -484,6 +499,7 @@ cedar::aux::ArithmeticExpression::ValuePtr cedar::aux::ArithmeticExpression::Exp
 
 void cedar::aux::ArithmeticExpression::Expression::simplify()
 {
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     term->simplify();
@@ -491,6 +507,7 @@ void cedar::aux::ArithmeticExpression::Expression::simplify()
 
   ConstantValuePtr constants(new ConstantValue(0.0));
 
+#pragma acc kernels
   for (auto iter = this->mTerms.begin(); iter != this->mTerms.end(); )
   {
     auto term = *iter;
@@ -524,6 +541,7 @@ void cedar::aux::ArithmeticExpression::Factor::simplify()
 void cedar::aux::ArithmeticExpression::Term::simplify()
 {
   // first, simplify all factors
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     factor->simplify();
@@ -531,6 +549,7 @@ void cedar::aux::ArithmeticExpression::Term::simplify()
 
   // then, merge together all constant factors
   ConstantValuePtr constants(new ConstantValue(1.0));
+#pragma acc kernels
   for (auto iter = this->mFactors.begin(); iter != this->mFactors.end(); )
   {
     auto factor = *iter;
@@ -567,6 +586,7 @@ bool cedar::aux::ArithmeticExpression::Factor::canEvaluate() const
 
 bool cedar::aux::ArithmeticExpression::Expression::canEvaluate() const
 {
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     if (!term->canEvaluate())
@@ -581,6 +601,7 @@ bool cedar::aux::ArithmeticExpression::Expression::canEvaluate() const
 
 bool cedar::aux::ArithmeticExpression::Term::canEvaluate() const
 {
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     if (!factor->canEvaluate())
@@ -594,6 +615,7 @@ bool cedar::aux::ArithmeticExpression::Term::canEvaluate() const
 
 void cedar::aux::ArithmeticExpression::Expression::divideBy(FactorPtr factor)
 {
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     term->divideBy(factor);
@@ -602,6 +624,7 @@ void cedar::aux::ArithmeticExpression::Expression::divideBy(FactorPtr factor)
 
 void cedar::aux::ArithmeticExpression::Expression::multiplyBy(FactorPtr factor)
 {
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     term->multiplyBy(factor);
@@ -628,6 +651,7 @@ double cedar::aux::ArithmeticExpression::Expression::evaluate(const Variables& v
 {
   double result = 0.0;
 
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     result += term->mSign * term->evaluate(variableValues);
@@ -638,6 +662,7 @@ double cedar::aux::ArithmeticExpression::Expression::evaluate(const Variables& v
 
 bool cedar::aux::ArithmeticExpression::Expression::contains(const std::string& variable) const
 {
+#pragma acc kernels
   for (auto term : this->mTerms)
   {
     if (term->contains(variable))
@@ -701,6 +726,7 @@ std::string cedar::aux::ArithmeticExpression::Expression::toString() const
   }
   else
   {
+#pragma acc kernels
     for (const auto& term : this->mTerms)
     {
       if (first)
@@ -776,6 +802,7 @@ cedar::aux::ArithmeticExpression::TermPtr cedar::aux::ArithmeticExpression::Term
   TermPtr clone(new Term());
   clone->mSign = this->mSign;
 
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     clone->mFactors.push_back(factor->clone());
@@ -787,6 +814,7 @@ double cedar::aux::ArithmeticExpression::Term::evaluate(const Variables& variabl
 {
   double result = 1.0;
 
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     if (factor->mIsDivision)
@@ -804,6 +832,7 @@ double cedar::aux::ArithmeticExpression::Term::evaluate(const Variables& variabl
 
 bool cedar::aux::ArithmeticExpression::Term::contains(const std::string& variable) const
 {
+#pragma acc kernels
   for (auto factor : this->mFactors)
   {
     if (factor->contains(variable))
@@ -830,6 +859,7 @@ std::string cedar::aux::ArithmeticExpression::Term::toString() const
   std::string result;
 
   bool first = true;
+#pragma acc kernels
   for (const auto& factor : this->mFactors)
   {
     if (first)

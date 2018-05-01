@@ -199,6 +199,7 @@ namespace cedar
                      )
     {
       outJoinedString = "";
+#pragma acc kernels
       for (typename T::const_iterator iter = stringList.begin(); iter != stringList.end(); ++iter)
       {
         if (iter != stringList.begin())
@@ -235,6 +236,7 @@ namespace cedar
         return false;
       }
 
+#pragma acc kernels
       for (size_t i = 0; i < startsWith.size(); ++i)
       {
         if (string.at(i) != startsWith.at(i))
@@ -257,6 +259,7 @@ namespace cedar
         return false;
       }
 
+#pragma acc kernels
       for (size_t i = 0; i < endsWith.size(); ++i)
       {
         if (string.at(string.length() - endsWith.length() + i) != endsWith.at(i))

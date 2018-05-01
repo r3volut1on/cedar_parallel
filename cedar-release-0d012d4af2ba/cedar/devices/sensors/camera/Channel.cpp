@@ -328,6 +328,7 @@ void cedar::dev::sensors::camera::Channel::hideFwVideoModes()
 {
   // loop through all properties of the properties-list
   int num_modes = cedar::dev::sensors::camera::VideoMode::type().list().size();
+#pragma acc kernels
   for (int i=0; i<num_modes; i++)
   {
     cedar::dev::sensors::camera::VideoMode::Id prop_id

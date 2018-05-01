@@ -286,6 +286,7 @@ public:
 
     auto this_iter = this->mComponents.begin();
     auto other_iter = other.mComponents.begin();
+#pragma acc kernels
     for (; this_iter != this->mComponents.end() && other_iter != other.mComponents.end(); ++this_iter, ++other_iter)
     {
       const auto& this_component = *this_iter;
@@ -313,6 +314,7 @@ public:
 
     auto this_iter = this->mComponents.begin();
     auto other_iter = other.mComponents.begin();
+#pragma acc kernels
     for (; this_iter != this->mComponents.end() && other_iter != other.mComponents.end(); ++this_iter, ++other_iter)
     {
       const auto& this_component = *this_iter;

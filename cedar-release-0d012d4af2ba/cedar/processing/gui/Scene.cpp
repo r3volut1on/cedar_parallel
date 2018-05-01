@@ -210,6 +210,7 @@ void cedar::proc::gui::Scene::deleteElements(QList<QGraphicsItem*>& items, bool 
     // go through the list of elements and check if there are any that need confirmation
     bool confirmation_needed = false;
 
+#pragma acc kernels
     for (auto item : items)
     {
       if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(item))
@@ -242,6 +243,7 @@ void cedar::proc::gui::Scene::deleteElements(QList<QGraphicsItem*>& items, bool 
 
   std::vector<cedar::proc::gui::Connection*> delete_connections_stack;
   // remove connections
+#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     // delete connections first
@@ -256,6 +258,7 @@ void cedar::proc::gui::Scene::deleteElements(QList<QGraphicsItem*>& items, bool 
   }
   std::vector<cedar::proc::gui::GraphicsBase*> delete_stack;
   // fill stack with elements
+#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items[i]);
@@ -326,6 +329,7 @@ void cedar::proc::gui::Scene::emitSceneChanged()
 void cedar::proc::gui::Scene::helpEvent(QGraphicsSceneHelpEvent* pHelpEvent)
 {
   auto items = this->items(pHelpEvent->scenePos());
+#pragma acc kernels
   for (auto item : items)
   {
     if (auto base_item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(item))
@@ -340,6 +344,7 @@ void cedar::proc::gui::Scene::helpEvent(QGraphicsSceneHelpEvent* pHelpEvent)
 void cedar::proc::gui::Scene::exportSvg(const QString& file)
 {
   std::vector<cedar::proc::gui::ConnectableIconView*> views;
+#pragma acc kernels
   for (auto item : this->items())
   {
     if (auto view = dynamic_cast<cedar::proc::gui::ConnectableIconView*>(item))
@@ -349,6 +354,7 @@ void cedar::proc::gui::Scene::exportSvg(const QString& file)
   }
 
   // some item views need to make preparations for svg export, especially the DefaultConnectableIconView
+#pragma acc kernels
   for (auto view : views)
   {
     view->prepareSvgExport();
@@ -365,6 +371,7 @@ void cedar::proc::gui::Scene::exportSvg(const QString& file)
   painter.end();
 
 
+#pragma acc kernels
   for (auto view : views)
   {
     view->unprepareSvgExport();
@@ -385,6 +392,7 @@ void cedar::proc::gui::Scene::itemSelected()
 {
   // either show the resize handles if only one item is selected, or hide them if more than one is selected
   auto selected_items = this->selectedItems();
+#pragma acc kernels
   for (int i = 0; i < selected_items.size(); ++i)
   {
     if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(selected_items.at(i)))
@@ -515,6 +523,7 @@ void cedar::proc::gui::Scene::setMode(MODE mode, const QString& param)
 
 cedar::proc::gui::GraphicsBase* cedar::proc::gui::Scene::findConnectableItem(const QList<QGraphicsItem*>& items)
 {
+#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     if (auto graphics_item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items[i]))
@@ -531,6 +540,7 @@ cedar::proc::gui::GraphicsBase* cedar::proc::gui::Scene::findConnectableItem(con
 
 cedar::proc::gui::Group* cedar::proc::gui::Scene::findFirstGroupItem(const QList<QGraphicsItem*>& items)
 {
+#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     if (auto graphics_item = dynamic_cast<cedar::proc::gui::Group*>(items[i]))
@@ -594,6 +604,7 @@ void cedar::proc::gui::Scene::mousePressEvent(QGraphicsSceneMouseEvent *pMouseEv
     {
       if (!dynamic_cast<cedar::proc::gui::ResizeHandle*>(items.at(0)))
       {
+#pragma acc kernels
         for (int i = 0; i < items.size(); ++i)
         {
           if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items.at(i)))
@@ -637,6 +648,7 @@ QList<QGraphicsItem*> cedar::proc::gui::Scene::getSelectedParents() const
   auto selected = this->selectedItems();
   QList<QGraphicsItem*> selected_parents;
 
+#pragma acc kernels
   for (int i = 0; i < selected.size(); ++i)
   {
     auto item = selected.at(i);
@@ -677,6 +689,7 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   bool target_is_root_group = true;
 
   // ... and look for a new one
+#pragma acc kernels
   for (int i = 0; i < items_under_mouse.size(); ++i)
   {
     if (items_under_mouse.at(i)->isSelected())
@@ -711,6 +724,7 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   // highlight the source groups
   if (potential_target_group_found)
   {
+#pragma acc kernels
     for (int i = 0; i < selected.size(); ++i)
     {
       auto item = selected.at(i);
@@ -729,6 +743,7 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   }
   else
   {
+#pragma acc kernels
     for (int i = 0; i < selected.size(); ++i)
     {
       auto item = selected.at(i);
@@ -778,6 +793,7 @@ void cedar::proc::gui::Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *pMouse
 
   // reset highlighting of the groups from which the items are being removed
   auto selected = this->selectedItems();
+#pragma acc kernels
   for (int i = 0; i < selected.size(); ++i)
   {
     auto item = selected.at(i);
@@ -790,6 +806,7 @@ void cedar::proc::gui::Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *pMouse
   if (mTargetGroup)
   {
     std::list<QGraphicsItem*> items_to_move;
+#pragma acc kernels
     for (auto p_item : this->getSelectedParents())
     {
       auto graphics_item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(p_item);
@@ -847,6 +864,7 @@ void cedar::proc::gui::Scene::addGroupNames
 
   Subgroups subgroups;
   group->listSubgroups(subgroups);
+#pragma acc kernels
   for (Subgroups::iterator iter = subgroups.begin(); iter != subgroups.end(); ++iter)
   {
     this->addGroupNames(submenu, *iter, path);
@@ -880,6 +898,7 @@ void cedar::proc::gui::Scene::multiItemContextMenuEvent(QGraphicsSceneContextMen
   QMenu menu;
 
   bool can_connect = false;
+#pragma acc kernels
   for (auto item : this->selectedItems())
   {
     //!@todo Cast to element instead
@@ -927,6 +946,7 @@ void cedar::proc::gui::Scene::assignSelectedToTrigger()
   // because changing triggers can mean that some trigger connections that are potentially in the selection get
   // destroyed, we first make a list of the triggerables to disconnect
   std::vector<cedar::proc::TriggerablePtr> to_disconnect;
+#pragma acc kernels
   for (auto selected : this->selectedItems())
   {
     auto connectable = dynamic_cast<cedar::proc::gui::Connectable*>(selected);
@@ -942,6 +962,7 @@ void cedar::proc::gui::Scene::assignSelectedToTrigger()
     }
   }
 
+#pragma acc kernels
   for (auto triggerable : to_disconnect)
   {
     if (trigger)
@@ -1036,6 +1057,7 @@ void cedar::proc::gui::Scene::connectModeProcessMousePress(QGraphicsSceneMouseEv
 
       // Highlight all potential connection targets
       QList<QGraphicsItem*> all_items = this->items();
+#pragma acc kernels
       for (int i = 0; i < all_items.size(); ++i)
       {
         if (cedar::proc::gui::GraphicsBase* item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(all_items.at(i)))
@@ -1053,6 +1075,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseMove(QGraphicsSceneMouseEve
   {
     QPointF p2 = pMouseEvent->scenePos() - mpConnectionStart->scenePos();
 
+#pragma acc kernels
     for (const auto& element_gui_ptr_pair : this->mElementMap)
     {
       auto p_gui_connectable = dynamic_cast<cedar::proc::gui::Connectable*>(element_gui_ptr_pair.second);
@@ -1070,6 +1093,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseMove(QGraphicsSceneMouseEve
     {
       cedar::proc::gui::GraphicsBase* target;
       bool connected = false;
+#pragma acc kernels
       for (int i = 0; i < items.size() && !connected; ++i)
       {
         if
@@ -1136,6 +1160,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseRelease(QGraphicsSceneMouse
   if (items.size() > 0)
   {
     bool connected = false;
+#pragma acc kernels
     for (int i = 0; i < items.size() && !connected; ++i)
     {
       cedar::proc::gui::GraphicsBase *target;
@@ -1235,6 +1260,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseRelease(QGraphicsSceneMouse
   }
 
   QList<QGraphicsItem*> all_items = this->items();
+#pragma acc kernels
   for (int i = 0; i < all_items.size(); ++i)
   {
     if (cedar::proc::gui::GraphicsBase* item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(all_items.at(i)))
@@ -1566,6 +1592,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
     case MODE_HIDE_ALL:
     {
       QList<QGraphicsItem *> selected_items = this->items();
+#pragma acc kernels
       for (int i = 0; i < selected_items.size(); ++i)
       {
         if (dynamic_cast<cedar::proc::gui::TriggerItem*>(selected_items.at(i)))
@@ -1578,6 +1605,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
     case MODE_SHOW_ALL:
     {
       QList<QGraphicsItem *> selected_items = this->items();
+#pragma acc kernels
       for (int i = 0; i < selected_items.size(); ++i)
       {
         if (dynamic_cast<cedar::proc::gui::TriggerItem*>(selected_items.at(i)))
@@ -1601,6 +1629,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
 void cedar::proc::gui::Scene::selectAll()
 {
   QList<QGraphicsItem*> selected_items = this->items();
+#pragma acc kernels
   for (int i = 0; i < selected_items.size(); ++i)
   {
     selected_items.at(i)->setSelected(true);
@@ -1610,6 +1639,7 @@ void cedar::proc::gui::Scene::selectAll()
 void cedar::proc::gui::Scene::selectNone()
 {
   QList<QGraphicsItem*> selected_items = this->items();
+#pragma acc kernels
   for (int i = 0; i < selected_items.size(); ++i)
   {
     selected_items.at(i)->setSelected(false);
@@ -1633,6 +1663,7 @@ cedar::proc::gui::StickyNote* cedar::proc::gui::Scene::addStickyNote(float x, fl
 
 void cedar::proc::gui::Scene::removeStickyNote(StickyNote* note)
 {
+#pragma acc kernels
   for (auto it = mStickyNotes.begin(); it != mStickyNotes.end(); it++)
   {
     if ((*it) == note)
@@ -1668,6 +1699,7 @@ public:
     this->connect(p_button_box, SIGNAL(accepted()), this, SLOT(accept()));
     this->connect(p_button_box, SIGNAL(rejected()), this, SLOT(reject()));
     p_layout->addWidget(p_button_box);
+#pragma acc kernels
     for (auto name : groupNames)
     {
       mpGroupNamesBox->addItem(QString::fromStdString(name));
@@ -1704,6 +1736,7 @@ void cedar::proc::gui::Scene::importGroup(bool link)
     {
       const cedar::aux::ConfigurationNode& groups_node = configuration.get_child("groups");
       std::vector<std::string> group_names;
+#pragma acc kernels
       for (auto group : groups_node)
       {
         group_names.push_back(group.first);
@@ -1763,6 +1796,7 @@ void cedar::proc::gui::Scene::importStep()
     {
       const cedar::aux::ConfigurationNode& steps_node = configuration.get_child("steps");
       std::vector<std::string> step_names;
+#pragma acc kernels
       for (auto step : steps_node)
       {
         step_names.push_back(step.second.get<std::string>("name"));

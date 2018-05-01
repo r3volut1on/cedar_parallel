@@ -68,6 +68,7 @@ cedar::proc::experiment::gui::ExperimentItemWidget::~ExperimentItemWidget()
 void cedar::proc::experiment::gui::ExperimentItemWidget::display(cedar::aux::ConfigurablePtr experimentItem)
 {
   clear();
+#pragma acc kernels
   for (auto parameter : experimentItem->getParameters())
   {
     cedar::aux::gui::Parameter* parameterWidget;
@@ -130,11 +131,13 @@ void cedar::proc::experiment::gui::ExperimentItemWidget::objectParameterChanged(
   CEDAR_DEBUG_ASSERT(p_parameter->hasSingleConfigurableChild());
 
   QList<cedar::aux::gui::Parameter*> parameter_list = this->findChildren<cedar::aux::gui::Parameter*>();
+#pragma acc kernels
   for(cedar::aux::gui::Parameter* parameter : parameter_list)
   {
     if(parameter->getParameter().get() == p_parameter)
     {
       QLayoutItem* child;
+#pragma acc kernels
       for(int i=0; i < this->layout()->count() ; i++)
       {
         child = layout()->itemAt(i);

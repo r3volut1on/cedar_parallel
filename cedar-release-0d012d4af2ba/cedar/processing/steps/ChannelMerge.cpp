@@ -161,6 +161,7 @@ void cedar::proc::steps::ChannelMerge::compute(const cedar::proc::Arguments& /* 
   cv::Mat& output = this->mOutput->getData();
 
   std::vector<cv::Mat> channels;
+#pragma acc kernels
   for (unsigned int i = 0; i < 3; ++i)
   {
     if (this->mChannels.at(i))

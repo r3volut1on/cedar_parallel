@@ -126,6 +126,7 @@ void cedar::dev::sensors::visual::GrabbableGrabber::onCreateGrabber()
   unsigned int num_channels = getNumChannels();
 
   // register this grabber in the grabbable object and store the readwrite-lock
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels;++channel)
   {
     getGrabbableChannel(channel)->mpGrabberLock
@@ -152,6 +153,7 @@ void cedar::dev::sensors::visual::GrabbableGrabber::onCleanUp()
   // do the cleanup of used hardware in this method
   // on an exception or a CTRL-C only onCleanUp will be invoked (no destructor)
   unsigned int num_channels = getNumChannels();
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getGrabbableChannel(channel)->mpSourceInterfaceClass->deregisterGrabber(getGrabbableChannel(channel)->mpGrabberLock);

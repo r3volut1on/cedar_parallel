@@ -348,6 +348,7 @@ void cedar::proc::gui::SimulationControl::setGroup(cedar::proc::gui::GroupPtr gr
 
 void cedar::proc::gui::SimulationControl::updateTriggerQualities()
 {
+#pragma acc kernels
   for (QTreeWidgetItemIterator iter(this->mpTree); auto p_item = *iter; ++iter)
   {
     auto trigger = this->getItemTrigger(p_item);
@@ -373,6 +374,7 @@ void cedar::proc::gui::SimulationControl::removeClicked()
   std::vector<cedar::proc::ElementPtr> to_remove;
 
   // first, remember all the items to be removed (because removing them will affect the selection in the tree)
+#pragma acc kernels
   for (auto item : selected_items)
   {
     std::string path = this->mpTree->getPathFromItem(item);
@@ -384,6 +386,7 @@ void cedar::proc::gui::SimulationControl::removeClicked()
   }
 
   // then remove them
+#pragma acc kernels
   for (auto element : to_remove)
   {
     this->mGroup->getGroup()->remove(element);
@@ -447,6 +450,7 @@ void cedar::proc::gui::SimulationControl::loopedTriggerAdded(QTreeWidgetItem* pI
   parameter_names.push_back("idle time");
   parameter_names.push_back("simulated time");
 
+#pragma acc kernels
   for (const auto& name : parameter_names)
   {
     auto parameter = loopedTrigger->getParameter(name);

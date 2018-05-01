@@ -114,6 +114,7 @@ void cedar::proc::experiment::gui::ActionListParameter::updateList()
 {
   mActionListWidget->clear();
   int size = 0;
+#pragma acc kernels
   for(unsigned int i=0; i < mActionListParameter->size(); i++)
   {
     // Create ActionWidget

@@ -113,6 +113,7 @@ std::string cedar::aux::formatDuration(const cedar::unit::Time& time)
   double current_max = 1.0;
   double time_remaining = time_in_seconds;
   bool first = true;
+#pragma acc kernels
   for (const auto& subdiv : time_subdivs)
   {
     double subtime;
@@ -175,6 +176,7 @@ std::string cedar::aux::camelCaseToSpaces(const std::string& camelCasedString)
 
   std::string spaced;
 
+#pragma acc kernels
   for (size_t i = 0; i < camelCasedString.size(); ++i)
   {
     bool in_upper = isupper(camelCasedString.at(i));

@@ -162,6 +162,7 @@ void cedar::proc::gui::StepItem::updateToolTip()
                 "<th>Average</th>"
               "</tr>";
 
+#pragma acc kernels
   for (unsigned int m = 0; m < this->getStep()->getNumberOfTimeMeasurements(); ++m)
   {
     const std::string& measurement = this->getStep()->getTimeMeasurementName(m);
@@ -260,6 +261,7 @@ void cedar::proc::gui::StepItem::handleStepNameChanged()
   this->redraw();
   // change title of child widgets
   QString step_name = QString::fromStdString(this->getConnectable()->getName());
+#pragma acc kernels
   for(auto childWidget : mChildWidgets)
   {
     childWidget->setWindowTitle(step_name);
@@ -350,6 +352,7 @@ void cedar::proc::gui::StepItem::openActionsDock()
   QWidget* p_actions = new QWidget();
   QVBoxLayout* p_layout = new QVBoxLayout();
   const cedar::proc::Step::ActionMap& map = this->getStep()->getActions();
+#pragma acc kernels
   for (cedar::proc::Step::ActionMap::const_iterator iter = map.begin(); iter != map.end(); ++iter)
   {
     QPushButton* p_button = new QPushButton(iter->first.c_str());
@@ -391,6 +394,7 @@ void cedar::proc::gui::StepItem::contextMenuEvent(QGraphicsSceneContextMenuEvent
   }
   else
   {
+#pragma acc kernels
     for (cedar::proc::Step::ActionMap::const_iterator iter = map.begin(); iter != map.end(); ++iter)
     {
       p_actions_menu->addAction(iter->first.c_str());
@@ -438,6 +442,7 @@ void cedar::proc::gui::StepItem::openDefinedPlotAction()
 
   // find the list of data to plot for this item
   size_t list_index = elem_decl->definedPlots().size();
+#pragma acc kernels
   for (size_t i = 0; i < elem_decl->definedPlots().size(); ++i)
   {
     const std::string& name = elem_decl->definedPlots()[i].mName;

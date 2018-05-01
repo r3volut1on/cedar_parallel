@@ -226,6 +226,7 @@ void cedar::proc::steps::Mask::compute(const cedar::proc::Arguments&)
     {
       std::vector<cv::Mat> channels(static_cast<size_t>(in_converted.channels()));
       cv::split(in_converted, channels);
+#pragma acc kernels
       for (auto& channel : channels)
       {
         channel = channel.mul(mask);

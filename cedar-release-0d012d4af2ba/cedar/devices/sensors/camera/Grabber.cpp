@@ -139,6 +139,7 @@ void cedar::dev::sensors::camera::Grabber::init()
               );
 
   // enable/disable settings like byGuid or so
+#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     getCameraChannel(channel)->setBackendType(getCameraChannel(channel)->_mpBackendType->getValue());
@@ -149,6 +150,7 @@ void cedar::dev::sensors::camera::Grabber::init()
 
 void cedar::dev::sensors::camera::Grabber::connectSignals()
 {
+#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     QObject::connect
@@ -198,6 +200,7 @@ void cedar::dev::sensors::camera::Grabber::backendChanged()
 {
   // update visible fields and create a new backend
   unsigned int num_channels = getNumChannels();
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getCameraChannel(channel)->setBackendType(getCameraChannel(channel)->_mpBackendType->getValue());
@@ -230,6 +233,7 @@ void cedar::dev::sensors::camera::Grabber::onCloseGrabber()
 {
   // close all captures
   unsigned int num_channels = getNumChannels();
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getCameraChannel(channel)->mVideoCapture = cv::VideoCapture();
@@ -247,6 +251,7 @@ void cedar::dev::sensors::camera::Grabber::onCreateGrabber()
   }
 
   // create capture device, which depends on the chosen backend
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     try
@@ -359,6 +364,7 @@ std::vector<std::string> cedar::dev::sensors::camera::Grabber::getAllProperties(
   properties.push_back("All properties of channel " + cedar::aux::toString(channel) + ":");
 
   int num_properties = cedar::dev::sensors::camera::Property::type().list().size();
+#pragma acc kernels
   for (int i=0; i<num_properties; i++)
   {
     cedar::dev::sensors::camera::Property::Id prop_id;

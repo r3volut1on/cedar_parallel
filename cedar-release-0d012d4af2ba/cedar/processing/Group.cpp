@@ -287,6 +287,7 @@ unsigned int cedar::proc::Group::getTriggerablesInWarningStateCount() const
   unsigned int copy = this->mTriggerablesInWarningStates.member();
   l.unlock();
 
+#pragma acc kernels
   for (auto group : this->findAll<cedar::proc::Group>(true))
   {
     copy += group->getTriggerablesInWarningStateCount();
@@ -301,6 +302,7 @@ unsigned int cedar::proc::Group::getTriggerablesInErrorStateCount() const
   unsigned int copy = this->mTriggerablesInErrorStates.member();
   l.unlock();
 
+#pragma acc kernels
   for (auto group : this->findAll<cedar::proc::Group>(false))
   {
     copy += group->getTriggerablesInErrorStateCount();
@@ -337,6 +339,7 @@ double cedar::proc::Group::getTimeFactor() const
 std::set<std::string> cedar::proc::Group::listRequiredPlugins() const
 {
   std::set<std::string> required_plugins;
+#pragma acc kernels
   for (const auto& name_element_pair : this->getElements())
   {
     auto element = name_element_pair.second;
@@ -358,6 +361,7 @@ std::set<std::string> cedar::proc::Group::listRequiredPlugins() const
 
   {
     QReadLocker locker(this->mScripts.getLockPtr());
+#pragma acc kernels
     for (auto script : this->mScripts.member())
     {
       auto declaration = cedar::proc::CppScriptDeclarationManagerSingleton::getInstance()->getDeclarationOf(script);
@@ -374,6 +378,7 @@ std::set<std::string> cedar::proc::Group::listRequiredPlugins() const
 bool cedar::proc::Group::checkScriptNameExists(const std::string& name) const
 {
   QReadLocker locker(this->mScripts.getLockPtr());
+#pragma acc kernels
   for (auto script : this->mScripts.member())
   {
     if (script->getName() == name)
@@ -416,6 +421,7 @@ std::set<cedar::proc::CppScriptPtr> cedar::proc::Group::getScripts() const
 {
   std::set<cedar::proc::CppScriptPtr> scripts;
   QReadLocker locker(this->mScripts.getLockPtr());
+#pragma acc kernels
   for (auto script : this->mScripts.member())
   {
     scripts.insert(script);
@@ -427,6 +433,7 @@ std::vector<cedar::proc::CppScriptPtr> cedar::proc::Group::getOrderedScripts() c
 {
   std::set<std::string> script_names;
   QReadLocker locker(this->mScripts.getLockPtr());
+#pragma acc kernels
   for (auto script : this->mScripts.member())
   {
     script_names.insert(script->getName());
@@ -434,6 +441,7 @@ std::vector<cedar::proc::CppScriptPtr> cedar::proc::Group::getOrderedScripts() c
   locker.unlock();
 
   std::vector<cedar::proc::CppScriptPtr> scripts;
+#pragma acc kernels
   for (const auto& script_name : script_names)
   {
     scripts.push_back(this->getScript(script_name));
@@ -446,6 +454,7 @@ std::vector<cedar::proc::CppScriptPtr> cedar::proc::Group::getOrderedScripts() c
 cedar::proc::CppScriptPtr cedar::proc::Group::getScript(const std::string& name) const
 {
   QReadLocker locker(this->mScripts.getLockPtr());
+#pragma acc kernels
   for (auto script : this->mScripts.member())
   {
     if (script->getName() == name)
@@ -481,6 +490,7 @@ std::vector<cedar::proc::GroupPath> cedar::proc::Group::listElementPaths(std::fu
 {
   std::vector<cedar::proc::GroupPath> paths;
 
+#pragma acc kernels
   for (auto name_element_pair : this->mElements)
   {
     if (fit(name_element_pair.second))
@@ -504,6 +514,7 @@ std::vector<cedar::proc::GroupPath> cedar::proc::Group::listElementPaths(std::fu
 
 void cedar::proc::Group::updateTriggerChains(std::set<cedar::proc::Trigger*>& visited)
 {
+#pragma acc kernels
   for (auto name_element_pair : this->mElements)
   {
     auto element = name_element_pair.second;
@@ -525,6 +536,7 @@ std::vector<std::string> cedar::proc::Group::listInvalidSteps() const
 {
   std::vector<std::string> invalid_steps;
 
+#pragma acc kernels
   for (auto name_element_pair : this->getElements())
   {
     auto element = name_element_pair.second;
@@ -656,6 +668,7 @@ void cedar::proc::Group::addParameterLink
 
 void cedar::proc::Group::removeParameterLink(cedar::aux::ParameterLinkPtr link)
 {
+#pragma acc kernels
   for (auto iter = this->mParameterLinks.begin(); iter != this->mParameterLinks.end(); ++iter)
   {
     if (iter->mParameterLink == link)
@@ -700,6 +713,7 @@ std::vector<cedar::proc::ConsistencyIssuePtr> cedar::proc::Group::checkConsisten
   std::vector<cedar::proc::LoopedTriggerPtr> looped_triggers = listLoopedTriggers();
 
   // Check for looped steps that are not connected to looped triggers
+#pragma acc kernels
   for (auto iter : this->getElements())
   {
     cedar::proc::TriggerablePtr triggerable = boost::dynamic_pointer_cast<cedar::proc::Triggerable>(iter.second);
@@ -719,6 +733,7 @@ std::vector<cedar::proc::ConsistencyIssuePtr> cedar::proc::Group::checkConsisten
       bool is_triggered = false;
       bool parent_not_triggered = false;
       // check if there is a looped trigger to which this element is connected
+#pragma acc kernels
       for (size_t i = 0; i < looped_triggers.size(); ++i)
       {
         cedar::proc::LoopedTriggerPtr trigger = looped_triggers[i];
@@ -773,6 +788,7 @@ void cedar::proc::Group::startTriggers(bool wait)
 {
   std::vector<cedar::proc::LoopedTriggerPtr> triggers = this->listLoopedTriggers();
 
+#pragma acc kernels
   for (auto trigger : triggers)
   {
     if (!trigger->isRunning() && trigger->startWithAll())
@@ -783,6 +799,7 @@ void cedar::proc::Group::startTriggers(bool wait)
 
   std::set<GroupPtr> subgroups;
   this->listSubgroups(subgroups);
+#pragma acc kernels
   for (auto subgroup : subgroups)
   {
     subgroup->startTriggers(wait);
@@ -790,6 +807,7 @@ void cedar::proc::Group::startTriggers(bool wait)
 
   if (wait)
   {
+#pragma acc kernels
     for (auto trigger : triggers)
     {
       while (!trigger->isRunning() && trigger->startWithAll())
@@ -805,6 +823,7 @@ void cedar::proc::Group::stopTriggers(bool wait)
   bool blocked = this->blockSignals(true);
   std::vector<cedar::proc::LoopedTriggerPtr> triggers = this->listLoopedTriggers();
 
+#pragma acc kernels
   for (auto trigger : triggers)
   {
     if (trigger->isRunning())
@@ -815,6 +834,7 @@ void cedar::proc::Group::stopTriggers(bool wait)
 
   std::set<GroupPtr> subgroups;
   this->listSubgroups(subgroups);
+#pragma acc kernels
   for (auto subgroup : subgroups)
   {
     subgroup->stopTriggers(wait);
@@ -822,6 +842,7 @@ void cedar::proc::Group::stopTriggers(bool wait)
 
   if (wait)
   {
+#pragma acc kernels
     for (auto trigger : triggers)
     {
       while (trigger->isRunning())
@@ -840,6 +861,7 @@ void cedar::proc::Group::stepTriggers()
   std::vector<cedar::proc::LoopedTriggerPtr> triggers = this->listLoopedTriggers();
   cedar::unit::Time time_step(std::numeric_limits<double>::max() * cedar::unit::milli * cedar::unit::second);
   // find the shortest time step of all triggers
+#pragma acc kernels
   for (auto trigger : triggers)
   {
     if (trigger->getSimulatedTimeParameter() < time_step)
@@ -855,6 +877,7 @@ void cedar::proc::Group::stepTriggers(cedar::unit::Time timeStep)
   cedar::aux::GlobalClockSingleton::getInstance()->addTime(timeStep);
   std::vector<cedar::proc::LoopedTriggerPtr> triggers = this->listLoopedTriggers();
   // step all triggers with this time step
+#pragma acc kernels
   for (auto trigger : triggers)
   {
     if (!trigger->isRunning())
@@ -920,6 +943,7 @@ bool cedar::proc::Group::nameExistsInAnyGroup(const cedar::proc::GroupPath& name
   }
 
   // if it does not, check in all subgroups
+#pragma acc kernels
   for (auto group : this->findAll<cedar::proc::Group>(true))
   {
     if (group->nameExists(name))
@@ -956,6 +980,7 @@ bool cedar::proc::Group::nameExists(const cedar::proc::GroupPath& name) const
 void cedar::proc::Group::listSubgroups(std::set<cedar::proc::ConstGroupPtr>& subgroups) const
 {
   subgroups.clear();
+#pragma acc kernels
   for (auto iter : this->mElements)
   {
     if (cedar::proc::ConstGroupPtr group = boost::dynamic_pointer_cast<const cedar::proc::Group>(iter.second))
@@ -970,6 +995,7 @@ void cedar::proc::Group::listSubgroups(std::set<cedar::proc::GroupPtr>& subgroup
   subgroups.clear();
   std::set<cedar::proc::ConstGroupPtr> const_groups;
   const_cast<const cedar::proc::Group*>(this)->listSubgroups(const_groups);
+#pragma acc kernels
   for (auto iter : const_groups)
   {
     subgroups.insert(boost::const_pointer_cast<cedar::proc::Group>(iter));
@@ -982,6 +1008,7 @@ void cedar::proc::Group::reset()
   auto looped_triggers = this->findAll<cedar::proc::LoopedTrigger>(true);
   std::set<cedar::proc::LoopedTriggerPtr> running_triggers;
 
+#pragma acc kernels
   for (auto trigger : looped_triggers)
   {
     if (trigger->isRunning())
@@ -998,6 +1025,7 @@ void cedar::proc::Group::reset()
   }
 
   // reset all elements in this group
+#pragma acc kernels
   for (auto name_element_pair : this->mElements)
   {
     auto element = name_element_pair.second;
@@ -1005,6 +1033,7 @@ void cedar::proc::Group::reset()
   }
 
   // restart all triggers that have been stopped
+#pragma acc kernels
   for (auto trigger : running_triggers)
   {
     trigger->start();
@@ -1020,6 +1049,7 @@ void cedar::proc::Group::remove(cedar::proc::ConstElementPtr element, bool destr
 {
   // first, delete all data connections to and from this Element
   std::vector<cedar::proc::DataConnectionPtr> delete_later;
+#pragma acc kernels
   for (auto data_con : mDataConnections)
   {
     if
@@ -1036,6 +1066,7 @@ void cedar::proc::Group::remove(cedar::proc::ConstElementPtr element, bool destr
   // remember all triggerables that have to be connected to the default trigger afterwards
   std::vector<cedar::proc::ConstTriggerablePtr> triggerables_for_default_trigger;
   // then, delete all trigger connections to and from this Element
+#pragma acc kernels
   for (
         cedar::proc::Group::TriggerConnectionVector::iterator trigger_con = mTriggerConnections.begin();
         trigger_con != mTriggerConnections.end();
@@ -1138,6 +1169,7 @@ void cedar::proc::Group::remove(cedar::proc::ConstElementPtr element, bool destr
       this->create("cedar.processing.LoopedTrigger", "default trigger");
     }
 
+#pragma acc kernels
     for (auto unconnected_triggerable : triggerables_for_default_trigger)
     {
       // cast to element to get name
@@ -1200,9 +1232,11 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
 {
   // prune elements that are children of moved elements
   std::list<cedar::proc::ElementPtr> elements_pruned;
+#pragma acc kernels
   for (auto element : elements)
   {
     bool is_child = false;
+#pragma acc kernels
     for (auto compare_element : elements)
     {
       auto group = boost::dynamic_pointer_cast<cedar::proc::Group>(compare_element);
@@ -1219,6 +1253,7 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
   }
   elements = elements_pruned;
 
+#pragma acc kernels
   for (auto it = elements.begin(); it != elements.end(); )
   {
     // check if the name already exists
@@ -1268,6 +1303,7 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
 
   // sanity check if all elements have the same parent group
   cedar::proc::GroupPtr old_group = (*(elements.begin()))->getGroup();
+#pragma acc kernels
   for (auto element : elements)
   {
     if (old_group != element->getGroup())
@@ -1287,6 +1323,7 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
   {
     std::vector<cedar::proc::ConstOwnedDataPtr> processed_sources;
     std::vector<cedar::proc::ConstExternalDataPtr> processed_targets;
+#pragma acc kernels
     for (auto connection : old_group->getDataConnections())
     {
       // find connections that we have to restore after moving elements
@@ -1310,6 +1347,7 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
                            source_slot,
                            boost::static_pointer_cast<cedar::proc::ConstGroup>(this->shared_from_this())
                          );
+#pragma acc kernels
         for (auto real_target : targets)
         {
           if (std::find(processed_targets.begin(), processed_targets.end(), real_target) == processed_targets.end())
@@ -1334,6 +1372,7 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
                            target_slot,
                            boost::static_pointer_cast<cedar::proc::ConstGroup>(this->shared_from_this())
                          );
+#pragma acc kernels
         for (auto real_source : sources)
         {
           if (std::find(processed_sources.begin(), processed_sources.end(), real_source) == processed_sources.end())
@@ -1352,18 +1391,21 @@ void cedar::proc::Group::add(std::list<cedar::proc::ElementPtr> elements)
   }
 
   // delete data connections
+#pragma acc kernels
   for (auto connection : data_connections)
   {
     cedar::proc::Group::disconnectAcrossGroups(connection.from, connection.to);
   }
 
   // now add each element to the new group
+#pragma acc kernels
   for (auto element : elements)
   {
     this->add(element);
   }
 
   // restore data connections
+#pragma acc kernels
   for (auto connection : data_connections)
   {
     cedar::proc::Group::connectAcrossGroups(connection.from, connection.to);
@@ -1406,6 +1448,7 @@ void cedar::proc::Group::add(cedar::proc::ElementPtr element)
   // we might have to restore recorder entries
   if (auto step = boost::dynamic_pointer_cast<cedar::proc::Step>(element))
   {
+#pragma acc kernels
     for (auto restored_record_entry : recorded_data)
     {
       cedar::proc::DataPath data_path(restored_record_entry.first);
@@ -1478,6 +1521,7 @@ void cedar::proc::Group::triggerStopped()
   std::vector<cedar::proc::LoopedTriggerPtr> triggers = this->listLoopedTriggers();
 
   bool any_running = false;
+#pragma acc kernels
   for (auto trigger : triggers)
   {
     if (trigger->isRunning())
@@ -1906,6 +1950,7 @@ void cedar::proc::Group::connectTrigger(cedar::proc::TriggerPtr source, cedar::p
 
 void cedar::proc::Group::disconnectSlots(const std::vector<cedar::proc::DataConnectionPtr>& connections)
 {
+#pragma acc kernels
   for (auto connection : connections)
   {
     this->disconnectSlots(connection->getSource(), connection->getTarget());
@@ -1972,6 +2017,7 @@ void cedar::proc::Group::disconnectSlots
                              cedar::proc::ConstExternalDataPtr targetSlot
                            )
 {
+#pragma acc kernels
   for (DataConnectionVector::iterator it = mDataConnections.begin(); it != mDataConnections.end(); ++it)
   {
     if ((*it)->equals(sourceSlot, targetSlot))
@@ -2007,6 +2053,7 @@ void cedar::proc::Group::disconnectTrigger(cedar::proc::TriggerPtr source, cedar
 void cedar::proc::Group::disconnectTriggerInternal(cedar::proc::TriggerPtr source, cedar::proc::TriggerablePtr target)
 {
   // iterate all connections to find the one that matches the given combination of source and target
+#pragma acc kernels
   for (auto it = mTriggerConnections.begin(); it != mTriggerConnections.end(); ++it)
   {
     if ((*it)->equals(source, target))
@@ -2032,6 +2079,7 @@ void cedar::proc::Group::writeConfiguration(cedar::aux::ConfigurationNode& root)
 
 void cedar::proc::Group::writeData(cedar::aux::ConfigurationNode& root) const
 {
+#pragma acc kernels
   for (auto name_element_pair : this->getElements())
   {
     auto element = name_element_pair.second;
@@ -2049,6 +2097,7 @@ void cedar::proc::Group::writeData(cedar::aux::ConfigurationNode& root) const
 
 void cedar::proc::Group::readData(const cedar::aux::ConfigurationNode& root)
 {
+#pragma acc kernels
   for (auto assoc_pair : root)
   {
     const std::string& element_name = assoc_pair.first;
@@ -2092,6 +2141,7 @@ std::set<std::string> cedar::proc::Group::getRequiredPlugins(const std::string& 
   }
 
   auto rq_plugins_node = rq_plugins_iter->second;
+#pragma acc kernels
   for (auto iter = rq_plugins_node.begin(); iter != rq_plugins_node.end(); ++iter)
   {
     plugins.insert(iter->second.get_value<std::string>());
@@ -2119,6 +2169,7 @@ void cedar::proc::Group::readConfiguration(const cedar::aux::ConfigurationNode& 
   }
 
   // holding trigger chain updates may have caused some steps to not be computed; thus, re-trigger all sources
+#pragma acc kernels
   for (const auto& name_element_pair : this->getElements())
   {
     auto triggerable = boost::dynamic_pointer_cast<cedar::proc::Triggerable>(name_element_pair.second);
@@ -2181,6 +2232,7 @@ bool cedar::proc::Group::isConnected(const std::string& source, const std::strin
   std::string target_slot;
   cedar::proc::Connectable::parseDataNameNoRole(source, source_name, source_slot);
   cedar::proc::Connectable::parseDataNameNoRole(target, target_name, target_slot);
+#pragma acc kernels
   for (size_t i = 0; i < mDataConnections.size(); ++i)
   {
     if (mDataConnections.at(i)->equals(
@@ -2203,6 +2255,7 @@ bool cedar::proc::Group::isConnected(cedar::proc::TriggerPtr source, cedar::proc
 void cedar::proc::Group::updateObjectName(cedar::proc::Element* object)
 {
   ElementMap::iterator old_iter;
+#pragma acc kernels
   for (old_iter = this->mElements.begin(); old_iter != this->mElements.end(); ++old_iter)
   {
     if (old_iter->second.get() == object) // found
@@ -2245,6 +2298,7 @@ void cedar::proc::Group::updateObjectName(cedar::proc::Element* object)
   if (auto step = dynamic_cast<cedar::proc::Step*>(object))
   {
     recorded_data = step->unregisterRecordedData();
+#pragma acc kernels
     for (auto restored_record_entry : recorded_data)
     {
       cedar::proc::DataPath data_path(restored_record_entry.first);
@@ -2276,6 +2330,7 @@ void cedar::proc::Group::getDataConnections
 )
 {
   connections.clear();
+#pragma acc kernels
   for (size_t i = 0; i < this->mDataConnections.size(); ++i)
   {
     // check if con is a valid pointer - during deletion of a step, some deleted connections are still in this list
@@ -2304,6 +2359,7 @@ void cedar::proc::Group::getDataConnections
 ) const
 {
   connections.clear();
+#pragma acc kernels
   for (size_t i = 0; i < this->mDataConnections.size(); ++i)
   {
     // check if con is a valid pointer - during deletion of a step, some deleted connections are still in this list
@@ -2363,6 +2419,7 @@ cedar::proc::Group::DataConnectionVector::iterator cedar::proc::Group::removeDat
     target_name = connection->getTarget()->getParent(); // reset target_name
     // check that both Connectables are not connected through some other DataSlots
     cedar::proc::ConnectablePtr target_connectable = this->getElement<cedar::proc::Connectable>(target_name);
+#pragma acc kernels
     for (DataConnectionVector::iterator iter = mDataConnections.begin(); iter != mDataConnections.end(); ++iter)
     {
       if
@@ -2444,6 +2501,7 @@ std::string cedar::proc::Group::findPath(const cedar::proc::Element* pFindMe) co
   }
 
   // if element is not found, search in child groups
+#pragma acc kernels
   for (auto iter = this->mElements.begin(); iter != this->mElements.end(); ++iter)
   {
     if (cedar::proc::ConstGroupPtr group = boost::dynamic_pointer_cast<cedar::proc::Group>(iter->second))
@@ -2467,6 +2525,7 @@ const cedar::proc::Group::DataConnectionVector& cedar::proc::Group::getDataConne
 
 void cedar::proc::Group::processConnectors()
 {
+#pragma acc kernels
   for (auto it = _mConnectors->begin(); it != _mConnectors->end(); ++it)
   {
     this->addConnectorInternal(it->first, it->second);
@@ -2487,6 +2546,7 @@ void cedar::proc::Group::onTrigger(cedar::proc::ArgumentsPtr args, cedar::proc::
   {
     QReadLocker looped_lock(this->mLoopedTriggerables.getLockPtr());
     // trigger every looped element in this group
+#pragma acc kernels
     for (auto triggerable : this->mLoopedTriggerables.member())
     {
       triggerable->onTrigger(args, trigger);
@@ -2533,6 +2593,7 @@ void cedar::proc::Group::revalidateInputSlot(const std::string& slot)
 
 bool cedar::proc::Group::contains(cedar::proc::ConstElementPtr element) const
 {
+#pragma acc kernels
   for (auto it = mElements.begin(); it != mElements.end(); ++it)
   {
     if (it->second == element)
@@ -2569,6 +2630,7 @@ std::vector<cedar::proc::OwnedDataPtr> cedar::proc::Group::getRealSources
   std::vector<cedar::proc::DataConnectionPtr> connections;
   this->getDataConnectionsTo(this->getElement<cedar::proc::Connectable>(slot->getParent()), slot->getName(), connections);
 
+#pragma acc kernels
   for (auto connection : connections)
   {
     // now try to decide what to do with the target of the current connection
@@ -2634,6 +2696,7 @@ std::vector<cedar::proc::ExternalDataPtr> cedar::proc::Group::getRealTargets
   std::vector<cedar::proc::DataConnectionPtr> connections;
   this->getDataConnectionsFrom(this->getElement<cedar::proc::Connectable>(slot->getParent()), slot->getName(), connections);
 
+#pragma acc kernels
   for (auto connection : connections)
   {
     // now try to decide what to do with the target of the current connection
@@ -2772,6 +2835,7 @@ bool cedar::proc::Group::disconnectAcrossGroups(cedar::proc::OwnedDataPtr source
     source_group->getDataConnectionsFrom(source_elem, source->getName(), outgoing_connections);
     std::vector<cedar::proc::DataConnectionPtr> delete_connections;
     // for every found connection, call disconnectAcrossGroups again, depending on the target's type
+#pragma acc kernels
     for (auto connection : outgoing_connections)
     {
       // is a group
@@ -2820,6 +2884,7 @@ void cedar::proc::Group::revalidateConnections(const std::string& sender)
   cedar::aux::splitLast(sender, ".", child, output);
   std::vector<cedar::proc::DataConnectionPtr> connections;
   this->getDataConnectionsFrom(this->getElement<Connectable>(child), output, connections);
+#pragma acc kernels
   for (auto connection : connections)
   {
     cedar::proc::ConnectablePtr sender = this->getElement<Connectable>(connection->getSource()->getParent());
@@ -2954,6 +3019,7 @@ cedar::proc::ElementPtr cedar::proc::Group::importStepFromFile(const std::string
     // try to access the "steps" node
     cedar::aux::ConfigurationNode& steps_node = configuration.get_child("steps");
     // for every node in "steps", check if this node matches the name
+#pragma acc kernels
     for (auto step_node : steps_node)
     {
       if (step_node.second.get<std::string>("name") == stepName)
@@ -2989,6 +3055,7 @@ void cedar::proc::Group::onStart()
 {
   // if we get to this point, set the state to running
   this->setState(cedar::proc::Triggerable::STATE_RUNNING, "");
+#pragma acc kernels
   for (auto element : this->mElements)
   {
     if (auto triggerable = boost::dynamic_pointer_cast<cedar::proc::Triggerable>(element.second))
@@ -3002,6 +3069,7 @@ void cedar::proc::Group::onStop()
 {
   // if we get to this point, set the state to running
   this->setState(cedar::proc::Triggerable::STATE_NOT_RUNNING, "");
+#pragma acc kernels
   for (auto element : this->mElements)
   {
     if (auto triggerable = boost::dynamic_pointer_cast<cedar::proc::Triggerable>(element.second))
@@ -3015,6 +3083,7 @@ void cedar::proc::Group::pruneUnusedConnectors()
 {
   cedar::proc::Group::ConnectorMap to_delete;
   auto this_as_connectable = boost::dynamic_pointer_cast<cedar::proc::Connectable>(this->shared_from_this());
+#pragma acc kernels
   for (auto connector : _mConnectors->getValue())
   {
     if (connector.second) // input connector
@@ -3049,6 +3118,7 @@ void cedar::proc::Group::pruneUnusedConnectors()
     }
   }
   // finally, remove all obsolete connectors
+#pragma acc kernels
   for (auto item : to_delete)
   {
     this->removeConnector(item.first, item.second);
@@ -3059,6 +3129,7 @@ std::vector<cedar::proc::ConstElementPtr> cedar::proc::Group::findElementsAcross
 {
   std::vector<cedar::proc::ConstElementPtr> found_elements;
   auto elements = this->getElements();
+#pragma acc kernels
   for (auto element : elements)
   {
     if (matcher(element.second))
@@ -3161,6 +3232,7 @@ void cedar::proc::Group::onLoopedChanged()
     if (this->isRoot())
     {
       // check if this group was connected to a looped trigger
+#pragma acc kernels
       for (auto trigger_connection : mTriggerConnections)
       {
         if (trigger_connection->getTarget() == group)
@@ -3197,12 +3269,14 @@ bool cedar::proc::Group::isRecorded() const
   slotTypes.push_back(cedar::proc::DataRole::BUFFER);
   slotTypes.push_back(cedar::proc::DataRole::OUTPUT);
 
+#pragma acc kernels
   for (unsigned int s = 0; s < slotTypes.size(); s++)
   {
 
     if (this->hasSlotForRole(slotTypes[s]))
     {
       cedar::proc::Connectable::SlotList dataSlots = this->getOrderedDataSlots(slotTypes[s]);
+#pragma acc kernels
       for (unsigned int i = 0; i < dataSlots.size(); i++)
       {
         if (cedar::aux::RecorderSingleton::getInstance()->isRegistered(dataSlots[i]->getDataPath().toString()))

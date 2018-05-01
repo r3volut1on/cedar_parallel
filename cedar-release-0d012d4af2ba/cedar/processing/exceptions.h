@@ -172,6 +172,7 @@ public:
   mExceptionInfos(exception_infos)
   {
     std::string message = "One or more exceptions occurred while loading the architecture. They are:";
+#pragma acc kernels
     for (size_t i = 0; i < this->mExceptionInfos.size(); ++i)
     {
       message += "\n";

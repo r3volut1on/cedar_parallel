@@ -325,6 +325,7 @@ std::string cedar::aux::locateResource(const std::string& resourcePath, bool sho
 {
   bool is_directory = false;
   std::vector<std::string> paths = cedar::aux::listResourcePaths();
+#pragma acc kernels
   for (auto path_iter = paths.begin(); path_iter != paths.end(); ++path_iter)
   {
     std::string path = (*path_iter) + "/" + resourcePath;
