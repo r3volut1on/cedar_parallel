@@ -204,7 +204,6 @@ void cedar::proc::steps::Threshold::compute(const cedar::proc::Arguments&)
   if (num_dims == 3)
   {
     const auto& sizes = input_image.size;
-#pragma acc kernels
     for (int i=0; i < sizes[0]; ++i)
     {
       /*

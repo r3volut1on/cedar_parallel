@@ -246,7 +246,6 @@ void cedar::proc::Triggerable::callOnStart()
     QReadLocker lock_r(this->mFinished.getLockPtr());
     if (mFinished.member())
     {
-#pragma acc kernels
       for (auto listener : this->mFinished.member()->getListeners())
       {
         listener->callOnStart();

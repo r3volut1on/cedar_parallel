@@ -224,7 +224,6 @@ QVariant cedar::proc::gui::ResizeHandle::itemChange(GraphicsItemChange change, c
 
         this->mpResizedItem->setBounds(bounds);
 
-#pragma acc kernels
         for (size_t i = 0; i < this->mOtherHandles.size(); ++i)
         {
           if (this->mOtherHandles.at(i) != this)

@@ -64,7 +64,6 @@ cedar::aux::PluginDeclarationList::PluginDeclarationList()
 
 void cedar::aux::PluginDeclarationList::setSource(const std::string& source)
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->mDeclarations.size(); ++i)
   {
     this->mDeclarations.at(i)->setSource(source);

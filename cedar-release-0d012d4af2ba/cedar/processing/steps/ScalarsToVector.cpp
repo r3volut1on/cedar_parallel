@@ -99,7 +99,6 @@ _mOutputDimension (new cedar::aux::UIntParameter(this, "number of vector entries
 void cedar::proc::steps::ScalarsToVector::compute(const cedar::proc::Arguments&)
 {
   mOutput->getData().setTo(0);
-#pragma acc kernels
   for (unsigned i=0; i<mInputs.size(); i++)
   {
     if (mInputs[i])

@@ -73,7 +73,6 @@ template<typename T>
 cv::Mat cedar::aux::math::sigmoid(const cv::Mat& mat, const double beta, const double threshold)
 {
   cv::Mat result = mat.clone();
-#pragma acc kernels
   for (int col = 0; col < mat.cols; col++)
   {
     for (int row = 0; row < mat.rows; row++)

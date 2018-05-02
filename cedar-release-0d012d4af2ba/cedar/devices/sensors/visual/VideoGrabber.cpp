@@ -122,7 +122,6 @@ void cedar::dev::sensors::visual::VideoGrabber::init(double speedFactor)
   QObject::connect (_mSpeedFactor.get(),SIGNAL(valueChanged()),this, SLOT(speedFactorChanged()));
 
   // watch filename on every channel
-#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     QObject::connect
@@ -270,7 +269,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onCreateGrabber()
 void cedar::dev::sensors::visual::VideoGrabber::onCloseGrabber()
 {
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     // there is no cv::VideoCapture.close() method, so we assign an empty one. The old will be released automatically

@@ -172,7 +172,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readGrabModesFromLibDc()
 
   int num_modes = cam_video_modes.num;
   //  std::cout << "Camera Video Modes:" << std::endl;
-#pragma acc kernels
   for (int i=0; i<num_modes; i++)
   {
 //    std::cout << " - " << cam_video_modes.modes[i]

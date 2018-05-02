@@ -151,7 +151,6 @@ void cedar::dev::gui::RobotManager::fillExistingRobots()
 {
   std::vector<std::string> robot_names = cedar::dev::RobotManagerSingleton::getInstance()->getRobotNames();
 
-#pragma acc kernels
   for (auto robot_name_iter = robot_names.begin(); robot_name_iter != robot_names.end(); ++robot_name_iter)
   {
     const std::string& robot_name = *robot_name_iter;

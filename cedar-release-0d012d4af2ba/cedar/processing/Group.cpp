@@ -287,7 +287,6 @@ unsigned int cedar::proc::Group::getTriggerablesInWarningStateCount() const
   unsigned int copy = this->mTriggerablesInWarningStates.member();
   l.unlock();
 
-#pragma acc kernels
   for (auto group : this->findAll<cedar::proc::Group>(true))
   {
     copy += group->getTriggerablesInWarningStateCount();

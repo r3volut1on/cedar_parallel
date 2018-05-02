@@ -63,7 +63,6 @@ mGroup(group)
   QObject::connect(this->mpRemoveButton, SIGNAL(clicked()), this, SLOT(removeRowClicked()));
 
   const auto& plots = this->mGroup->getArchitectureWidgets();
-#pragma acc kernels
   for (const auto& name_path_pair : plots)
   {
     const auto& name = name_path_pair.first;

@@ -194,7 +194,6 @@ void cedar::dev::kuka::KinematicChain::step(cedar::unit::Time)
     float commanded_joint[LBR_MNJ];
     // initialize it with current measured position. This value will be overwritten in any case
     // so this is just for safety
-#pragma acc kernels
     for (unsigned i = 0; i < LBR_MNJ; i++)
     {
       commanded_joint[i] = mMeasuredJointPosition.at(i);
@@ -216,7 +215,6 @@ void cedar::dev::kuka::KinematicChain::step(cedar::unit::Time)
             mCommandedJointPosition.at(i) += getJointVelocity(i) * mpFriRemote->getSampleTime();
           }
         case 3:
-#pragma acc kernels
           for(unsigned i=0; i<LBR_MNJ; i++)
           {
             // if the joint position exceeds the one in the reference geometry, reset the angle

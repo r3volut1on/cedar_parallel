@@ -209,7 +209,6 @@ namespace cedar
       auto numerator_pow = boost::units::pow<NumeratorRational>(i_numerator);
       auto denominator_pow = boost::units::pow<DenominatorRational>(i_denominator);
 
-#pragma acc kernels
       for (auto iter = component_strs.begin(); iter != component_strs.end(); ++iter)
       {
         const std::string& component_unit = *iter;

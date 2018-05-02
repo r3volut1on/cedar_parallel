@@ -182,7 +182,6 @@ QWidget* cedar::proc::gui::ArchitectureWidget::readPlot(const cedar::aux::Config
     auto iter = data_node.begin();
     ++iter;
 
-#pragma acc kernels
     for (; iter != data_node.end(); ++iter)
     {
       std::string path, title;

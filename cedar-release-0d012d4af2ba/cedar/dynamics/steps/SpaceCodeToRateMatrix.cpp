@@ -164,7 +164,6 @@ void cedar::dyn::SpaceCodeToRateMatrix::compute(const cedar::proc::Arguments&)
   const cv::Mat& input = this->mInput->getData();
   output = 0.0;
 
-#pragma acc kernels
   for (unsigned int row = 0; row < rows; ++row)
   {
     for (unsigned int col = 0; col < cols; ++col)

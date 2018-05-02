@@ -79,7 +79,6 @@ Qwt3D::StandardColor cedar::aux::ColorGradient::toQwt3DStandardColor(size_t step
   Qwt3D::StandardColor col;
   std::vector<Qwt3D::RGBA> qwt_colors;
   qwt_colors.resize(steps);
-#pragma acc kernels
   for (size_t i = 0; i < steps; ++i)
   {
     double step = static_cast<double>(i) / static_cast<double>(steps - 1); // - 1 because we want to reach the last color

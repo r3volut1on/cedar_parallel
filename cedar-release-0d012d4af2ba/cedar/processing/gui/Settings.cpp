@@ -297,7 +297,6 @@ void cedar::proc::gui::Settings::setFavorite(const std::string& className, bool 
 
 bool cedar::proc::gui::Settings::isFavoriteElement(const std::string& className) const
 {
-#pragma acc kernels
   for (const auto& favorite : this->getFavedElements())
   {
     if (favorite == className)

@@ -213,7 +213,6 @@ void cedar::aux::gui::MatrixSlicePlot3D::slicesFromMat(const cv::Mat& mat)
   unsigned int column = 0;
   unsigned int row = 0;
 
-#pragma acc kernels
   for (unsigned int tile = 0; tile < tiles; tile++, column++)
   {
     if (column >= columns)

@@ -199,7 +199,6 @@ namespace cedar
                      )
     {
       outJoinedString = "";
-#pragma acc kernels
       for (typename T::const_iterator iter = stringList.begin(); iter != stringList.end(); ++iter)
       {
         if (iter != stringList.begin())

@@ -224,7 +224,6 @@ cedar::proc::gui::Group::~Group()
 
 cedar::proc::gui::DataSlotItem* cedar::proc::gui::Group::getSourceConnectorItem(cedar::proc::DataSlotPtr slot) const
 {
-#pragma acc kernels
   for (auto slot_gui : this->mConnectorSources)
   {
     if (slot_gui->getSlot() == slot)
@@ -1163,7 +1162,6 @@ void cedar::proc::gui::Group::readConfiguration(const cedar::aux::ConfigurationN
 void cedar::proc::gui::Group::readPlotList(const std::string& plotGroupName, const cedar::aux::ConfigurationNode& node)
 {
   std::set<std::string> removed_elements;
-#pragma acc kernels
   for(auto it : node)
   {
     std::string step_name = cedar::proc::gui::PlotWidget::getStepNameFromConfiguration(it.second);

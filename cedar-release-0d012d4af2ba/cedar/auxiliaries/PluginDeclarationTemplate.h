@@ -102,7 +102,6 @@ public:
   {
     DeclarationManager::getInstance()->addDeclaration(this->shared_from_this());
 
-#pragma acc kernels
     for (size_t i = 0; i < this->deprecatedNames().size(); ++i)
     {
       PluginFactoryManager::getInstance()->addDeprecatedName(this->getClassName(), this->deprecatedNames().at(i));

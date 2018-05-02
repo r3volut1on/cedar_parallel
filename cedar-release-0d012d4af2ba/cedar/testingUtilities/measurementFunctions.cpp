@@ -79,7 +79,6 @@ void cedar::test::test_time(std::string id, std::function<void()> fun, unsigned 
   auto start = microsec_clock::local_time();
 
   // execute the test:
-#pragma acc kernels
   for (unsigned int i = 0; i < repetitions; ++i)
   {
     fun();

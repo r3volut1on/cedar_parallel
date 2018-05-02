@@ -256,7 +256,6 @@ bool cedar::aux::gui::MatrixVectorPlot::canDetach(cedar::aux::ConstDataPtr data)
 {
   if(this->mpPlot != nullptr && this->mPlotSeriesVector.size() > 1)
   {
-#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)
@@ -321,7 +320,6 @@ void cedar::aux::gui::MatrixVectorPlot::contextMenuEvent(QContextMenuEvent *pEve
   p_antialiasing->setCheckable(true);
 
   bool combined = true;
-#pragma acc kernels
   for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
   {
     PlotSeriesPtr series = this->mPlotSeriesVector.at(i);

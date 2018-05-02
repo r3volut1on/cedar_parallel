@@ -180,7 +180,6 @@ void cedar::aux::conv::Convolution::updateEngineCapabilities()
   }
 
   const std::vector<cedar::aux::Enum>& modes = cedar::aux::conv::Mode::type().list();
-#pragma acc kernels
   for (size_t i = 0; i < modes.size(); ++i)
   {
     const cedar::aux::Enum& enum_value = modes.at(i);

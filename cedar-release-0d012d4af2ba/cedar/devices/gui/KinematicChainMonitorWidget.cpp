@@ -99,7 +99,6 @@ void cedar::dev::gui::KinematicChainMonitorWidget::initWindow()
   acc_label->setAlignment(Qt::AlignRight);
   mpGridLayout->addWidget(acc_label, 0, 3);
 
-#pragma acc kernels
   for(unsigned int i = 0; i < mpKinematicChain->getNumberOfJoints(); ++i)
   {
     // add joint label

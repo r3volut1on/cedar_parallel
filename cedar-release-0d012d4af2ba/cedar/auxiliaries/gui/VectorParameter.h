@@ -178,7 +178,6 @@ protected:
   {
     size_t index = this->mWidgets.size();
 
-#pragma acc kernels
     for (size_t i = 0; i < this->mWidgets.size(); ++i)
     {
       if (this->mWidgets[i] == pWidget)

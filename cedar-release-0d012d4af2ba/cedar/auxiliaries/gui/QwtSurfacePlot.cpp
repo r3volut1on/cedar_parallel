@@ -125,7 +125,6 @@ void cedar::aux::gui::QwtSurfacePlot::deleteArrayData()
 {
   if (mppArrayData != NULL)
   {
-#pragma acc kernels
     for (size_t i = 0; i < mDataRows; ++i)
     {
       delete[] mppArrayData[i];

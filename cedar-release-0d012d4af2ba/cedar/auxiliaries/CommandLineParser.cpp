@@ -123,7 +123,6 @@ void cedar::aux::CommandLineParser::setParsedFlag(const std::string& longName, b
   else
   {
     // erase all occurrences of longName
-#pragma acc kernels
     for (auto iter = this->mParsedFlags.begin(); iter != this->mParsedFlags.end();)
     {
       if (*iter == longName)

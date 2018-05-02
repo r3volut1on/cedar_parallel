@@ -121,7 +121,6 @@ void cedar::aux::kernel::Box::calculateParts()
 
   CEDAR_DEBUG_ASSERT(this->getDimensionality() == this->_mWidths->size());
 
-#pragma acc kernels
   for (unsigned int dim = 0; dim < this->getDimensionality(); ++dim)
   {
     this->setKernelPart(dim, cv::Mat::ones(static_cast<int>(this->_mWidths->at(dim)), 1, CV_32F));

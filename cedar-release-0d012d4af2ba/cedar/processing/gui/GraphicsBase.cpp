@@ -126,7 +126,6 @@ cedar::proc::gui::GraphicsBase::~GraphicsBase()
     delete *this->mConnections.begin();
   }
 
-#pragma acc kernels
   for (auto resize_handle : this->mpResizeHandles)
   {
     delete resize_handle;

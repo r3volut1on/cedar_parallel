@@ -193,7 +193,6 @@ void cedar::proc::steps::Projection::reconfigure(bool triggerSubsequent)
     // ... compute which indices need to be compressed
     mIndicesToCompress.clear();
 
-#pragma acc kernels
     for (unsigned int index = 0; index < input_dimensionality; ++index)
     {
       if (_mDimensionMappings->getValue()->isDropped(index))

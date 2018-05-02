@@ -111,7 +111,6 @@ void cedar::proc::experiment::gui::ActionParameter::updateActions()
   auto parameter = boost::dynamic_pointer_cast<cedar::proc::experiment::ActionParameter>(this->getParameter());
   auto actions = parameter->getListOfActions();
   bool blocked = mpActionComboBox->blockSignals(true);
-#pragma acc kernels
   for (std::string action : actions)
   {
     mpActionComboBox->addItem(QString::fromStdString(action));

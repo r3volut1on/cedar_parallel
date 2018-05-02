@@ -136,7 +136,6 @@ void cedar::aux::math::flip(const cv::Mat& toFlip, cv::Mat& flipped, const std::
     src_range[1] = cv::Range::all();
     dst_range[0] = cv::Range::all();
     dst_range[1] = cv::Range::all();
-#pragma acc kernels
     for (int d3 = 0; d3 < toFlip.size[2]; ++d3)
     {
       src_range[2] = cv::Range(d3, d3 + 1);

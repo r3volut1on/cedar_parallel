@@ -159,7 +159,6 @@ public:
   {
     this->mLimits.setLower(minimum);
 
-#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
       if (this->mValues[i] < minimum)

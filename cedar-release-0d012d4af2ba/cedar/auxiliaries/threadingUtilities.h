@@ -92,7 +92,6 @@ namespace cedar
     inline void lock(LockSet& locks)
     {
       // The implicit ordering of the set is used to impose the canonical lock order here.
-#pragma acc kernels
       for (LockSet::iterator iter = locks.begin(); iter != locks.end(); ++iter)
       {
         // switch based on the lock type

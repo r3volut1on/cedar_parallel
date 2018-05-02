@@ -165,7 +165,6 @@ std::vector<double> cedar::dev::KinematicChain::getJointAngles() const
 {
   std::vector<double> dummy(getNumberOfJoints());
 
-#pragma acc kernels
   for(unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     dummy[i] = getJointAngle(i);
@@ -177,7 +176,6 @@ cv::Mat cedar::dev::KinematicChain::getCachedJointAngles() const
 {
   cv::Mat dummy = cv::Mat::zeros(getNumberOfJoints(), 1, CV_64FC1);
 
-#pragma acc kernels
   for (unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     dummy.at<double>(i,0) = getJointAngle(i);

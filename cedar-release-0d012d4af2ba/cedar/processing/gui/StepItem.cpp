@@ -162,7 +162,6 @@ void cedar::proc::gui::StepItem::updateToolTip()
                 "<th>Average</th>"
               "</tr>";
 
-#pragma acc kernels
   for (unsigned int m = 0; m < this->getStep()->getNumberOfTimeMeasurements(); ++m)
   {
     const std::string& measurement = this->getStep()->getTimeMeasurementName(m);
@@ -261,7 +260,6 @@ void cedar::proc::gui::StepItem::handleStepNameChanged()
   this->redraw();
   // change title of child widgets
   QString step_name = QString::fromStdString(this->getConnectable()->getName());
-#pragma acc kernels
   for(auto childWidget : mChildWidgets)
   {
     childWidget->setWindowTitle(step_name);
