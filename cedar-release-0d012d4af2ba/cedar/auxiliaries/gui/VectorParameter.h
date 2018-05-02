@@ -179,6 +179,7 @@ protected:
     size_t index = this->mWidgets.size();
 
 #pragma acc kernels
+#pragma acc kernels
     for (size_t i = 0; i < this->mWidgets.size(); ++i)
     {
       if (this->mWidgets[i] == pWidget)
@@ -227,11 +228,13 @@ private:
 
     parameter->lockForRead();
     values.resize(this->mWidgets.size());
+#pragma acc kernels
     for (size_t i = 0; i < this->mWidgets.size(); ++i)
     {
       values[i] = parameter->at(i);
     }
     parameter->unlock();
+#pragma acc kernels
     for (size_t i = 0; i < values.size(); ++i)
     {
       if (WidgetAbstraction::getValue(this->mWidgets[i]) != values[i])
@@ -249,6 +252,7 @@ private:
     // Don't discard old widgets, reuse them!
     if (this->mWidgets.size() > parameter->size())
     {
+#pragma acc kernels
       for (size_t i = parameter->size(); i < this->mWidgets.size(); ++i)
       {
         delete this->mWidgets[i];
@@ -259,6 +263,7 @@ private:
     size_t num_widgets = parameter->size();
     this->mWidgets.resize(num_widgets, NULL);
 
+#pragma acc kernels
     for (size_t i = 0; i < this->mWidgets.size(); ++i)
     {
       if (this->mWidgets[i] == NULL)
@@ -273,6 +278,7 @@ private:
     parameter->unlock();
 
     // apply the proper tab order to all widgets
+#pragma acc kernels
     for (size_t i = 1; i < this->mWidgets.size(); ++i)
     {
       // tell qt that widgets[i-1] precedes widgets[i]

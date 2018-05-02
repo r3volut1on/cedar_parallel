@@ -101,6 +101,7 @@ void cedar::aux::gui::SettingsWidget::fillPossible2dMatDataPlots()
   int selected = -1;
   this->mpDefault2dMatDataPlot->clear();
 #pragma acc kernels
+#pragma acc kernels
   for (const auto& class_name : declarations)
   {
     if (class_name == current_default)

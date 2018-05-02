@@ -91,6 +91,7 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
   {
     unsigned int dim = this->getKernel(0)->getDimensionality();
 #pragma acc kernels
+#pragma acc kernels
     for (unsigned int i = 1; i < this->size(); ++i)
     {
       if (dim != this->getKernel(i)->getDimensionality())
@@ -106,6 +107,7 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
   {
     new_combined_kernel = cv::Mat::zeros(1, 1, CV_32F);
 
+#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
       cedar::aux::kernel::ConstKernelPtr kernel = this->getKernel(i);
@@ -146,12 +148,15 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
   {
     std::vector<int> sizes;
     sizes.resize(this->getKernel(0)->getDimensionality());
+#pragma acc kernels
     for (size_t dim = 0; dim < this->getKernel(0)->getDimensionality(); ++dim)
     {
       sizes.at(dim) = 0;
     }
+#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
+#pragma acc kernels
       for (size_t dim = 0; dim < this->getKernel(i)->getDimensionality(); ++dim)
       {
         if (static_cast<unsigned int>(sizes.at(dim)) < this->getKernel(i)->getSize(dim))
@@ -162,10 +167,12 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
     }
     new_combined_kernel = cv::Mat(this->getKernel(0)->getDimensionality(), &sizes.front(), CV_32F);
     new_combined_kernel = 0.0;
+#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
       // determine ROI
       std::vector<cv::Range> ranges;
+#pragma acc kernels
       for (size_t dim = 0; dim < this->getKernel(i)->getDimensionality(); ++dim)
       {
         int diff = new_combined_kernel.size[dim] - this->getKernel(i)->getSize(dim);
@@ -190,6 +197,7 @@ bool cedar::aux::conv::KernelList::checkForSameKernelSize() const
   cedar::aux::kernel::ConstKernelPtr first_kernel = this->getKernel(0);
 
   // compare dimensionality and sizes of first kernel with each other kernel
+#pragma acc kernels
   for (size_t i = 1; i < this->size(); ++i)
   {
     cedar::aux::kernel::ConstKernelPtr kernel = this->getKernel(i);
@@ -200,6 +208,7 @@ bool cedar::aux::conv::KernelList::checkForSameKernelSize() const
       return false;
     }
     // if dimensionality is equal check sizes of each dimension
+#pragma acc kernels
     for (size_t d = 0; d < first_kernel->getDimensionality(); ++d)
     {
       if (first_kernel->getSize(d) != kernel->getSize(d))

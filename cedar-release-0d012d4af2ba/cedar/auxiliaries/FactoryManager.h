@@ -256,6 +256,7 @@ public:
   void listTypes(std::vector<std::string>& types) const
   {
 #pragma acc kernels
+#pragma acc kernels
     for(auto iter = this->mRegisteredFactories.begin(); iter != this->mRegisteredFactories.end(); ++iter)
     {
       types.push_back(iter->first);

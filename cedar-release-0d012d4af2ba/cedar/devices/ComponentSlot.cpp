@@ -75,6 +75,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, const cedar::dev::Com
 
   stream << "available components:" << std::endl;
 #pragma acc kernels
+#pragma acc kernels
   for (auto iter = slot._mComponentConfigurations.begin(); iter != slot._mComponentConfigurations.end(); ++iter)
   {
     const std::string& type_name = iter->first;
@@ -101,6 +102,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, cedar::dev::Component
 std::vector<std::string> cedar::dev::ComponentSlot::listChannels() const
 {
   std::vector<std::string> list;
+#pragma acc kernels
   for (auto iter = this->mComponentTypeIds.begin(); iter != this->mComponentTypeIds.end(); ++iter)
   {
     list.push_back(iter->first);
@@ -161,6 +163,7 @@ void cedar::dev::ComponentSlot::readConfiguration(const cedar::aux::Configuratio
   cedar::aux::ConfigurationNode::const_assoc_iterator available_slots = node.find("available components");
   if (available_slots != node.not_found())
   {
+#pragma acc kernels
     for (auto slot_iter = available_slots->second.begin(); slot_iter != available_slots->second.end(); ++slot_iter)
     {
       const std::string& channel_name = slot_iter->first;

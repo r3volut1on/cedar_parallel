@@ -160,6 +160,7 @@ public:
   FactoryPtr get(KeyBasePtr pointer)
   {
 #pragma acc kernels
+#pragma acc kernels
     for(typename KeyTypes::iterator iter = this->mKeyTypes.begin(); iter != this->mKeyTypes.end(); ++iter)
     {
       if ((*iter)->matches(pointer))

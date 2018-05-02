@@ -232,6 +232,7 @@ void cedar::aux::gui::QwtLinePlot::applyStyle(cedar::aux::ConstDataPtr data, siz
 void cedar::aux::gui::QwtLinePlot::getStyleFor(cedar::aux::ConstDataPtr data, QPen& pen, QBrush& brush) const
 {
 #pragma acc kernels
+#pragma acc kernels
   for (auto plot_series : this->mPlotSeriesVector)
   {
     if (plot_series->mMatData == data)
@@ -342,6 +343,7 @@ bool cedar::aux::gui::QwtLinePlot::canDetach(cedar::aux::ConstDataPtr data) cons
   if(this->mpPlot != nullptr && this->mPlotSeriesVector.size() > 1)
   {
 #pragma acc kernels
+#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)
@@ -449,6 +451,7 @@ void cedar::aux::gui::QwtLinePlot::contextMenuEvent(QContextMenuEvent *pEvent)
   p_antialiasing->setCheckable(true);
 
   bool combined = true;
+#pragma acc kernels
   for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
   {
     PlotSeriesPtr series = this->mPlotSeriesVector.at(i);
@@ -500,6 +503,7 @@ void cedar::aux::gui::QwtLinePlot::contextMenuEvent(QContextMenuEvent *pEvent)
 
   if (p_action == p_antialiasing)
   {
+#pragma acc kernels
     for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
     {
       PlotSeriesPtr series = this->mPlotSeriesVector.at(i);
@@ -698,6 +702,7 @@ void cedar::aux::gui::QwtLinePlot::PlotSeries::buildArrays(unsigned int new_size
 
   if (!dimensions || !dimensions->hasSamplingPositions(0))
   {
+#pragma acc kernels
     for (unsigned int i = old_size; i < new_size; ++i)
     {
       this->mXValues.at(i) = static_cast<double>(i);
@@ -710,6 +715,7 @@ void cedar::aux::gui::QwtLinePlot::PlotSeries::buildArrays(unsigned int new_size
     min = std::numeric_limits<double>::max();
     max = -std::numeric_limits<double>::max();
     const auto& sampling_positions = dimensions->getSamplingPositions(0);
+#pragma acc kernels
     for (unsigned int i = 0; i < new_size; ++i)
     {
       double sampling_position;
@@ -734,6 +740,7 @@ void cedar::aux::gui::detail::QwtLinePlotWorker::convert()
   QWriteLocker plot_locker(this->mpPlot->mpLock);
   double x_min = std::numeric_limits<double>::max();
   double x_max = -std::numeric_limits<double>::max();
+#pragma acc kernels
   for (size_t series_index = 0; series_index < this->mpPlot->mPlotSeriesVector.size(); ++series_index)
   {
     cedar::aux::gui::QwtLinePlot::PlotSeriesPtr series = this->mpPlot->mPlotSeriesVector.at(series_index);
@@ -765,12 +772,14 @@ void cedar::aux::gui::detail::QwtLinePlotWorker::convert()
     x_min = std::min(x_min, local_min);
     x_max = std::max(x_max, local_max);
 
+#pragma acc kernels
     for (size_t x = 0; x < series->mXValues.size(); ++x)
     {
       series->mYValues.at(x) = cedar::aux::math::getMatrixEntry<double>(mat, x);
     }
   }
 
+#pragma acc kernels
   for (QwtPlotMarker* marker : this->mpPlot->mMarkers)
   {
     x_min = std::min(x_min, marker->xValue());
@@ -780,6 +789,7 @@ void cedar::aux::gui::detail::QwtLinePlotWorker::convert()
   double hinted_min = std::numeric_limits<double>::max();
   double hinted_max = -std::numeric_limits<double>::max();
   bool value_hints_for_all = true;
+#pragma acc kernels
   for (const auto& series : this->mpPlot->mPlotSeriesVector)
   {
     if (!series->mValueRange)
@@ -809,6 +819,7 @@ void cedar::aux::gui::QwtLinePlot::conversionDone(double min, double max)
 {
   QReadLocker locker(this->mpLock);
 
+#pragma acc kernels
   for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
   {
     PlotSeriesPtr series = this->mPlotSeriesVector.at(i);

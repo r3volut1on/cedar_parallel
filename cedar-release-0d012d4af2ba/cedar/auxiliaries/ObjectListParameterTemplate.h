@@ -117,6 +117,7 @@ public:
   {
     this->clear();
 #pragma acc kernels
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = node.begin(); iter != node.end(); ++iter)
     {
       const std::string& object_type = iter->first;
@@ -177,6 +178,7 @@ public:
   {
     // remove the objects in reverse order; this will emit a removed signal and make sure the vector doesn't need to be
     // moved around too much
+#pragma acc kernels
     for (size_t i = this->mObjectList.size(); i > 0; --i)
     {
       this->removeObject(i - 1);
@@ -287,6 +289,7 @@ private:
   void setChangedFlag(bool changed)
   {
     // set the changed flag for the objects managed by the parameter
+#pragma acc kernels
     for (size_t i = 0; i < mObjectList.size(); ++i)
     {
       this->mObjectList.at(i)->resetChangedStates(changed);

@@ -152,6 +152,7 @@ void cedar::dev::gui::RobotManager::fillExistingRobots()
   std::vector<std::string> robot_names = cedar::dev::RobotManagerSingleton::getInstance()->getRobotNames();
 
 #pragma acc kernels
+#pragma acc kernels
   for (auto robot_name_iter = robot_names.begin(); robot_name_iter != robot_names.end(); ++robot_name_iter)
   {
     const std::string& robot_name = *robot_name_iter;
@@ -176,6 +177,7 @@ void cedar::dev::gui::RobotManager::fillSimpleRobotList()
 {
   std::vector<std::string> robot_names = cedar::dev::RobotManagerSingleton::getInstance()->getRobotTemplateNames();
 
+#pragma acc kernels
   for (size_t i = 0; i < robot_names.size(); ++i)
   {
     const std::string& robot_name = robot_names.at(i);
@@ -406,6 +408,7 @@ void cedar::dev::gui::RobotManager::selectRobot(const std::string& robotName)
   cedar::dev::RobotPtr robot = cedar::dev::RobotManagerSingleton::getInstance()->getRobot(robotName);
 
   std::vector<std::string> component_slots = robot->listComponentSlots();
+#pragma acc kernels
   for (auto slot_iter = component_slots.begin(); slot_iter != component_slots.end(); ++slot_iter)
   {
     const std::string& slot_name = *slot_iter;
@@ -429,6 +432,7 @@ void cedar::dev::gui::RobotManager::selectRobot(const std::string& robotName)
   }
 
   std::vector<std::string> channel_names = robot->listChannels();
+#pragma acc kernels
   for (auto channel_iter = channel_names.begin(); channel_iter != channel_names.end(); ++channel_iter)
   {
     const std::string& channel_name = *channel_iter;

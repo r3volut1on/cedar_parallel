@@ -115,6 +115,7 @@ std::vector<cedar::unit::Frequency> cedar::dev::kteam::Drive::convertWheelSpeedT
                                       );
 
 #pragma acc kernels
+#pragma acc kernels
   for (unsigned int i = 0; i < wheelSpeed.size(); ++i)
   {
     // compute the number of pulses per second and round the value to a natural number
@@ -138,6 +139,7 @@ std::vector<cedar::unit::Velocity> cedar::dev::kteam::Drive::convertPulsesToWhee
                                         0.0 * cedar::unit::DEFAULT_VELOCITY_UNIT
                                       );
 
+#pragma acc kernels
   for (unsigned int i = 0; i < wheelSpeedPulses.size(); ++i)
   {
     // compute the number of pulses per second and round the value to a natural number

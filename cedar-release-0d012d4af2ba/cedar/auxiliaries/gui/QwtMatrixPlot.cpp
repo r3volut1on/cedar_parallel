@@ -279,6 +279,7 @@ void cedar::aux::gui::QwtMatrixPlot::processChangedData()
         if (dynamic_cast<cedar::aux::gui::MultiPlotInterface*>(mpCurrentPlotWidget))
         {
 #pragma acc kernels
+#pragma acc kernels
           for (auto rest = ++iter; rest != map.end(); ++rest)
           {
             this->append(rest->first, rest->second);

@@ -135,6 +135,7 @@ public:
   cedar::aux::ConstPluginDeclarationPtr getDeclarationOf(ConstBaseTypePtr object) const
   {
 #pragma acc kernels
+#pragma acc kernels
     for (auto declaration : this->mDeclarations)
     {
       if (declaration->isObjectInstanceOf(object))
@@ -186,6 +187,7 @@ public:
   ConstBasePluginDeclarationPtr getDeclarationNoThrow(const std::string& className) const
   {
     // look through all declarations and see if there is one whose name matches the given one
+#pragma acc kernels
     for (auto declaration : this->mDeclarations)
     {
       if (declaration->getClassName() == className)

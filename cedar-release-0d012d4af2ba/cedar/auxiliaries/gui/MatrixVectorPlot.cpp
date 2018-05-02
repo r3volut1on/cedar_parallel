@@ -257,6 +257,7 @@ bool cedar::aux::gui::MatrixVectorPlot::canDetach(cedar::aux::ConstDataPtr data)
   if(this->mpPlot != nullptr && this->mPlotSeriesVector.size() > 1)
   {
 #pragma acc kernels
+#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)
@@ -322,6 +323,7 @@ void cedar::aux::gui::MatrixVectorPlot::contextMenuEvent(QContextMenuEvent *pEve
 
   bool combined = true;
 #pragma acc kernels
+#pragma acc kernels
   for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
   {
     PlotSeriesPtr series = this->mPlotSeriesVector.at(i);
@@ -342,6 +344,7 @@ void cedar::aux::gui::MatrixVectorPlot::contextMenuEvent(QContextMenuEvent *pEve
 
   if (p_action == p_antialiasing)
   {
+#pragma acc kernels
     for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
     {
       PlotSeriesPtr series = this->mPlotSeriesVector.at(i);
@@ -385,6 +388,7 @@ void cedar::aux::gui::MatrixVectorPlot::buildArrays(PlotSeriesPtr series, unsign
   series->mXValues.resize(new_size);
   series->mYValues.resize(new_size);
 
+#pragma acc kernels
   for (unsigned int i = old_size; i < new_size; ++i)
   {
     series->mXValues.at(i) = static_cast<double>(i);
@@ -399,6 +403,7 @@ void cedar::aux::gui::MatrixVectorPlot::timerEvent(QTimerEvent * /* pEvent */)
   }
 
   this->mpLock->lockForRead();
+#pragma acc kernels
   for (size_t i = 0; i < this->mPlotSeriesVector.size(); ++i)
   {
     PlotSeriesPtr series = this->mPlotSeriesVector.at(i);
@@ -438,6 +443,7 @@ void cedar::aux::gui::MatrixVectorPlot::timerEvent(QTimerEvent * /* pEvent */)
     series->mYValues.at(1) = cedar::aux::math::getMatrixEntry<double>(mat, 1);
     series->mMatData->unlock();
 
+#pragma acc kernels
     for (unsigned int i = 0; i < 2; ++i)
     {
       const QwtScaleDiv* p_lower;

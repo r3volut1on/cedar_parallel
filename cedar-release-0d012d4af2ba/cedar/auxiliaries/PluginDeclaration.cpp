@@ -97,6 +97,7 @@ std::string cedar::aux::PluginDeclaration::getPluginType() const
 bool cedar::aux::PluginDeclaration::isDeprecatedName(const std::string& name) const
 {
 #pragma acc kernels
+#pragma acc kernels
   for (size_t i = 0; i < this->mDeprecatedNames.size(); ++i)
   {
     if (this->mDeprecatedNames.at(i) == name)

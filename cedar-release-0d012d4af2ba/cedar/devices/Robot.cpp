@@ -83,6 +83,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, const cedar::dev::Rob
   std::vector<std::string> slot_list = robot.listComponentSlots();
 
 #pragma acc kernels
+#pragma acc kernels
   for (auto slot_iter = slot_list.begin(); slot_iter != slot_list.end(); ++slot_iter)
   {
     const std::string& slot_name = *slot_iter;
@@ -95,6 +96,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, const cedar::dev::Rob
 
   std::vector<std::string> channel_list = robot.listChannels();
 
+#pragma acc kernels
   for (auto channel_iter = channel_list.begin(); channel_iter != channel_list.end(); ++channel_iter)
   {
     const std::string& channel_name = *channel_iter;
@@ -132,6 +134,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, cedar::dev::RobotPtr 
 
 void cedar::dev::Robot::openChannels()
 {
+#pragma acc kernels
   for (auto iter = this->mChannelInstances.begin(); iter != this->mChannelInstances.end(); ++iter)
   {
     cedar::dev::ChannelPtr channel = iter->second;
@@ -141,6 +144,7 @@ void cedar::dev::Robot::openChannels()
 
 void cedar::dev::Robot::closeChannels()
 {
+#pragma acc kernels
   for (auto iter = this->mChannelInstances.begin(); iter != this->mChannelInstances.end(); ++iter)
   {
     cedar::dev::ChannelPtr channel = iter->second;
@@ -151,6 +155,7 @@ void cedar::dev::Robot::closeChannels()
 unsigned int cedar::dev::Robot::countOpenChannels() const
 {
   unsigned int open_channels = 0;
+#pragma acc kernels
   for (auto iter = this->mChannelInstances.begin(); iter != this->mChannelInstances.end(); ++iter)
   {
     cedar::dev::ChannelPtr channel = iter->second;
@@ -170,6 +175,7 @@ unsigned int cedar::dev::Robot::getNumberOfChannels() const
 
 void cedar::dev::Robot::setChannel(const std::string& channel)
 {
+#pragma acc kernels
   for (auto slot_iter = mComponentSlots.begin(); slot_iter != mComponentSlots.end(); ++slot_iter)
   {
     cedar::dev::ComponentSlotPtr slot = slot_iter->second;
@@ -196,6 +202,7 @@ std::vector<std::string> cedar::dev::Robot::listComponentSlots() const
 {
   std::vector<std::string> slot_vector;
 
+#pragma acc kernels
   for (auto slot_iter = mComponentSlots.begin(); slot_iter != mComponentSlots.end(); ++slot_iter)
   {
     slot_vector.push_back(slot_iter->first);
@@ -208,6 +215,7 @@ std::vector<std::string> cedar::dev::Robot::listChannels() const
 {
   std::vector<std::string> channels;
 
+#pragma acc kernels
   for (auto channel_iter = mChannelTypes.begin(); channel_iter != mChannelTypes.end(); ++channel_iter)
   {
     channels.push_back(channel_iter->first);
@@ -226,6 +234,7 @@ void cedar::dev::Robot::performConsistencyCheck() const
   // gather all channels from the component slots
   std::set<std::string> slot_channels;
 
+#pragma acc kernels
   for (auto slot_iter = this->mComponentSlots.begin(); slot_iter != this->mComponentSlots.end(); ++slot_iter)
   {
     cedar::dev::ConstComponentSlotPtr slot = slot_iter->second;
@@ -234,10 +243,12 @@ void cedar::dev::Robot::performConsistencyCheck() const
   }
 
   // check if every slot specifies relationships for every channel
+#pragma acc kernels
   for (auto slot_iter = this->mComponentSlots.begin(); slot_iter != this->mComponentSlots.end(); ++slot_iter)
   {
     cedar::dev::ConstComponentSlotPtr slot = slot_iter->second;
     const std::string& slot_name = slot_iter->first;
+#pragma acc kernels
     for (auto channel_it = slot_channels.begin(); channel_it != slot_channels.end(); ++channel_it)
     {
       const std::string& name = *channel_it;
@@ -274,6 +285,7 @@ void cedar::dev::Robot::readDescription(const cedar::aux::ConfigurationNode& nod
 
     //!@todo Maybe this kind of list/map of configurables of fixed type can be generalized to a parameter?
     mComponentSlots.clear();
+#pragma acc kernels
     for (auto slot_iter = component_slots.begin(); slot_iter != component_slots.end(); ++slot_iter)
     {
       const std::string& slot_name = slot_iter->first;
@@ -291,6 +303,7 @@ void cedar::dev::Robot::readDescription(const cedar::aux::ConfigurationNode& nod
   {
     //!@todo Maybe this kind of list/map of configurables of fixed type can be generalized to a parameter?
     mChannelTypes.clear();
+#pragma acc kernels
     for (auto slot_iter = channel_node->second.begin(); slot_iter != channel_node->second.end(); ++slot_iter)
     {
       const std::string& channel_name = slot_iter->first;
@@ -343,6 +356,7 @@ void cedar::dev::Robot::readChannels(const cedar::aux::ConfigurationNode& node)
 
   if (component_slots_iter != node.not_found())
   {
+#pragma acc kernels
     for (auto iter = component_slots_iter->second.begin(); iter != component_slots_iter->second.end(); ++iter)
     {
       const std::string& channel_name = iter->first;
@@ -379,6 +393,7 @@ void cedar::dev::Robot::readComponentSlotInstantiations(const cedar::aux::Config
   const cedar::aux::ConfigurationNode& component_slots_node = component_slots_iter->second;
 
   // iterate over all slots; there should be an entry in the configuration for each of them.
+#pragma acc kernels
   for (auto iter = component_slots.begin(); iter != component_slots.end(); ++iter)
   {
     const std::string& slot_name = *iter;
@@ -438,6 +453,7 @@ std::vector<std::string> cedar::dev::Robot::getComponentSlotNames() const
   std::vector<std::string> slot_names;
 
   // for all elements in the _mComponentSlots map
+#pragma acc kernels
 #pragma acc kernels
   for(auto map_entry = mComponentSlots.begin(); map_entry != mComponentSlots.end(); ++map_entry)
   {

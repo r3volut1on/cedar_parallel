@@ -93,6 +93,7 @@ std::vector<std::string> cedar::dev::RobotManager::Template::getConfigurationNam
   std::vector<std::string> names;
 
 #pragma acc kernels
+#pragma acc kernels
   for (auto iter = this->mNamedPaths.begin(); iter != this->mNamedPaths.end(); ++iter)
   {
     names.push_back(iter->first);
@@ -126,6 +127,7 @@ std::vector<std::string> cedar::dev::RobotManager::getRobotNames() const
 {
   std::vector<std::string> names;
 
+#pragma acc kernels
   for (auto iter = this->mRobotInstances.begin(); iter != this->mRobotInstances.end(); ++iter)
   {
     names.push_back(iter->first);
@@ -138,6 +140,7 @@ std::vector<std::string> cedar::dev::RobotManager::getRobotTemplateNames() const
 {
   std::vector<std::string> names;
 
+#pragma acc kernels
   for (auto iter = this->mRobotTemplates.begin(); iter != this->mRobotTemplates.end(); ++iter)
   {
     names.push_back(iter->first);
@@ -233,6 +236,7 @@ cedar::dev::RobotPtr cedar::dev::RobotManager::getRobot(const std::string& robot
 
 const std::string& cedar::dev::RobotManager::getRobotName(cedar::dev::ConstRobotPtr robot) const
 {
+#pragma acc kernels
   for (auto iter = this->mRobotInstances.begin(); iter != this->mRobotInstances.end(); ++iter)
   {
     if (iter->second == robot)
@@ -334,6 +338,7 @@ void cedar::dev::RobotManager::store() const
 
   cedar::aux::ConfigurationNode root, robots;
 
+#pragma acc kernels
   for (auto iter = this->mRobotInfos.begin(); iter != this->mRobotInfos.end(); ++iter)
   {
     const std::string& robot_name = iter->first;
@@ -373,6 +378,7 @@ void cedar::dev::RobotManager::restore()
 
   robots = root.get_child("robots");
 
+#pragma acc kernels
 #pragma acc kernels
   for(auto child_iter = robots.begin(); child_iter != robots.end(); ++child_iter)
   {

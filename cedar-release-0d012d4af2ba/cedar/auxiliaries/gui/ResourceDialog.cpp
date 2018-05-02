@@ -151,6 +151,7 @@ void cedar::aux::gui::ResourceDialog::fill()
   CEDAR_ASSERT(this->mpResourceList->invisibleRootItem() != NULL);
 
 #pragma acc kernels
+#pragma acc kernels
   for (auto path_iter = paths.begin(); path_iter != paths.end(); ++path_iter)
   {
     this->appendDirectories(*path_iter, this->mpResourceList->invisibleRootItem());
@@ -162,6 +163,7 @@ void cedar::aux::gui::ResourceDialog::fill()
 void cedar::aux::gui::ResourceDialog::removeEmpty(QTreeWidgetItem* pParent)
 {
   QList<QTreeWidgetItem*> to_remove;
+#pragma acc kernels
   for (int i = 0; i < pParent->childCount(); ++i)
   {
     this->removeEmpty(pParent->child(i));
@@ -176,6 +178,7 @@ void cedar::aux::gui::ResourceDialog::removeEmpty(QTreeWidgetItem* pParent)
     }
   }
 
+#pragma acc kernels
   for (int i = 0; i < to_remove.count(); ++i)
   {
     delete to_remove.at(i);
@@ -199,6 +202,7 @@ void cedar::aux::gui::ResourceDialog::appendDirectories
   }
 
   // list directories
+#pragma acc kernels
   for (directory_iterator directory_iter(path); directory_iter != directory_iterator(); ++directory_iter)
   {
     boost::filesystem::path file = *directory_iter;
@@ -246,6 +250,7 @@ void cedar::aux::gui::ResourceDialog::appendFiles
     return;
   }
 
+#pragma acc kernels
   for (directory_iterator directory_iter(path); directory_iter != directory_iterator(); ++directory_iter)
   {
     boost::filesystem::path file = *directory_iter;
@@ -276,6 +281,7 @@ void cedar::aux::gui::ResourceDialog::appendFiles
 
         // see if the file's extension matches any of the set ones
         bool matched = false;
+#pragma acc kernels
         for (size_t i = 0; i < this->mExtensions.size(); ++i)
         {
           if (extension == this->mExtensions.at(i))
@@ -328,12 +334,14 @@ QTreeWidgetItem* cedar::aux::gui::ResourceDialog::findPathNode
   auto path_iter = path.begin();
   ++path_iter;
 
+#pragma acc kernels
   for (;path_iter != path.end(); ++path_iter)
   {
     sub_path /= *path_iter;
   }
 
 
+#pragma acc kernels
   for (int i = 0; i < pParent->childCount(); ++i)
   {
     QTreeWidgetItem* p_current_item = pParent->child(i);

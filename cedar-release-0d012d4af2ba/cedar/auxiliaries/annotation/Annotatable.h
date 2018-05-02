@@ -103,6 +103,7 @@ public:
   bool hasAnnotation() const
   {
 #pragma acc kernels
+#pragma acc kernels
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *annotation = this->mAnnotations[i].get();
@@ -151,6 +152,7 @@ private:
   template <typename T>
   size_t findAnnotation() const
   {
+#pragma acc kernels
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *annotation = this->mAnnotations[i].get();
@@ -170,6 +172,7 @@ private:
   {
     const cedar::aux::annotation::Annotation *that_annotation = annotation.get();
 
+#pragma acc kernels
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *this_annotation = this->mAnnotations[i].get();
@@ -190,6 +193,7 @@ private:
   {
     const cedar::aux::annotation::Annotation *that_annotation = annotation.get();
 
+#pragma acc kernels
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *this_annotation = this->mAnnotations[i].get();

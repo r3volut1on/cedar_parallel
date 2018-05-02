@@ -137,6 +137,7 @@ void cedar::aux::math::flip(const cv::Mat& toFlip, cv::Mat& flipped, const std::
     dst_range[0] = cv::Range::all();
     dst_range[1] = cv::Range::all();
 #pragma acc kernels
+#pragma acc kernels
     for (int d3 = 0; d3 < toFlip.size[2]; ++d3)
     {
       src_range[2] = cv::Range(d3, d3 + 1);
@@ -399,11 +400,14 @@ void cedar::aux::math::reduceCvMat3D
   {
     case CEDAR_OPENCV_CONSTANT(REDUCE_SUM):
     {
+#pragma acc kernels
       for (dim_1 = 0; dim_1 < source_size[0]; ++dim_1)
       {
+#pragma acc kernels
         for (dim_2 = 0; dim_2 < source_size[1]; ++dim_2)
         {
           sum = 0;
+#pragma acc kernels
           for (dim_dropped = 0; dim_dropped < dropped_size; ++dim_dropped)
           {
             sum += source.at<T>(src_index);
@@ -415,11 +419,14 @@ void cedar::aux::math::reduceCvMat3D
     }
     case CEDAR_OPENCV_CONSTANT(REDUCE_AVG):
     {
+#pragma acc kernels
       for (dim_1 = 0; dim_1 < source_size[0]; ++dim_1)
       {
+#pragma acc kernels
         for (dim_2 = 0; dim_2 < source_size[1]; ++dim_2)
         {
           sum = 0;
+#pragma acc kernels
           for (dim_dropped = 0; dim_dropped < dropped_size; ++dim_dropped)
           {
             sum += source.at<T>(src_index);
@@ -431,11 +438,14 @@ void cedar::aux::math::reduceCvMat3D
     }
     case CEDAR_OPENCV_CONSTANT(REDUCE_MAX):
     {
+#pragma acc kernels
       for (dim_1 = 0; dim_1 < source_size[0]; ++dim_1)
       {
+#pragma acc kernels
         for (dim_2 = 0; dim_2 < source_size[1]; ++dim_2)
         {
           max = static_cast<T>(std::numeric_limits<int>::min());
+#pragma acc kernels
           for (dim_dropped = 0; dim_dropped < dropped_size; ++dim_dropped)
           {
             max = std::max(max, source.at<T>(src_index));
@@ -447,11 +457,14 @@ void cedar::aux::math::reduceCvMat3D
     }
     case CEDAR_OPENCV_CONSTANT(REDUCE_MIN):
     {
+#pragma acc kernels
       for (dim_1 = 0; dim_1 < source_size[0]; ++dim_1)
       {
+#pragma acc kernels
         for (dim_2 = 0; dim_2 < source_size[1]; ++dim_2)
         {
           min = static_cast<T>(std::numeric_limits<int>::max());
+#pragma acc kernels
           for (dim_dropped = 0; dim_dropped < dropped_size; ++dim_dropped)
           {
             min = std::min(min, source.at<T>(src_index));
@@ -509,8 +522,10 @@ void cedar::aux::math::findPeaks(const cv::Mat& activation, std::vector<cv::Poin
       if (marked_map.at<float>(pt) >= threshold)
       {
         points.push_back(pt);
+#pragma acc kernels
         for (int i = -1; i <= 1; ++i)
         {
+#pragma acc kernels
           for (int j = -1; j <= 1; ++j)
           {
             if (i != 0 || j != 0)
@@ -526,6 +541,7 @@ void cedar::aux::math::findPeaks(const cv::Mat& activation, std::vector<cv::Poin
 
     // find center of the point (use mean value)
     cv::Point sum(0, 0);
+#pragma acc kernels
     for (auto point : points)
     {
       sum += point;

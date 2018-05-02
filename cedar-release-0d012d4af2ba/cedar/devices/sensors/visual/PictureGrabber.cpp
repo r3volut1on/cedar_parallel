@@ -110,6 +110,7 @@ void cedar::dev::sensors::visual::PictureGrabber::init()
 
   // watch filename on every channel
 #pragma acc kernels
+#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     QObject::connect
@@ -211,6 +212,7 @@ void cedar::dev::sensors::visual::PictureGrabber::onCreateGrabber()
   unsigned int num_channels = getNumChannels();
 
   // for every channel, read from image-file
+#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     // read from file

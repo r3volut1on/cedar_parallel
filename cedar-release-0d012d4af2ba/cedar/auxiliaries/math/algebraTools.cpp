@@ -137,6 +137,7 @@ std::vector<double> cedar::aux::math::solveCubic(const std::vector<double>& rCoe
   sub = 1.0/3.0 * A;
   
 #pragma acc kernels
+#pragma acc kernels
   for (unsigned int i = 0; i < solutions.size(); ++i)
   {
     solutions[i] -= sub;
@@ -256,6 +257,7 @@ std::vector<double> cedar::aux::math::solveQuartic(const std::vector<double>& rC
   // resubstitute
   sub = 1.0/4.0*A;
   
+#pragma acc kernels
   for (unsigned i = 0; i < solutions.size(); ++i)
   {
     solutions[i] -= sub;

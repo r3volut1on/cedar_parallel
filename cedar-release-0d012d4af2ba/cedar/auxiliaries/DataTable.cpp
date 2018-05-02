@@ -182,6 +182,7 @@ void cedar::aux::DataTable::RowCollection::append(ConstRowCollectionPtr other)
   CEDAR_ASSERT(other->mDataTable.lock() == this->mDataTable.lock());
 
 #pragma acc kernels
+#pragma acc kernels
   for (auto row : other->mRows)
   {
     this->appendRow(row);
@@ -223,6 +224,7 @@ std::set<std::string> cedar::aux::DataTable::IndexMap::listIndexNames() const
 {
   std::set<std::string> ids;
 
+#pragma acc kernels
   for (const auto& name_id_pair : this->map.left)
   {
     ids.insert(name_id_pair.first);
@@ -282,6 +284,7 @@ cedar::aux::DataTable::ConstRowCollectionPtr cedar::aux::DataTable::RowCollectio
   CEDAR_ASSERT(table);
   RowCollectionPtr result(new RowCollection(table));
 
+#pragma acc kernels
   for (auto row : this->mRows)
   {
     if (selector(row))
@@ -338,6 +341,7 @@ cedar::aux::DataTable::ConstRowCollectionPtr cedar::aux::DataTable::RowCollectio
 
 void cedar::aux::DataTable::RowCollection::forAll(const boost::function<void(ConstRowPtr)>& valueFunction) const
 {
+#pragma acc kernels
   for (auto row : this->mRows)
   {
     valueFunction(row);
@@ -348,6 +352,7 @@ double cedar::aux::DataTable::RowCollection::sum(const boost::function<double(Co
 {
   double sum = 0.0;
 
+#pragma acc kernels
   for (auto row : this->mRows)
   {
     sum += valueFunction(row);

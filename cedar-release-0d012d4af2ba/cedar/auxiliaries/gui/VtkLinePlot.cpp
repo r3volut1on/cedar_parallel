@@ -303,6 +303,7 @@ bool cedar::aux::gui::VtkLinePlot::canDetach(cedar::aux::ConstDataPtr data) cons
   if(this->mPlotSeriesVector.size() > 1)
   {
 #pragma acc kernels
+#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)
@@ -318,6 +319,7 @@ bool cedar::aux::gui::VtkLinePlot::canDetach(cedar::aux::ConstDataPtr data) cons
 void cedar::aux::gui::VtkLinePlot::doDetach(cedar::aux::ConstDataPtr data)
 {
   QWriteLocker locker(mpLock);
+#pragma acc kernels
   for(auto it = mPlotSeriesVector.begin(); it != mPlotSeriesVector.end(); ++it)
   { 
     auto plot_series = *it;
@@ -335,6 +337,7 @@ void cedar::aux::gui::VtkLinePlot::PlotSeries::buildXAxis(unsigned int new_size)
   vtkIdType old_size = this->mpVtkTable->GetNumberOfRows();
   this->mpVtkTable->SetNumberOfRows(new_size);
 #pragma acc kernels
+#pragma acc kernels
   for (unsigned int i = old_size; i < new_size; ++i)
   {
     this->mpVtkTable->SetValue(i, this->mXColumn, static_cast<double>(i));
@@ -345,6 +348,7 @@ void cedar::aux::gui::VtkLinePlot::PlotSeries::buildXAxis(unsigned int new_size)
 void cedar::aux::gui::detail::VtkLinePlotWorker::convert()
 {
   QWriteLocker plot_locker(this->mpPlot->mpLock);
+#pragma acc kernels
   for (size_t i = 0; i < this->mpPlot->mPlotSeriesVector.size(); ++i)
   {
     cedar::aux::gui::VtkLinePlot::PlotSeriesPtr series = this->mpPlot->mPlotSeriesVector.at(i);
@@ -377,6 +381,7 @@ void cedar::aux::gui::detail::VtkLinePlotWorker::convert()
     {
       series->buildXAxis(size);
     }
+#pragma acc kernels
     for (size_t j = 0; j < size; ++j)
     {
       this->mpPlot->mpVtkTable->SetValueByName(j, series->mYColumnName.c_str(),cedar::aux::math::getMatrixEntry<double>(mat, j));

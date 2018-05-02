@@ -112,6 +112,7 @@ void cedar::dev::kteam::InfraredSensorSerial::updateIrValues()
   CEDAR_ASSERT(parts.size() == cedar::aux::math::get1DMatrixSize(infrared_values) + 1);
 
 #pragma acc kernels
+#pragma acc kernels
   for (unsigned int i = 0; i < cedar::aux::math::get1DMatrixSize(infrared_values); ++i)
   {
     const std::string& value = parts[i + 1]; // +1 to skip the command/reply string
