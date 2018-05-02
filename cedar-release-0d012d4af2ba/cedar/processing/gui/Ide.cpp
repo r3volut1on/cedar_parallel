@@ -548,7 +548,6 @@ void cedar::proc::gui::Ide::init(bool loadDefaultPlugins, bool redirectLogToGui,
   openable_dialogs.push_back(boost_ctrl);
 
   // need to iterate in reverse, actions are always added at the beginning of the menu
-#pragma acc kernels
   for (auto iter = openable_dialogs.rbegin(); iter != openable_dialogs.rend(); ++iter)
   {
     auto openable_dialog = *iter;
@@ -625,7 +624,6 @@ void cedar::proc::gui::Ide::lockUI(bool lock)
   widgets.push_back(this->mpPropertiesWidget);
   widgets.push_back(this->mpLogWidget);
 
-#pragma acc kernels
   for (auto widget : widgets)
   {
     if (lock)
@@ -933,7 +931,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
 
   // create a list of all items to be duplicated (take out items that will be duplicated by selected groups)
   QList<QGraphicsItem*> items_to_duplicate;
-#pragma acc kernels
   for (auto item : selected)
   {
     item->setSelected(false);
@@ -952,7 +949,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
     if (add_to_list)
     {
       // check if the item has a parent within the selection
-#pragma acc kernels
       for (auto sub_item : selected)
       {
         if (sub_item->isAncestorOf(item))
@@ -980,7 +976,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
 
   // determine the position offset of the duplicates as the average of the positions of all selected elements
   QPointF center(0.0, 0.0);
-#pragma acc kernels
   for (int i = 0; i < items_to_duplicate.size(); ++i)
   {
     center += items_to_duplicate.at(i)->scenePos();
@@ -989,7 +984,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
 
   std::vector<cedar::proc::DataConnectionPtr> duplicated_connections;
   // now try to find all connections between duplicated items
-#pragma acc kernels
   for (auto connected_item : items_to_duplicate)
   {
     // first, try to get the underlying connectable and parent group for each item
@@ -1004,7 +998,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
           // get a list of all outgoing connections for this element
           if (connectable->hasSlotForRole(cedar::proc::DataRole::OUTPUT))
           {
-#pragma acc kernels
             for (auto slot : connectable->getDataSlots(cedar::proc::DataRole::OUTPUT))
             {
               std::vector<cedar::proc::DataConnectionPtr> more_connections;
@@ -1013,7 +1006,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
             }
           }
           // now check if any of these connections point to an element in the list of duplicates
-#pragma acc kernels
           for (auto con : connections)
           {
             auto target = this->mpProcessingDrawer->getScene()->getGraphicsItemFor(con->getTarget()->getParentPtr());
@@ -1029,14 +1021,12 @@ void cedar::proc::gui::Ide::duplicateSelected()
 
   std::vector<std::pair<cedar::proc::Connectable*, cedar::proc::OwnedDataPtr> > outgoing_slots;
   std::vector<std::pair<cedar::proc::Connectable*, cedar::proc::ExternalDataPtr> > receiving_slots;
-#pragma acc kernels
   for (auto con : duplicated_connections)
   {
     outgoing_slots.push_back(std::make_pair(con->getSource()->getParentPtr(), con->getSource()));
     receiving_slots.push_back(std::make_pair(con->getTarget()->getParentPtr(), con->getTarget()));
   }
   // perform the actual duplication
-#pragma acc kernels
   for (int i = 0; i < items_to_duplicate.size(); ++i)
   {
     if (auto p_base = dynamic_cast<cedar::proc::gui::Element*>(items_to_duplicate.at(i)))
@@ -1060,7 +1050,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
           p_new->setSelected(true);
           
           // replace any slots with new ones
-#pragma acc kernels
           for (auto& out : outgoing_slots)
           {
             if (out.first == p_base->getElement().get())
@@ -1068,7 +1057,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
               out.second = boost::dynamic_pointer_cast<cedar::proc::Connectable>(p_new->getElement())->getOutputSlot(out.second->getName());
             }
           }
-#pragma acc kernels
           for (auto& in : receiving_slots)
           {
             if (in.first == p_base->getElement().get())
@@ -1086,7 +1074,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
   }
 
   // now duplicate connections between duplicated elements
-#pragma acc kernels
   for (unsigned int i = 0; i < outgoing_slots.size(); ++i)
   {
     cedar::proc::Group::connectAcrossGroups(outgoing_slots.at(i).second, receiving_slots.at(i).second);
@@ -1120,7 +1107,6 @@ void cedar::proc::gui::Ide::pasteStepConfiguration()
     {
       this->mpPropertyTable->clear();
     }
-#pragma acc kernels
     for (auto item : selected_items)
     {
       if (cedar::proc::gui::StepItem* p_base = dynamic_cast<cedar::proc::gui::StepItem*>(item))
@@ -1264,7 +1250,6 @@ void cedar::proc::gui::Ide::storeSettings()
   cedar::proc::gui::SettingsSingleton::getInstance()->propertiesSettings()->getFrom(this->mpPropertiesWidget);
   cedar::proc::gui::SettingsSingleton::getInstance()->stepsSettings()->getFrom(this->mpItemsWidget);
 
-#pragma acc kernels
   for (const auto& name_openable_pair : this->mOpenableDialogs)
   {
     auto openable = name_openable_pair.second;
@@ -1573,7 +1558,6 @@ void cedar::proc::gui::Ide::loadFile(QString file)
   auto required_plugins = cedar::proc::Group::getRequiredPlugins(file.toStdString());
   std::set<std::string> plugins_not_found;
   std::set<std::string> plugins_not_loaded;
-#pragma acc kernels
   for (auto iter = required_plugins.begin(); iter != required_plugins.end(); ++iter)
   {
     const std::string& plugin_name = *iter;
@@ -1595,7 +1579,6 @@ void cedar::proc::gui::Ide::loadFile(QString file)
     p_message->setText("Some plugins required for this architecture were not found. Continue?");
 
     QString details = "The plugins not found are:";
-#pragma acc kernels
     for (auto iter = plugins_not_found.begin(); iter != plugins_not_found.end(); ++iter)
     {
       details += "\n";
@@ -1625,7 +1608,6 @@ void cedar::proc::gui::Ide::loadFile(QString file)
     p_message->setText("Some plugins required for this architecture were not loaded. Load them?");
 
     QString details = "The plugins not found are:";
-#pragma acc kernels
     for (auto iter = plugins_not_loaded.begin(); iter != plugins_not_loaded.end(); ++iter)
     {
       details += "\n";
@@ -1648,7 +1630,6 @@ void cedar::proc::gui::Ide::loadFile(QString file)
     }
     if (r == QMessageBox::Yes)
     {
-#pragma acc kernels
       for (auto iter = plugins_not_loaded.begin(); iter != plugins_not_loaded.end(); ++iter)
       {
         auto plugin_name = *iter;
@@ -1688,7 +1669,6 @@ void cedar::proc::gui::Ide::loadFile(QString file)
     p_error_widget->setWordWrap(true);
     p_layout->addWidget(p_error_widget);
 
-#pragma acc kernels
     for (size_t i = 0; i < e.getMessages().size(); ++i)
     {
       QString error = QString::fromStdString(e.getMessages()[i]);
@@ -1776,7 +1756,6 @@ void cedar::proc::gui::Ide::fillRecentFilesList()
   {
     this->mpRecentFiles->setEnabled(true);
 
-#pragma acc kernels
     for (size_t i = entries->size(); i > 0; --i)
     {
       QAction *p_action = p_menu->addAction(entries->at(i - 1).c_str());
@@ -1817,14 +1796,12 @@ void cedar::proc::gui::Ide::closePlots()
 {
   //!@todo Why is this not a function in proc::gui::Group?
   auto steps = this->mGroup->getScene()->getStepMap();
-#pragma acc kernels
   for (auto step : steps)
   {
     step.second->closeAllPlots();
   }
 
   auto groups = this->mGroup->getScene()->getGroupMap();
-#pragma acc kernels
   for (auto group : groups)
   {
     group.second->closeAllPlots();
@@ -1837,14 +1814,12 @@ void cedar::proc::gui::Ide::toggleVisibilityOfPlots(bool hidden)
 {
   //!@todo Why is this not a function in proc::gui::Group?
   auto steps = this->mGroup->getScene()->getStepMap();
-#pragma acc kernels
   for (auto step : steps)
   {
     step.second->toggleVisibilityOfPlots(!hidden);
   }
 
   auto groups = this->mGroup->getScene()->getGroupMap();
-#pragma acc kernels
   for (auto group : groups)
   {
     group.second->toggleVisibilityOfPlots(!hidden);
@@ -1984,7 +1959,6 @@ void cedar::proc::gui::Ide::loadPlotGroupsIntoComboBox()
 {
   this->mpPlotGroupsComboBox->clear();
   std::list<std::string> plot_group_names = this->mGroup->getPlotGroupNames();
-#pragma acc kernels
   for(auto it = plot_group_names.begin(); it != plot_group_names.end(); ++it)
   {
     this->mpPlotGroupsComboBox->addItem(QString::fromStdString(*it));
@@ -2014,7 +1988,6 @@ void cedar::proc::gui::Ide::setGroup(cedar::proc::gui::GroupPtr group)
 
   this->updateTriggerStartStopThreadCallers();
 
-#pragma acc kernels
   for (auto name_openable_pair : this->mOpenableDialogs)
   {
     auto openable_dialog = name_openable_pair.second;
@@ -2065,7 +2038,6 @@ void cedar::proc::gui::Ide::updateArchitectureWidgetsMenu()
   }
   else
   {
-#pragma acc kernels
     for (const auto& name_path_pair : plots)
     {
       QAction* action = menu->addAction(QString::fromStdString(name_path_pair.first));

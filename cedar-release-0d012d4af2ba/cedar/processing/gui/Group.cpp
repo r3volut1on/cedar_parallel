@@ -224,7 +224,6 @@ cedar::proc::gui::Group::~Group()
 
 cedar::proc::gui::DataSlotItem* cedar::proc::gui::Group::getSourceConnectorItem(cedar::proc::DataSlotPtr slot) const
 {
-#pragma acc kernels
   for (auto slot_gui : this->mConnectorSources)
   {
     if (slot_gui->getSlot() == slot)
@@ -238,7 +237,6 @@ cedar::proc::gui::DataSlotItem* cedar::proc::gui::Group::getSourceConnectorItem(
 
 cedar::proc::gui::DataSlotItem* cedar::proc::gui::Group::getSinkConnectorItem(cedar::proc::DataSlotPtr slot) const
 {
-#pragma acc kernels
   for (auto slot_gui : this->mConnectorSinks)
   {
     if (slot_gui->getSlot() == slot)
@@ -448,7 +446,6 @@ QBrush cedar::proc::gui::Group::getColorFor(cedar::proc::LoopedTriggerPtr trigge
     auto triggers = this->mGroup->findAll<cedar::proc::Trigger>(true);
     std::map<std::string, cedar::proc::TriggerPtr> sorted_triggers;
 
-#pragma acc kernels
     for (auto trigger : triggers)
     {
       sorted_triggers[trigger->getName()] = trigger;
@@ -459,7 +456,6 @@ QBrush cedar::proc::gui::Group::getColorFor(cedar::proc::LoopedTriggerPtr trigge
     size_t color_style_count = color_count * style_count;
 
     size_t num = 0;
-#pragma acc kernels
     for (auto name_trigger_pair : sorted_triggers)
     {
       size_t color_index = num % colors.size();
@@ -527,7 +523,6 @@ void cedar::proc::gui::Group::showArchitectureWidget(const std::string& name)
 
 void cedar::proc::gui::Group::toggleVisibilityOfOpenArchitectureWidgets(bool visible)
 {
-#pragma acc kernels
   for (auto iter = this->mArchitectureWidgetDocks.begin(); iter != this->mArchitectureWidgetDocks.end();)
   {
     auto widget_weak_ptr = *iter;
@@ -546,7 +541,6 @@ void cedar::proc::gui::Group::toggleVisibilityOfOpenArchitectureWidgets(bool vis
 
 void cedar::proc::gui::Group::closeOpenArchitectureWidgets()
 {
-#pragma acc kernels
   for (auto iter = this->mArchitectureWidgetDocks.begin(); iter != this->mArchitectureWidgetDocks.end();)
   {
     auto widget_weak_ptr = *iter;
@@ -621,7 +615,6 @@ void cedar::proc::gui::Group::linkedChanged(bool linked)
 
   this->setResizeable(!linked);
 
-#pragma acc kernels
   for (auto p_item : this->childItems())
   {
     if (auto p_graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(p_item))
@@ -645,7 +638,6 @@ void cedar::proc::gui::Group::addGuiItemsForGroup()
   CEDAR_DEBUG_ASSERT(this->getGroup());
 
   auto elements = this->getGroup()->getElements();
-#pragma acc kernels
   for (auto iter = elements.begin(); iter != elements.end(); ++iter)
   {
     auto element = iter->second;
@@ -833,7 +825,6 @@ void cedar::proc::gui::Group::fitToContents(bool grow)
 
   // find the bounding box of all children
   QRectF bounds;
-#pragma acc kernels
   for (QSet<QGraphicsItem*>::iterator i = children.begin(); i != children.end(); ++i)
   {
     QGraphicsItem* p_item = *i;
@@ -871,7 +862,6 @@ void cedar::proc::gui::Group::fitToContents(bool grow)
   // setting a new position moves the children, thus, transform them back to keep their original positions
   QPointF old_pos_local = this->mapFromScene(old_pos_scene);
   // using a set avoids moving the same child more than once
-#pragma acc kernels
   for (QSet<QGraphicsItem*>::iterator i = children.begin(); i != children.end(); ++i)
   {
     QGraphicsItem* p_item = *i;
@@ -905,7 +895,6 @@ bool cedar::proc::gui::Group::canAddAny(const QList<QGraphicsItem*>& items) cons
   {
     return false;
   }
-#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     //!@todo This should cast to a cedar::proc::gui::Element class.
@@ -925,7 +914,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
 {
   std::list<cedar::proc::ElementPtr> elements_to_move;
   std::list<cedar::proc::ElementPtr> all_elements;
-#pragma acc kernels
   for (auto it = elements.begin(); it != elements.end(); ++it)
   {
     cedar::proc::ElementPtr element;
@@ -935,7 +923,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
       element = element_item->getElement();
 
       std::vector<QGraphicsItem*> items;
-#pragma acc kernels
       for (int i = 0; i < element_item->childItems().size(); ++i)
       {
         items.push_back(element_item->childItems().at(i));
@@ -950,7 +937,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
         {
           all_elements.push_back(child_element->getElement());
 
-#pragma acc kernels
           for (int i = 0; i < child_element->childItems().size(); ++i)
           {
             items.push_back(child_element->childItems().at(i));
@@ -980,7 +966,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
 
   std::map<cedar::proc::ElementPtr, QPointF> item_scene_pos;
   std::map<cedar::proc::ElementPtr, cedar::aux::ConfigurationNode> item_configs;
-#pragma acc kernels
   for (auto it = all_elements.begin(); it != all_elements.end(); ++it)
   {
     auto element = *it;
@@ -998,7 +983,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
 
   this->getGroup()->add(elements_to_move);
 
-#pragma acc kernels
   for (auto element : all_elements)
   {
     auto graphics_item = this->mpScene->getGraphicsItemFor(element.get());
@@ -1022,7 +1006,6 @@ void cedar::proc::gui::Group::addElements(const std::list<QGraphicsItem*>& eleme
     graphics_item->setPos(parent->mapFromScene(scene_pos));
   }
 
-#pragma acc kernels
   for (auto element : all_elements)
   {
     auto graphics_item = this->mpScene->getGraphicsItemFor(element.get());
@@ -1128,7 +1111,6 @@ void cedar::proc::gui::Group::readConfiguration(const cedar::aux::ConfigurationN
     {
       // _mArchitecturePlots
       const auto& architecture_plots = architecture_plots_iter->second;
-#pragma acc kernels
       for (auto pair : architecture_plots)
       {
         const auto& key = pair.first;
@@ -1180,7 +1162,6 @@ void cedar::proc::gui::Group::readConfiguration(const cedar::aux::ConfigurationN
 void cedar::proc::gui::Group::readPlotList(const std::string& plotGroupName, const cedar::aux::ConfigurationNode& node)
 {
   std::set<std::string> removed_elements;
-#pragma acc kernels
   for(auto it : node)
   {
     std::string step_name = cedar::proc::gui::PlotWidget::getStepNameFromConfiguration(it.second);
@@ -1207,7 +1188,6 @@ void cedar::proc::gui::Group::readPlotList(const std::string& plotGroupName, con
   {
     std::string message;
     message += "Some elements of the plot group " + plotGroupName + " do not exist anymore. These are:\n\n";
-#pragma acc kernels
     for (auto element : removed_elements)
     {
       message += "  " + element + "\n";
@@ -1224,7 +1204,6 @@ void cedar::proc::gui::Group::readPlotList(const std::string& plotGroupName, con
     int selection = msgBox.exec();
     if (selection == QMessageBox::Yes)
     {
-#pragma acc kernels
       for (auto remove : removed_elements)
       {
         this->removeElementFromPlotGroup(plotGroupName, remove);
@@ -1255,7 +1234,6 @@ void cedar::proc::gui::Group::writeConfiguration(cedar::aux::ConfigurationNode& 
   // write architecture plots
   {
     cedar::aux::ConfigurationNode architecture_plots;
-#pragma acc kernels
     for (const auto& pair : this->_mArchitectureWidgets)
     {
       architecture_plots.put(pair.first, pair.second.toString(true));
@@ -1281,12 +1259,10 @@ void cedar::proc::gui::Group::writeConfiguration(cedar::aux::ConfigurationNode& 
 
 void cedar::proc::gui::Group::writeOpenPlotsTo(cedar::aux::ConfigurationNode& node) const
 {
-#pragma acc kernels
   for (auto step_map_item : this->mpScene->getStepMap())
   {
     step_map_item.second->writeOpenChildWidgets(node);
   }
-#pragma acc kernels
   for (auto group_map_item : this->mpScene->getGroupMap())
   {
     group_map_item.second->writeOpenChildWidgets(node);
@@ -1302,7 +1278,6 @@ void cedar::proc::gui::Group::writeScene(cedar::aux::ConfigurationNode& root) co
   {
     std::vector<cedar::proc::gui::StickyNote*> stickyNotes = this->mpScene->getStickyNotes();
 
-#pragma acc kernels
     for(cedar::proc::gui::StickyNote* note : stickyNotes)
     {
       cedar::aux::ConfigurationNode node;
@@ -1445,7 +1420,6 @@ void cedar::proc::gui::Group::dataConnectionChanged
   // if the source is a group source, get its slot from the group
   if (auto group_source = boost::dynamic_pointer_cast<cedar::proc::sources::GroupSource>(element))
   {
-#pragma acc kernels
     for (size_t i = 0; i < this->mConnectorSources.size(); ++i)
     {
       auto connector_source = this->mConnectorSources.at(i);
@@ -1475,7 +1449,6 @@ void cedar::proc::gui::Group::dataConnectionChanged
   // if the target is a group sink, get its slot from the group
   if (auto group_source = boost::dynamic_pointer_cast<cedar::proc::sinks::GroupSink>(target))
   {
-#pragma acc kernels
     for (size_t i = 0; i < this->mConnectorSinks.size(); ++i)
     {
       auto connector_target = this->mConnectorSinks.at(i);
@@ -1510,7 +1483,6 @@ void cedar::proc::gui::Group::dataConnectionChanged
     case cedar::proc::Group::CONNECTION_REMOVED:
     {
       QList<QGraphicsItem*> items = this->mpScene->items();
-#pragma acc kernels
       for (int i = 0; i < items.size(); ++i)
       {
         if (cedar::proc::gui::Connection* con = dynamic_cast<cedar::proc::gui::Connection*>(items[i]))
@@ -1569,7 +1541,6 @@ void cedar::proc::gui::Group::checkTriggerConnection
   else
   {
     QList<QGraphicsItem*> items = this->mpScene->items();
-#pragma acc kernels
     for (int i = 0; i < items.size(); ++i)
     {
       if (cedar::proc::gui::Connection* con = dynamic_cast<cedar::proc::gui::Connection*>(items[i]))
@@ -1590,7 +1561,6 @@ void cedar::proc::gui::Group::updateConnectorPositions()
 {
   qreal pad_side = 5;
 
-#pragma acc kernels
   for (size_t i = 0; i < this->mConnectorSources.size(); ++i)
   {
     auto source = this->mConnectorSources.at(i);
@@ -1601,7 +1571,6 @@ void cedar::proc::gui::Group::updateConnectorPositions()
   }
 
   qreal connector_max_width = 0;
-#pragma acc kernels
   for (size_t i = 0; i < this->mConnectorSinks.size(); ++i)
   {
     auto sink = this->mConnectorSinks.at(i);
@@ -1622,7 +1591,6 @@ void cedar::proc::gui::Group::updateConnectorPositions()
     }
   }
 
-#pragma acc kernels
   for (size_t i = 0; i < this->mConnectorSinks.size(); ++i)
   {
     auto sink = this->mConnectorSinks.at(i);
@@ -1813,7 +1781,6 @@ void cedar::proc::gui::Group::tryToRestoreGroupUIConfiguration
 void cedar::proc::gui::Group::tryRestoreUIConfigurationsOfElements(cedar::aux::ConfigurationNode& conf)
 {
   // try to apply the configuration to any steps that have already been added to the group
-#pragma acc kernels
   for (auto name_element_iter : this->getGroup()->getElements())
   {
     auto element = name_element_iter.second;
@@ -1861,7 +1828,6 @@ void cedar::proc::gui::Group::tryToRestoreUIConfiguration
   if (ui_iter != config.not_found())
   {
     cedar::aux::ConfigurationNode& ui = ui_iter->second;
-#pragma acc kernels
     for (cedar::aux::ConfigurationNode::iterator iter = ui.begin(); iter != ui.end(); ++iter)
     {
       const std::string& type = iter->second.get<std::string>("type");
@@ -1887,7 +1853,6 @@ void cedar::proc::gui::Group::slotRemoved(cedar::proc::DataRole::Id role, const 
 
 cedar::proc::gui::DataSlotItem* cedar::proc::gui::Group::getSlotItemFor(cedar::proc::sources::GroupSourcePtr source) const
 {
-#pragma acc kernels
   for (auto p_data_slot : mConnectorSources)
   {
     if (p_data_slot->getSlot()->getParentPtr() == source.get())
@@ -1907,7 +1872,6 @@ void cedar::proc::gui::Group::removeConnectorItem(bool isSource, const std::stri
     p_list = &mConnectorSinks;
   }
 
-#pragma acc kernels
   for (size_t i = 0; i < p_list->size(); ++i)
   {
     auto p_data_slot = p_list->at(i);
@@ -1949,7 +1913,6 @@ void cedar::proc::gui::Group::toggleSmartConnectionMode()
   bool smart = this->_mSmartMode->getValue();
   CEDAR_ASSERT(this->mpScene != nullptr);
   QList<QGraphicsItem*> items = this->mpScene->items();
-#pragma acc kernels
   for (int i = 0; i < items.size(); ++i)
   {
     if (cedar::proc::gui::Connection* con = dynamic_cast<cedar::proc::gui::Connection*>(items[i]))
@@ -1963,7 +1926,6 @@ void cedar::proc::gui::Group::stepRecordStateChanged()
 {
   std::map<const cedar::proc::Step*, cedar::proc::gui::StepItem*> steps = this->mpScene->getStepMap();
 
-#pragma acc kernels
   for (auto iter = steps.begin(); iter != steps.end(); ++iter)
   {
     iter->second->setRecorded(iter->first->isRecorded());
@@ -1971,7 +1933,6 @@ void cedar::proc::gui::Group::stepRecordStateChanged()
 
   std::map<const cedar::proc::Group*,cedar::proc::gui::Group*> groups = this->mpScene->getGroupMap();
 
-#pragma acc kernels
   for (auto iter = groups.begin(); iter != groups.end(); ++iter)
   {
     iter->second->setRecorded(iter->first->isRecorded());
@@ -2043,7 +2004,6 @@ void cedar::proc::gui::Group::renamePlotGroup(std::string from, std::string to)
 std::list<std::string> cedar::proc::gui::Group::getPlotGroupNames()
 {
   std::list<std::string> plot_group_names;
-#pragma acc kernels
   for (auto node : mPlotGroupsNode)
   {
     plot_group_names.push_back(node.first);
@@ -2054,7 +2014,6 @@ std::list<std::string> cedar::proc::gui::Group::getPlotGroupNames()
 
 bool cedar::proc::gui::Group::plotGroupNameExists(const std::string& newName) const
 {
-#pragma acc kernels
   for (auto node : mPlotGroupsNode)
   {
     if (node.first == newName)
@@ -2135,7 +2094,6 @@ void cedar::proc::gui::Group::contextMenuEvent(QGraphicsSceneContextMenuEvent *e
     )
   );
 
-#pragma acc kernels
   for (auto color : colors)
   {
     if (color->hasName())
@@ -2168,7 +2126,6 @@ void cedar::proc::gui::Group::contextMenuEvent(QGraphicsSceneContextMenuEvent *e
   p_rename_input_menu->setEnabled(can_edit_slots);
   p_rename_output_menu->setEnabled(can_edit_slots);
   const cedar::proc::Group::ConnectorMap& connectors = this->getGroup()->getConnectorMap();
-#pragma acc kernels
   for (auto it = connectors.begin(); it != connectors.end(); ++it)
   {
     if (it->second)
@@ -2198,7 +2155,6 @@ void cedar::proc::gui::Group::contextMenuEvent(QGraphicsSceneContextMenuEvent *e
   p_remove_input_menu->setEnabled(can_edit_slots);
   p_remove_output_menu->setEnabled(can_edit_slots);
 
-#pragma acc kernels
   for (auto it = connectors.begin(); it != connectors.end(); ++it)
   {
     if (it->second)
@@ -2331,7 +2287,6 @@ void cedar::proc::gui::Group::updateCollapsedness()
 
   // hide all children of this group
   auto children = this->childItems();
-#pragma acc kernels
   for (auto child : children)
   {
     if (auto element = dynamic_cast<cedar::proc::gui::Element*>(child))
@@ -2341,13 +2296,11 @@ void cedar::proc::gui::Group::updateCollapsedness()
   }
 
   // also, hide all connectors
-#pragma acc kernels
   for (auto connector : this->mConnectorSinks)
   {
     connector->setVisible(!collapse);
   }
 
-#pragma acc kernels
   for (auto connector : this->mConnectorSources)
   {
     connector->setVisible(!collapse);
@@ -2395,10 +2348,8 @@ void cedar::proc::gui::Group::changeStepName(const std::string& from, const std:
 
     we have to search and replace the old step name in every step for every group
   */
-#pragma acc kernels
   for(auto& plot_group : this->mPlotGroupsNode)
   {
-#pragma acc kernels
     for(auto& plot : plot_group.second)
     {
       auto name = plot.second.get<std::string>("step");
@@ -2413,7 +2364,6 @@ void cedar::proc::gui::Group::changeStepName(const std::string& from, const std:
 void cedar::proc::gui::Group::readStickyNotes(const cedar::aux::ConfigurationNode& node)
 {
 
-#pragma acc kernels
   for (auto iter = node.begin(); iter != node.end(); ++iter)
   {
     const auto& sticky_node = iter->second;
@@ -2456,7 +2406,6 @@ void cedar::proc::gui::Group::readStickyNotes(const cedar::aux::ConfigurationNod
 void cedar::proc::gui::Group::restoreConnections()
 {
   auto connections = this->getGroup()->getDataConnections();
-#pragma acc kernels
   for (auto connection : connections)
   {
     this->checkDataConnection(connection->getSource(), connection->getTarget(), cedar::proc::Group::CONNECTION_ADDED);
@@ -2480,7 +2429,6 @@ void cedar::proc::gui::Group::removeElementFromPlotGroup(const std::string& plot
     );
   }
 
-#pragma acc kernels
   for (auto plot_iter = plot_group->second.begin(); plot_iter != plot_group->second.end(); )
   {
     auto name = plot_iter->second.get<std::string>("step");
@@ -2515,7 +2463,6 @@ void cedar::proc::gui::Group::updateTriggerColorState()
 
 void cedar::proc::gui::Group::updateAllElementsTriggerColorState() const
 {
-#pragma acc kernels
   for (const auto element : this->getGroup()->getElements())
   {
     // get the gui representation, if this is a triggerable
@@ -2616,7 +2563,6 @@ void cedar::proc::gui::Group::setGroup(cedar::proc::GroupPtr group)
 
 void cedar::proc::gui::Group::addElementsToGroup()
 {
-#pragma acc kernels
   for (const auto& element : this->mGroup->getElements())
   {
     this->processElementAddedSignal(element.second);

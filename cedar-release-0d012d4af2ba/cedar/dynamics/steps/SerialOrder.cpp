@@ -239,7 +239,6 @@ void cedar::dyn::SerialOrder::numberOfOrdinalPositionsChanged()
   if (new_number_of_positions > old_number_of_positions)
   {
     // for all new ordinal positions
-#pragma acc kernels
     for (unsigned int i = old_number_of_positions; i < new_number_of_positions; ++i)
     {
       // resize all relevant vectors and matrices to their new (larger) sizes and initialize their content
@@ -274,7 +273,6 @@ void cedar::dyn::SerialOrder::numberOfOrdinalPositionsChanged()
     mMemoryNodeOutputBuffer->getData().resize(new_number_of_positions);
 
     // for all ordinal positions that are being deleted
-#pragma acc kernels
     for (unsigned int i = new_number_of_positions; i < old_number_of_positions; ++i)
     {
       // remove the output slots
@@ -302,7 +300,6 @@ void cedar::dyn::SerialOrder::eulerStep(const cedar::unit::Time& time)
   cv::Mat sum_of_ordinal_outputs = cv::Mat::zeros(1, 1, CV_32F);
 
   // go through all ordinal positions to compute the sigmoided output of all nodes
-#pragma acc kernels
   for (unsigned int i = 0; i < mOrdinalNodes.size(); ++i)
   {
     // compute the sigmoided output of the ordinal nodes
@@ -319,7 +316,6 @@ void cedar::dyn::SerialOrder::eulerStep(const cedar::unit::Time& time)
   }
 
   // go through all ordinal positions again, this time to do the actual Euler approximation
-#pragma acc kernels
   for (unsigned int i = 0; i < mOrdinalNodes.size(); ++i)
   {
     // this equation uses variable names similar to those in Sandamirskaya, Schoener, 2010
@@ -383,7 +379,6 @@ void cedar::dyn::SerialOrder::eulerStep(const cedar::unit::Time& time)
 
 void cedar::dyn::SerialOrder::reset()
 {
-#pragma acc kernels
   for (unsigned int i = 0; i < mOrdinalNodes.size(); ++i)
   {
     cv::Mat& d = this->mOrdinalNodes.at(i)->getData();

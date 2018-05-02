@@ -82,7 +82,6 @@ cedar::proc::ProjectionMappingParameter::~ProjectionMappingParameter()
 void cedar::proc::ProjectionMappingParameter::readFromNode(const cedar::aux::ConfigurationNode& root)
 {
   mValues->initialize(0);
-#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
   {
     unsigned int key;

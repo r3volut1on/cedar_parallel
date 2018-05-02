@@ -91,7 +91,6 @@ cedar::proc::steps::ChannelSplit::ChannelSplit()
   this->declareInput("three channel input");
 
   this->mChannelData.resize(4);
-#pragma acc kernels
   for (size_t i = 0; i < this->mChannelData.size(); ++i)
   {
     this->mChannelData.at(i) = cedar::aux::MatDataPtr(new cedar::aux::MatData(cv::Mat()));
@@ -149,7 +148,6 @@ void cedar::proc::steps::ChannelSplit::inputConnectionChanged(const std::string&
   this->mInput = cedar::aux::asserted_pointer_cast<cedar::aux::ConstMatData>(data);
 
   // copy annotations
-#pragma acc kernels
   for (size_t i = 0; i < this->mChannels.size(); ++i)
   {
     this->mChannelData.at(i)->copyAnnotationsFrom(this->mInput);
@@ -171,7 +169,6 @@ void cedar::proc::steps::ChannelSplit::inputConnectionChanged(const std::string&
 
 
   // reset channels
-#pragma acc kernels
   for (size_t i = 0; i < this->mChannelData.size(); ++i)
   {
     this->mChannelData.at(i)->setData(cv::Mat());
@@ -184,7 +181,6 @@ void cedar::proc::steps::ChannelSplit::inputConnectionChanged(const std::string&
   if (cedar::aux::math::getDimensionalityOf(this->mInput->getData()) > 2)
   {
     // there are now empty matrices, notify the subsequent steps
-#pragma acc kernels
     for (size_t i = 0; i < this->mChannelData.size(); ++i)
     {
       this->emitOutputPropertiesChangedSignal(this->generateDataName(i));
@@ -192,7 +188,6 @@ void cedar::proc::steps::ChannelSplit::inputConnectionChanged(const std::string&
     return;
   }
 
-#pragma acc kernels
   for (size_t i = 0; i < num_channels; ++i)
   {
     if (color_space)
@@ -217,7 +212,6 @@ void cedar::proc::steps::ChannelSplit::inputConnectionChanged(const std::string&
   )
   {
     this->callComputeWithoutTriggering();
-#pragma acc kernels
     for (size_t i = 0; i < this->mChannelData.size(); ++i)
     {
       this->emitOutputPropertiesChangedSignal(this->generateDataName(i));
@@ -238,7 +232,6 @@ void cedar::proc::steps::ChannelSplit::compute(const cedar::proc::Arguments& /* 
 
   cv::split(input, this->mChannels);
 
-#pragma acc kernels
   for (size_t i = 0; i < static_cast<size_t>(input.channels()); ++i)
   {
     this->mChannelData.at(i)->setData(this->mChannels.at(i));

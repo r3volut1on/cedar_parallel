@@ -124,7 +124,6 @@ std::ostream& cedar::aux::operator<< (std::ostream& stream, const cedar::aux::St
   stream << "." << std::endl;
   stream << "Backtrace contains " << trace.size() << " items:" << std::endl;
 
-#pragma acc kernels
   for (size_t i = 0; i < trace.size(); ++i)
   {
     stream << "  [" << i << "] " << trace.at(i) << std::endl;
@@ -305,7 +304,6 @@ cedar::aux::StackTrace::StackTrace()
   // transform the backtrace into symbols
   strings = backtrace_symbols(array, size);
 
-#pragma acc kernels
   for (i = 0; i < size; i++)
   {
     cedar::aux::StackEntry entry;
@@ -327,10 +325,8 @@ void cedar::aux::write(cv::Mat matrix)
   switch (matrix.type())
   {
   case CV_8U:
-#pragma acc kernels
     for(int i = 0; i < matrix.rows; i++)
     {
-#pragma acc kernels
       for (int j = 0; j < matrix.cols; j++)
       {
         if (cedar::aux::math::isZero(matrix.at<unsigned char>(i, j)))
@@ -346,10 +342,8 @@ void cedar::aux::write(cv::Mat matrix)
     }
   break;
   case CV_8S:
-#pragma acc kernels
     for(int i = 0; i < matrix.rows; i++)
     {
-#pragma acc kernels
       for (int j = 0; j < matrix.cols; j++)
       {
         if (cedar::aux::math::isZero(matrix.at<char>(i, j)))
@@ -365,10 +359,8 @@ void cedar::aux::write(cv::Mat matrix)
     }
   break;
   case CV_16U:
-#pragma acc kernels
       for(int i = 0; i < matrix.rows; i++)
       {
-#pragma acc kernels
         for (int j = 0; j < matrix.cols; j++)
         {
           if (cedar::aux::math::isZero(matrix.at<unsigned short int>(i, j)))
@@ -384,10 +376,8 @@ void cedar::aux::write(cv::Mat matrix)
       }
     break;
   case CV_16S:
-#pragma acc kernels
       for(int i = 0; i < matrix.rows; i++)
       {
-#pragma acc kernels
         for (int j = 0; j < matrix.cols; j++)
         {
           if (cedar::aux::math::isZero(matrix.at<short int>(i, j)))
@@ -403,10 +393,8 @@ void cedar::aux::write(cv::Mat matrix)
       }
     break;
   case CV_32S:
-#pragma acc kernels
       for(int i = 0; i < matrix.rows; i++)
       {
-#pragma acc kernels
         for (int j=0; j<matrix.cols; j++)
         {
           if (cedar::aux::math::isZero(matrix.at<int>(i, j)))
@@ -422,10 +410,8 @@ void cedar::aux::write(cv::Mat matrix)
       }
     break;
   case CV_32F:
-#pragma acc kernels
     for(int i = 0; i < matrix.rows; i++)
     {
-#pragma acc kernels
       for (int j=0; j<matrix.cols; j++)
       {
         if (cedar::aux::math::isZero(matrix.at<float>(i, j)))
@@ -441,10 +427,8 @@ void cedar::aux::write(cv::Mat matrix)
     }
   break;
   case CV_64F:
-#pragma acc kernels
   for(int i = 0; i < matrix.rows; i++)
   {
-#pragma acc kernels
     for (int j=0; j<matrix.cols; j++)
     {
       if (cedar::aux::math::isZero(matrix.at<double>(i, j)))

@@ -163,7 +163,6 @@ void cedar::proc::ProjectionMapping::initialize(unsigned int numberOfMappings)
   {
     // could not find a mapping, initialize
     mMapping.clear();
-#pragma acc kernels
     for (unsigned int i = 0; i < numberOfMappings; ++i)
     {
       mMapping[i] = msDropIndex;
@@ -225,7 +224,6 @@ void cedar::proc::ProjectionMapping::setOutputDimensionality(unsigned int dimens
 {
   mOutputDimensionality = dimensionality;
   // prune invalid entries
-#pragma acc kernels
   for (unsigned int i = 0; i < mMapping.size(); ++i)
   {
     if (mMapping[i] >= dimensionality)

@@ -95,7 +95,6 @@ cedar::aux::annotation::Annotation(copy)
 std::string cedar::aux::annotation::ColorSpace::getChannelCode() const
 {
   std::string code;
-#pragma acc kernels
   for (size_t i = 0; i < this->getNumberOfChannels(); ++i)
   {
     switch (this->getChannelType(i))
@@ -202,7 +201,6 @@ cedar::aux::annotation::ColorSpacePtr cedar::aux::annotation::ColorSpace::gray()
 std::string cedar::aux::annotation::ColorSpace::getDescription() const
 {
   std::string description = "Color space with " + cedar::aux::toString(this->getNumberOfChannels()) + " channels: ";
-#pragma acc kernels
   for (unsigned int i = 0; i < this->getNumberOfChannels(); ++i)
   {
     description += "<br />Channel " + cedar::aux::toString(i) + ": " + channelTypeToString(this->getChannelType(i));

@@ -159,7 +159,6 @@ protected:
   {
 //    if (!mIsOpen)
     {
-#pragma acc kernels
       for (auto it = mReaderMap.begin(); it != mReaderMap.end(); ++it)
       {
         const std::string& port = it->first;
@@ -176,7 +175,6 @@ protected:
           }
         }
       }
-#pragma acc kernels
       for (auto it = mWriterMap.begin(); it != mWriterMap.end(); ++it)
       {
         const std::string& port = it->first;

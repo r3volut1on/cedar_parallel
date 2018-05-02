@@ -74,7 +74,6 @@ mpVideoCaptureLock(lock)
 
   // Add all properties to the properties-list
   int num_properties = cedar::dev::sensors::camera::Property::type().list().size();
-#pragma acc kernels
   for (int i=0; i<num_properties; i++)
   {
     cedar::dev::sensors::camera::Property::Id prop_id
@@ -124,7 +123,6 @@ cedar::dev::sensors::camera::Properties::~Properties()
 void cedar::dev::sensors::camera::Properties::blockSignals(bool block)
 {
   int num_properties = cedar::dev::sensors::camera::Property::type().list().size();
-#pragma acc kernels
   for (int i=0; i<num_properties; i++)
   {
     cedar::dev::sensors::camera::Property::Id prop_id = cedar::dev::sensors::camera::Property::type().list().at(i).id();

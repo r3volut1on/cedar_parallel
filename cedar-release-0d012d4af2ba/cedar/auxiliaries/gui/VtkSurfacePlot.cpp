@@ -290,10 +290,8 @@ cedar::aux::gui::VtkSurfacePlot::~VtkSurfacePlot()
     int point_number = 0;
     double point[3];
     double scalar_range[2] = {data.at<double>(0, 0), data.at<double>(0, 0)};
-#pragma acc kernels
     for(int i=0; i<data.rows; i++)
     {
-#pragma acc kernels
       for(int j=0; j<data.cols; j++)
       {
         //InsertNextPoint(x,y,z)
@@ -412,7 +410,6 @@ cedar::aux::gui::VtkSurfacePlot::~VtkSurfacePlot()
     if ((data.rows) != mpPlot->mpTable->GetNumberOfRows() || (data.cols) != mpPlot->mpTable->GetNumberOfColumns())
     { // create table
       mpPlot->mpTable = vtkSmartPointer<vtkTable>::New();
-#pragma acc kernels
       for (int i = 0; i < data.cols; ++i)
       {
         vtkNew<vtkDoubleArray> arr;
@@ -422,10 +419,8 @@ cedar::aux::gui::VtkSurfacePlot::~VtkSurfacePlot()
     }
 
     // fill table
-#pragma acc kernels
     for(int i=0; i<data.rows; i++)
     {
-#pragma acc kernels
       for(int j=0; j<data.cols; j++)
       {
         mpPlot->mpTable->SetValue(i, j, data.at<double>(i,j));

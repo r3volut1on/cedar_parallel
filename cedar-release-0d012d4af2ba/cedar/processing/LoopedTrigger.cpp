@@ -172,7 +172,6 @@ void cedar::proc::LoopedTrigger::prepareStart()
 
   {
     QReadLocker locker(this->mListeners.getLockPtr());
-#pragma acc kernels
     for (auto listener : this->mListeners.member())
     {
       listener->callOnStart();
@@ -197,7 +196,6 @@ void cedar::proc::LoopedTrigger::processQuit()
 
   {
     QReadLocker locker(this->mListeners.getLockPtr());
-#pragma acc kernels
     for (auto listener : this->mListeners.member())
     {
       listener->callOnStop();
@@ -213,7 +211,6 @@ void cedar::proc::LoopedTrigger::step(cedar::unit::Time time)
 
   QReadLocker locker(this->mListeners.getLockPtr());
   auto this_ptr = boost::static_pointer_cast<cedar::proc::LoopedTrigger>(this->shared_from_this());
-#pragma acc kernels
   for (const auto& listener : this->mListeners.member())
   {
     listener->onTrigger(arguments, this_ptr);

@@ -73,7 +73,6 @@ void cedar::dev::Component::updateValues(cedar::dev::Component::DataType type)
 
   const std::map<std::string, DataSlot>& map = map_iter->second;
 
-#pragma acc kernels
   for (auto iter = map.begin(); iter != map.end(); ++iter)
   {
     const DataSlot& slot = iter->second;
@@ -169,7 +168,6 @@ std::vector<std::string> cedar::dev::Component::getDataNames(cedar::dev::Compone
   if (iter != this->mData.end())
   {
     auto map = iter->second;
-#pragma acc kernels
     for (auto data_iter = map.begin(); data_iter != map.end(); ++data_iter)
     {
       names.push_back(data_iter->first);

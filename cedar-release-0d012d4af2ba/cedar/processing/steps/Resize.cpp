@@ -208,7 +208,6 @@ double cedar::proc::steps::Resize::linearInterpolationND
   bounds.resize(target.dims);
   interpolated_indices.resize(target.dims);
 
-#pragma acc kernels
   for (int d = 0; d < target.dims; ++d)
   {
     // calculate the factor by which the source must be resized
@@ -260,11 +259,9 @@ void cedar::proc::steps::Resize::linearInterpolationNDRecursion
     std::vector<int> index;
     index.resize(target.dims, 0);
     // iterate over all possible combinations
-#pragma acc kernels
     for(unsigned int i = 0; i < num_combinations; ++i)
     {
       // build interpolation index: the first n - 1 dimensions
-#pragma acc kernels
       for (size_t j = 0; j < static_cast<size_t>(source.dims) - 1; ++j)
       {
         // decide if the lower or upper bound is used
@@ -304,7 +301,6 @@ void cedar::proc::steps::Resize::linearInterpolationNDRecursion
     // process the result of the recursion
     size_t num = 1 << currentDimension; // 2^(currentDimension)
     interpolatedValues.resize(num);
-#pragma acc kernels
     for (size_t i = 0; i < num; ++i)
     {
       interpolatedValues.at(i) = (1.0 - distance) * next_interpolated_values.at(2 * i)
@@ -363,7 +359,6 @@ void cedar::proc::steps::Resize::updateOutputMatrixSize()
   }
 
   std::vector<int> sizes;
-#pragma acc kernels
   for (size_t i = 0; i < this->_mOutputSize->size(); ++i)
   {
     sizes.push_back(static_cast<int>(this->_mOutputSize->at(i)));

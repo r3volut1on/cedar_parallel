@@ -87,7 +87,6 @@ cedar::proc::Trigger::~Trigger()
 
   QReadLocker lock(this->mListeners.getLockPtr());
 
-#pragma acc kernels
   for (auto listener : this->mListeners.member())
   {
     listener->noLongerTriggeredBy(boost::static_pointer_cast<cedar::proc::Trigger>(this->shared_from_this()));
@@ -254,7 +253,6 @@ void cedar::proc::Trigger::exploreSink
 #endif
 
   // go through the connections ...
-#pragma acc kernels
   for (auto connection : connections)
   {
     // ... and find out where they lead
@@ -332,7 +330,6 @@ void cedar::proc::Trigger::exploreGroupTarget
   }
 
   // go through all the output slots of the source connectable
-#pragma acc kernels
   for (auto slot : source_connectable->getOrderedDataSlots(cedar::proc::DataRole::OUTPUT))
   {
 #ifdef DEBUG_TRIGGER_TREE_EXPLORATION
@@ -342,7 +339,6 @@ void cedar::proc::Trigger::exploreGroupTarget
     parent_group->getDataConnectionsFrom(source_connectable, slot->getName(), connections);
 
     // go through all connections originating from the slot and check if they go to the target group
-#pragma acc kernels
     for (auto connection : connections)
     {
       auto target_slot = connection->getTarget();
@@ -447,7 +443,6 @@ void cedar::proc::Trigger::explore
 
   QReadLocker lock(trigger->mListeners.getLockPtr());
   // append all listeners of this step; they all have a distance of one, because they follow this step directly
-#pragma acc kernels
   for (auto listener : trigger->mListeners.member())
   {
     // Special case: listener is a group. Groups are ignored in building the triggering graph. Rather, a direct
@@ -590,10 +585,8 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
   {
     std::vector<std::set<cedar::proc::TriggerablePtr> > triggerable_cycles;
     triggerable_cycles.resize(cycles.size());
-#pragma acc kernels
     for (size_t i = 0; i < cycles.size(); ++i)
     {
-#pragma acc kernels
       for (auto iter = cycles.at(i).begin(); iter != cycles.at(i).end(); ++iter)
       {
         auto node = *iter;
@@ -616,7 +609,6 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
   QWriteLocker lock_w(this->mTriggeringOrder.getLockPtr());
   this->mTriggeringOrder.member().clear();
 
-#pragma acc kernels
   for (auto dist_iter = distances.begin(); dist_iter != distances.end(); ++dist_iter)
   {
     auto node = dist_iter->first;
@@ -647,7 +639,6 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
     QReadLocker lock_r(this->mListeners.getLockPtr());
     if (recurseDown)
     {
-#pragma acc kernels
       for (cedar::proc::TriggerablePtr listener : this->mListeners.member())
       {
         QReadLocker lock_r_finished(listener->mFinished.getLockPtr());
@@ -673,7 +664,6 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
             parent_group->getDataConnectionsTo(group, group_source->getName(), connections);
 
             // update the triggering order of all the steps connected to the group's input
-#pragma acc kernels
             for (auto connection : connections)
             {
               auto source = dynamic_cast<cedar::proc::Triggerable*>(connection->getSource()->getParentPtr());
@@ -690,7 +680,6 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
   if (recurseUp && this->mpOwner != nullptr)
   {
     QReadLocker lock_r(this->mpOwner->mTriggersListenedTo.getLockPtr());
-#pragma acc kernels
     for (const auto& trigger_weak : this->mpOwner->mTriggersListenedTo.member())
     {
       auto trigger = trigger_weak.lock();
@@ -711,7 +700,6 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
     //!@todo This might do more than needed; in principle, only the slots sinks actually affected need to be updated
     if (auto group = dynamic_cast<cedar::proc::Group*>(this->mpOwner))
     {
-#pragma acc kernels
       for (auto name_connector_type_pair : group->getConnectorMap())
       {
         if (!name_connector_type_pair.second) // connector is an output/sink
@@ -726,12 +714,10 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
 #ifdef DEBUG_TRIGGER_TREE_EXPLORATION
 /* DEBUG_TRIGGER_TREE_EXPLORATION */ std::cout << " F Final triggering order for " << nameTrigger(this) << std::endl;
 /* DEBUG_TRIGGER_TREE_EXPLORATION */  QReadLocker r_lock(this->mTriggeringOrder.getLockPtr());
-#pragma acc kernels
 /* DEBUG_TRIGGER_TREE_EXPLORATION */  for (auto distance_triggerable_set_pair : this->mTriggeringOrder.member())
 /* DEBUG_TRIGGER_TREE_EXPLORATION */  {
 /* DEBUG_TRIGGER_TREE_EXPLORATION */    std::cout << "Distance: " << distance_triggerable_set_pair.first << std::endl;
 /* DEBUG_TRIGGER_TREE_EXPLORATION */
-#pragma acc kernels
 /* DEBUG_TRIGGER_TREE_EXPLORATION */    for (auto triggerable : distance_triggerable_set_pair.second)
 /* DEBUG_TRIGGER_TREE_EXPLORATION */    {
 /* DEBUG_TRIGGER_TREE_EXPLORATION */      std::cout << "  " << nameTriggerable(triggerable) << std::endl;
@@ -756,7 +742,6 @@ void cedar::proc::Trigger::updateTriggeringOrderRecurseUpSource(cedar::proc::sou
 #ifdef DEBUG_TRIGGER_TREE_EXPLORATION
 /* DEBUG_TRIGGER_TREE_EXPLORATION */ std::cout << " Iterating connections." << std::endl;
 #endif
-#pragma acc kernels
   for (auto connection : group->getInputSlot(source->getName())->getDataConnections())
   {
     auto source_triggerable = dynamic_cast<cedar::proc::Triggerable*>(connection->getSource()->getParentPtr());
@@ -799,11 +784,9 @@ void cedar::proc::Trigger::trigger(cedar::proc::ArgumentsPtr arguments)
 /* DEBUG_TRIGGERING */  std::cout << "> Triggering " << nameTrigger(this) << std::endl;
 #endif
 
-#pragma acc kernels
   for (auto order_triggerables_pair : this->mTriggeringOrder.member())
   {
     auto triggerables = order_triggerables_pair.second;
-#pragma acc kernels
     for (cedar::proc::TriggerablePtr triggerable : triggerables)
     {
 #ifdef DEBUG_TRIGGERING
@@ -892,7 +875,6 @@ void cedar::proc::Trigger::removeListener(cedar::proc::Triggerable* triggerable)
 
 std::vector<cedar::proc::TriggerablePtr>::iterator cedar::proc::Trigger::find(cedar::proc::Triggerable* triggerable)
 {
-#pragma acc kernels
   for (auto iter = this->mListeners.member().begin(); iter != this->mListeners.member().end(); ++iter)
   {
     if (iter->get() == triggerable)
@@ -925,7 +907,6 @@ void cedar::proc::Trigger::writeConfiguration(cedar::aux::ConfigurationNode& nod
 
   QReadLocker lock(this->mListeners.getLockPtr());
   cedar::aux::ConfigurationNode listeners;
-#pragma acc kernels
   for (cedar::proc::TriggerablePtr triggerable : this->mListeners.member())
   {
     cedar::aux::ConfigurationNode listener(boost::dynamic_pointer_cast<cedar::proc::Element>(triggerable)->getName());

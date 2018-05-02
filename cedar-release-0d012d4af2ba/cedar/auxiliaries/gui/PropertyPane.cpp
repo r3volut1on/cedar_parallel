@@ -116,7 +116,6 @@ void cedar::aux::gui::PropertyPane::resetContents()
 
 void cedar::aux::gui::PropertyPane::disconnect()
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->mSlotConnections.size(); i++)
   {
     if (this->mSlotConnections[i].connected())
@@ -126,7 +125,6 @@ void cedar::aux::gui::PropertyPane::disconnect()
   }
   this->mSlotConnections.clear();
 
-#pragma acc kernels
   for (auto iter = this->mParameterRowIndex.begin(); iter != this->mParameterRowIndex.end(); ++iter)
   {
     cedar::aux::Parameter* parameter = iter->first;
@@ -185,7 +183,6 @@ void cedar::aux::gui::PropertyPane::append(const std::string& title, cedar::aux:
   );
 
   // append all children as well
-#pragma acc kernels
   for (cedar::aux::Configurable::Children::const_iterator iter = configurable->configurableChildren().begin();
        iter != configurable->configurableChildren().end();
        ++iter)
@@ -235,7 +232,6 @@ void cedar::aux::gui::PropertyPane::addWidgetRow(QWidget* pWidget)
 
 void cedar::aux::gui::PropertyPane::append(cedar::aux::Configurable::ParameterList& parameters)
 {
-#pragma acc kernels
   for (cedar::aux::Configurable::ParameterList::iterator iter = parameters.begin(); iter != parameters.end(); ++iter)
   {
     cedar::aux::ParameterPtr parameter = *iter;
@@ -322,7 +318,6 @@ void cedar::aux::gui::PropertyPane::addPropertyRow(cedar::aux::ParameterPtr para
     {
       QObject::connect(list_parameter.get(), SIGNAL(valueChanged()), this, SLOT(redraw()));
 
-#pragma acc kernels
       for (size_t i = 0; i < list_parameter->size(); ++i)
       {
         cedar::aux::ConfigurablePtr configurable = list_parameter->getConfigurableChild(i);

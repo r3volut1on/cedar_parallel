@@ -114,7 +114,6 @@ void cedar::proc::steps::Sum::sumSlot(cedar::proc::ExternalDataPtr slot, cv::Mat
   sum.setTo(0.0);
   double scalar_additions = 0.0;
 
-#pragma acc kernels
   for (size_t i = 0; i < slot->getDataCount(); ++i)
   {
     auto mat_data = boost::dynamic_pointer_cast<cedar::aux::MatData>(slot->getData(i));
@@ -186,7 +185,6 @@ void cedar::proc::steps::Sum::inputConnectionChanged(const std::string& /*inputN
     r_l.unlock();
 
     // then, initialize the output to the appropriate size
-#pragma acc kernels
     for (size_t i = 0; i < this->mInputs->getDataCount(); ++i)
     {
       auto mat_data = boost::dynamic_pointer_cast<cedar::aux::ConstMatData>(this->mInputs->getData(i));

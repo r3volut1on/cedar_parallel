@@ -156,7 +156,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::scriptStatusChanged(QString new
   auto script = dynamic_cast<cedar::proc::CppScript*>(QObject::sender());
   CEDAR_DEBUG_ASSERT(script);
 
-#pragma acc kernels
   for (int row = 0; row < this->mpScriptList->rowCount(); ++row)
   {
     if (this->mpScriptList->item(row, M_NAME_COL)->text() == QString::fromStdString(script->getName()))
@@ -176,7 +175,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::scriptNameChanged()
   std::string new_name = name_parameter->getValue();
   auto items = this->mpScriptList->findItems(QString::fromStdString(old_name), Qt::MatchExactly);
 
-#pragma acc kernels
   for (auto item : items)
   {
     if (item->column() == M_NAME_COL)
@@ -192,7 +190,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::refreshScriptList()
 {
   this->mpScriptList->setRowCount(0);
 
-#pragma acc kernels
   for (auto script : this->mGroup->getGroup()->getOrderedScripts())
   {
     this->addScriptToList(QString::fromStdString(script->getName()));
@@ -235,7 +232,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::translateScriptRemovedSignal(co
 void cedar::proc::gui::ArchitectureScriptEditor::removeScriptFromList(const QString& scriptName)
 {
   auto items = this->mpScriptList->findItems(scriptName, Qt::MatchExactly);
-#pragma acc kernels
   for (auto item : items)
   {
     if (item->column() == M_NAME_COL)
@@ -268,14 +264,12 @@ void cedar::proc::gui::ArchitectureScriptEditor::fillTypeComboBox()
   auto manager = cedar::proc::CppScriptDeclarationManagerSingleton::getInstance();
 
   bool selected = false;
-#pragma acc kernels
   for (const auto& category : manager->listCategories())
   {
     this->mpTypeSelector->addItem(QString::fromStdString(category));
     this->setComboBoxItemEnabled(this->mpTypeSelector->count() - 1, false);
     this->mpTypeSelector->insertSeparator(this->mpTypeSelector->count());
 
-#pragma acc kernels
     for (const auto& entry : manager->getCategoryEntries(category))
     {
       QString full_name = QString::fromStdString(entry->getClassName());
@@ -330,7 +324,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::removeClicked()
 {
   auto selected = this->mpScriptList->selectedItems();
   std::set<std::string> scripts_to_remove;
-#pragma acc kernels
   for (auto item : selected)
   {
     if (item->column() == M_NAME_COL)
@@ -342,7 +335,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::removeClicked()
   if (!scripts_to_remove.empty())
   {
     this->mpConfigurationEditor->clear();
-#pragma acc kernels
     for (const auto& script_name : scripts_to_remove)
     {
       this->mGroup->getGroup()->removeScript(script_name);

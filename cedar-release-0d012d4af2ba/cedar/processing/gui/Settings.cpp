@@ -297,7 +297,6 @@ void cedar::proc::gui::Settings::setFavorite(const std::string& className, bool 
 
 bool cedar::proc::gui::Settings::isFavoriteElement(const std::string& className) const
 {
-#pragma acc kernels
   for (const auto& favorite : this->getFavedElements())
   {
     if (favorite == className)
@@ -313,7 +312,6 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 {
   std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> messages;
 
-#pragma acc kernels
   for (auto message : this->mOneTimeMessages)
   {
     unsigned int major_minor_version = CEDAR_MAKE_VERSION(CEDAR_VERSION_MAJOR, CEDAR_VERSION_MINOR, 0);
@@ -333,14 +331,12 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Settings::getRecentOneTimeMessages() const
 {
   std::multimap<unsigned int, OneTimeMessagePtr> messages_by_version;
-#pragma acc kernels
   for (auto message : this->mOneTimeMessages)
   {
     messages_by_version.insert(std::make_pair(message->mVersion, message));
   }
 
   std::vector<OneTimeMessagePtr> messages;
-#pragma acc kernels
   for (auto iter = messages_by_version.rbegin(); iter != messages_by_version.rend(); ++iter)
   {
     messages.push_back(iter->second);
@@ -350,7 +346,6 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 
 void cedar::proc::gui::Settings::markAsRead(const std::vector<OneTimeMessagePtr>& messages)
 {
-#pragma acc kernels
   for (auto message : messages)
   {
     this->_mReadOneTimeMessages->insert(message->mId);
@@ -393,7 +388,6 @@ void cedar::proc::gui::Settings::userDefinedColorStringsChanged()
 {
   this->mUserDefinedColors.clear();
 
-#pragma acc kernels
   for (const auto& string : this->_mUserDefinedColors->getValue())
   {
     UserDefinedColorPtr color(new UserDefinedColor(string));
@@ -509,7 +503,6 @@ void cedar::proc::gui::Settings::appendArchitectureFileToHistory(const std::stri
   }
   else
   {
-#pragma acc kernels
     for (size_t i = 0; i < this->mRecentArchitectureFiles->size(); ++i)
     {
       const std::string& value = this->mRecentArchitectureFiles->at(i);

@@ -143,7 +143,6 @@ void cedar::aux::gui::ObjectListParameter::parameterPointerChanged()
   std::vector<std::string> types;
   parameter->listTypes(types);
 
-#pragma acc kernels
   for (size_t i = 0; i < types.size(); ++i)
   {
     QString type_id = QString::fromStdString(types.at(i));
@@ -153,7 +152,6 @@ void cedar::aux::gui::ObjectListParameter::parameterPointerChanged()
 
   // Fill existing instances ------------------------------------------------------------------
   this->mpInstanceSelector->clear();
-#pragma acc kernels
   for (size_t i = 0; i < parameter->size(); ++i)
   {
     this->appendObjectToInstanceList(i);

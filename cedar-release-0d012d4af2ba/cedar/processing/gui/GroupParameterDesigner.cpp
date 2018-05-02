@@ -75,7 +75,6 @@ mGroup(group)
     boost::bind(&cedar::proc::gui::GroupParameterDesigner::translateCustomParameterRemoved, this, _1)
   );
 
-#pragma acc kernels
   for (auto parameter : this->mGroup->getCustomParameters())
   {
     this->addParameterToList(parameter);
@@ -119,7 +118,6 @@ void cedar::proc::gui::GroupParameterDesigner::customParameterRemovedSlot(QVaria
 
   std::vector<QTreeWidgetItem*> to_delete;
   auto root = this->mpParameterDisplay->invisibleRootItem();
-#pragma acc kernels
   for (int i = 0; i < root->childCount(); ++i)
   {
     auto item = root->child(i);
@@ -129,7 +127,6 @@ void cedar::proc::gui::GroupParameterDesigner::customParameterRemovedSlot(QVaria
     }
   }
 
-#pragma acc kernels
   for (auto item : to_delete)
   {
     delete item;
@@ -151,11 +148,9 @@ void cedar::proc::gui::GroupParameterDesigner::addParameterToList(cedar::aux::Pa
 
 void cedar::proc::gui::GroupParameterDesigner::fillParameterTypeBox()
 {
-#pragma acc kernels
   for (auto category : cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->listCategories())
   {
     //!@todo category separator
-#pragma acc kernels
     for (auto declaration : cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->getCategoryEntries(category))
     {
       std::string class_name = declaration->getClassName();
@@ -183,14 +178,12 @@ void cedar::proc::gui::GroupParameterDesigner::deleteClicked()
 {
   std::vector<cedar::aux::ParameterPtr> to_remove;
 
-#pragma acc kernels
   for (auto item : this->mpParameterDisplay->selectedItems())
   {
     auto parameter = this->parameterFromItem(item);
     to_remove.push_back(parameter);
   }
 
-#pragma acc kernels
   for (auto parameter : to_remove)
   {
     this->mGroup->removeCustomParameter(parameter->getName());

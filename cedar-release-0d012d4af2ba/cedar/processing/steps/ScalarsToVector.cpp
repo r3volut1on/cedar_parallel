@@ -99,7 +99,6 @@ _mOutputDimension (new cedar::aux::UIntParameter(this, "number of vector entries
 void cedar::proc::steps::ScalarsToVector::compute(const cedar::proc::Arguments&)
 {
   mOutput->getData().setTo(0);
-#pragma acc kernels
   for (unsigned i=0; i<mInputs.size(); i++)
   {
     if (mInputs[i])
@@ -126,7 +125,6 @@ void cedar::proc::steps::ScalarsToVector::vectorDimensionChanged()
   else if (newsize < mInputs.size())
   {
     //delete unused slots
-#pragma acc kernels
     for (unsigned i=newsize; i<mInputs.size(); i++)
     {
       removeInputSlot(makeSlotName(i));
@@ -135,7 +133,6 @@ void cedar::proc::steps::ScalarsToVector::vectorDimensionChanged()
   else if (newsize > mInputs.size())
   {
     //declare new input slots
-#pragma acc kernels
     for (unsigned i=mInputs.size(); i<newsize; i++)
     {
       declareInput(makeSlotName(i), false);
@@ -164,7 +161,6 @@ void cedar::proc::steps::ScalarsToVector::inputConnectionChanged(const std::stri
 
   //revalidate all other inputs and set new output type if necessary
   int input_type = -1;
-#pragma acc kernels
   for (unsigned i=0; i<_mOutputDimension->getValue(); i++)
   {
     //name of the i-th slot
@@ -218,7 +214,6 @@ const
       //there is no way to tell which input pin has the desired type, so return VALIDITY_VALID only
       //if the pin matches all other pins
       bool type_valid = true;
-#pragma acc kernels
       for (unsigned i=0; i<mInputs.size(); i++)
       {
         if (mInputs[i])

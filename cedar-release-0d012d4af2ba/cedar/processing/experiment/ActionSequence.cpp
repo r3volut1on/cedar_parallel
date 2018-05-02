@@ -87,7 +87,6 @@ bool cedar::proc::experiment::ActionSequence::checkValidity(std::vector<std::str
 {
   bool all_valid = this->_mCondition->getValue()->checkValidity(errors, warnings);
 
-#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSet->size(); ++i)
   {
     bool action_valid = this->_mActionSet->at(i)->checkValidity(errors, warnings);
@@ -99,7 +98,6 @@ bool cedar::proc::experiment::ActionSequence::checkValidity(std::vector<std::str
 
 void cedar::proc::experiment::ActionSequence::preExperiment()
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSet->size(); ++i)
   {
     this->_mActionSet->at(i)->preExperiment();
@@ -108,7 +106,6 @@ void cedar::proc::experiment::ActionSequence::preExperiment()
 
 void cedar::proc::experiment::ActionSequence::postExperiment()
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSet->size(); ++i)
   {
     this->_mActionSet->at(i)->postExperiment();
@@ -119,7 +116,6 @@ void cedar::proc::experiment::ActionSequence::run()
 {
   if (this->getCondition()->runCheck())
   {
-#pragma acc kernels
     for (auto action : this->getActions())
     {
       action->run();
@@ -133,7 +129,6 @@ void cedar::proc::experiment::ActionSequence::prepareTrial()
   this->_mCondition->getValue()->reset();
   if (this->getCondition()->initialCheck())
   {
-#pragma acc kernels
     for (auto action : this->getActions())
     {
       action->run();
@@ -154,7 +149,6 @@ void cedar::proc::experiment::ActionSequence::setCondition(cedar::proc::experime
 std::vector<cedar::proc::experiment::action::ActionPtr> cedar::proc::experiment::ActionSequence::getActions()
 {
   std::vector<cedar::proc::experiment::action::ActionPtr> ret;
-#pragma acc kernels
   for (unsigned int i = 0; i < _mActionSet->size(); i++)
   {
     ret.push_back(this->_mActionSet->at(i));

@@ -348,7 +348,6 @@ public:
   virtual void readFromNode(const cedar::aux::ConfigurationNode& node)
   {
     this->mObjectMap.clear();
-#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = node.begin(); iter != node.end(); ++iter)
     {
       const std::string& key = iter->first;
@@ -365,7 +364,6 @@ public:
   virtual void writeToNode(cedar::aux::ConfigurationNode& root) const
   {
     cedar::aux::ConfigurationNode object_map_node;
-#pragma acc kernels
     for (auto iter = this->begin(); iter != this->end(); ++iter)
     {
       const std::string& key = iter->first;
@@ -509,7 +507,6 @@ private:
   {
     // set the changed flag for the objects managed by the parameter
     typename std::map<std::string, typename TAllocationPolicy::ValueTypePtr>::iterator map_it;
-#pragma acc kernels
     for (map_it = this->mObjectMap.begin(); map_it != this->mObjectMap.end(); ++map_it)
     {
       map_it->second->resetChangedStates(changed);

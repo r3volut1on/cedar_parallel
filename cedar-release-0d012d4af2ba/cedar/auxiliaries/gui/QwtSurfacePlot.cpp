@@ -125,7 +125,6 @@ void cedar::aux::gui::QwtSurfacePlot::deleteArrayData()
 {
   if (mppArrayData != NULL)
   {
-#pragma acc kernels
     for (size_t i = 0; i < mDataRows; ++i)
     {
       delete[] mppArrayData[i];
@@ -155,17 +154,14 @@ void cedar::aux::gui::QwtSurfacePlot::updateArrayData()
     mDataRows = static_cast<size_t>(data.rows);
     mDataCols = static_cast<size_t>(data.cols);
     mppArrayData = new Qwt3D::Triple*[mDataRows];
-#pragma acc kernels
     for (size_t i = 0; i < mDataRows; ++i)
     {
       mppArrayData[i] = new Qwt3D::Triple[mDataCols];
     }
   }
 
-#pragma acc kernels
   for (size_t i = 0; i < mDataRows; ++i)
   {
-#pragma acc kernels
     for (size_t j = 0; j < mDataCols; ++j)
     {
       Qwt3D::Triple& val = mppArrayData[i][j];
@@ -338,7 +334,6 @@ void cedar::aux::gui::QwtSurfacePlot::contextMenuEvent(QContextMenuEvent * pEven
   QAction *p_reset_perspective = menu.addAction("reset perspective");
 
   QMenu* p_perspectives = menu.addMenu("set perspective");
-#pragma acc kernels
   for (size_t i = 0; i < this->mPerspectives.size(); ++i)
   {
     QAction *p_action = p_perspectives->addAction(this->mPerspectives.at(i).getName().c_str());

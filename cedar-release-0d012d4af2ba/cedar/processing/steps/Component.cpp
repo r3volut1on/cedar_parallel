@@ -143,7 +143,6 @@ void cedar::proc::steps::Component::compute(const cedar::proc::Arguments&)
 
   // read values from the inputs
   std::vector<std::string> data_names = this->getComponent()->getDataNames(cedar::dev::Component::COMMANDED);
-#pragma acc kernels
   for (auto name_iter = data_names.begin(); name_iter != data_names.end(); ++name_iter)
   {
     const std::string& name = *name_iter;
@@ -204,14 +203,12 @@ void cedar::proc::steps::Component::componentChanged()
     types.push_back(cedar::dev::Component::MEASURED);
   }
 
-#pragma acc kernels
   for (auto type_it = types.begin(); type_it != types.end(); ++type_it)
   {
     cedar::dev::Component::DataType type = *type_it;
 
     std::vector<std::string> data_names = component->getDataNames(type);
 
-#pragma acc kernels
     for (auto name_iter = data_names.begin(); name_iter != data_names.end(); ++name_iter)
     {
       const std::string& name = *name_iter;

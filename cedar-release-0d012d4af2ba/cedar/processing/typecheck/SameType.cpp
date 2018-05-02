@@ -67,7 +67,6 @@ cedar::proc::DataSlot::VALIDITY
     return this->validityBad();
   }
 
-#pragma acc kernels
   for (const auto& slot_weak : this->mSlots)
   {
     auto slot = slot_weak.lock();

@@ -84,7 +84,6 @@ bool cedar::proc::ExternalData::isCollection() const
 bool cedar::proc::ExternalData::hasData(cedar::aux::ConstDataPtr data) const
 {
   std::vector<cedar::aux::DataWeakPtr>::const_iterator iter;
-#pragma acc kernels
   for (iter = this->mData.begin(); iter != this->mData.end(); ++iter)
   {
     cedar::aux::ConstDataPtr item = iter->lock();
@@ -117,7 +116,6 @@ void cedar::proc::ExternalData::removeDataInternal(cedar::aux::DataPtr data)
   CEDAR_DEBUG_ASSERT(data);
   // Find the data entry.
   std::vector<cedar::aux::DataWeakPtr>::iterator iter;
-#pragma acc kernels
   for (iter = this->mData.begin(); iter != this->mData.end(); ++iter)
   {
     cedar::aux::ConstDataPtr item = iter->lock();
@@ -146,7 +144,6 @@ void cedar::proc::ExternalData::addDataInternal(cedar::aux::DataPtr data)
   CEDAR_DEBUG_ASSERT(this->isCollection());
 
   // check if there is a free slot in the current vector
-#pragma acc kernels
   for (size_t i = 0; i < this->mData.size(); ++i)
   {
     if (!this->mData.at(i).lock())

@@ -65,7 +65,6 @@ void cedar::proc::typecheck::Matrix::addAcceptedDimensionality(unsigned int dime
 void cedar::proc::typecheck::Matrix::addAcceptedDimensionalityRange(unsigned int lowest, unsigned int highest)
 {
   //!@todo This is not the best way of storing this information. Rather, a class is needed that stores a set of mins and maxes
-#pragma acc kernels
   for (unsigned int d = lowest; d <= highest; ++d)
   {
     this->addAcceptedDimensionality(d);
@@ -111,7 +110,6 @@ cedar::proc::DataSlot::VALIDITY
     }
 
     bool type_ok = this->mAcceptedTypes.empty(); // if empty, everything is accepted
-#pragma acc kernels
     for (size_t i = 0; i < this->mAcceptedTypes.size(); ++i)
     {
       if (mat_data->getCvType() == this->mAcceptedTypes.at(i))
@@ -127,7 +125,6 @@ cedar::proc::DataSlot::VALIDITY
     }
 
     bool dim_ok = this->mAcceptedDimensionalities.empty(); // if empty, everything is accepted
-#pragma acc kernels
     for (size_t i = 0; i < this->mAcceptedDimensionalities.size(); ++i)
     {
       if (mat_data->getDimensionality() == this->mAcceptedDimensionalities.at(i))
@@ -146,7 +143,6 @@ cedar::proc::DataSlot::VALIDITY
     auto accepted_sizes = this->mAcceptedMinimumSizes.find(mat_data->getDimensionality());
     if (accepted_sizes != this->mAcceptedMinimumSizes.end())
     {
-#pragma acc kernels
       for (unsigned int i = 0; i < mat_data->getDimensionality(); ++i)
       {
         if (accepted_sizes->second.at(i).is_initialized())
@@ -162,7 +158,6 @@ cedar::proc::DataSlot::VALIDITY
     }
 
     bool channel_ok = this->mAcceptedNumberOfChannels.empty(); // if empty, everything is accepted
-#pragma acc kernels
     for (size_t i = 0; i < this->mAcceptedNumberOfChannels.size(); ++i)
     {
       if (static_cast<unsigned int>(mat_data->getData().channels()) == this->mAcceptedNumberOfChannels.at(i))

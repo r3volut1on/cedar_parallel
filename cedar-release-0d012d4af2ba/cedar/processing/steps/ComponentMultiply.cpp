@@ -120,7 +120,6 @@ void cedar::proc::steps::ComponentMultiply::inputConnectionChanged(const std::st
 
   // Find the first non-0d input. If all are 0d, just use the last one as a "template".
   cv::Mat in_mat;
-#pragma acc kernels
   for (unsigned int i = 0; i < this->mInputs->getDataCount(); ++i)
   {
     if (cedar::aux::ConstMatDataPtr mat_data = boost::dynamic_pointer_cast<const cedar::aux::MatData>(slot->getData(i)))
@@ -147,7 +146,6 @@ void cedar::proc::steps::ComponentMultiply::compute(const cedar::proc::Arguments
   cv::Mat& prod = mOutput->getData();
   prod = cv::Scalar(1);
 
-#pragma acc kernels
   for (unsigned int i = 0; i < this->mInputs->getDataCount(); ++i)
   {
     cedar::aux::MatDataPtr mat_data = boost::dynamic_pointer_cast<cedar::aux::MatData>(this->mInputs->getData(i));

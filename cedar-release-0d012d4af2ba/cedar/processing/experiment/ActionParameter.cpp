@@ -141,7 +141,6 @@ std::vector<std::string> cedar::proc::experiment::ActionParameter::getListOfActi
   if (auto connectable = boost::dynamic_pointer_cast<cedar::proc::Step>(this->getConnectable()))
   {
     auto action_map = connectable->getActions();
-#pragma acc kernels
     for (auto action : action_map)
     {
       actions.push_back(action.first);

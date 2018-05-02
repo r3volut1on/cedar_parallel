@@ -248,7 +248,6 @@ void cedar::aux::gui::PluginManagerDialog::populate()
 {
   // restore plugins to load from the settings
   auto known_plugins = cedar::aux::SettingsSingleton::getInstance()->getKnownPlugins();
-#pragma acc kernels
   for (auto iter = known_plugins.begin(); iter != known_plugins.end(); ++iter)
   {
     this->addPlugin(*iter);
@@ -256,7 +255,6 @@ void cedar::aux::gui::PluginManagerDialog::populate()
 
   // restore search paths
   auto search_paths = cedar::aux::SettingsSingleton::getInstance()->getPluginSearchPaths();
-#pragma acc kernels
   for (auto iter = search_paths.begin(); iter != search_paths.end(); ++iter)
   {
     this->addPluginSearchPath(*iter);
@@ -278,7 +276,6 @@ void cedar::aux::gui::PluginManagerDialog::removePluginSearchPathIndex(size_t in
 
 void cedar::aux::gui::PluginManagerDialog::removePluginSearchPath(const std::string& path)
 {
-#pragma acc kernels
   for (int row = this->mpSearchPathList->count() - 1; row >= 0; ++row)
   {
     if (this->mpSearchPathList->item(row)->text().toStdString() == path)
@@ -378,7 +375,6 @@ void cedar::aux::gui::PluginManagerDialog::loadOnStartupCheckboxToggled(bool loa
 
   // find out which checkbox sent the signal
   int row;
-#pragma acc kernels
   for (row = 0; row < this->mpPluginList->rowCount(); ++row)
   {
     if (this->mpPluginList->cellWidget(row, 0) == p_sender)
@@ -404,7 +400,6 @@ void cedar::aux::gui::PluginManagerDialog::loadOnStartupCheckboxToggled(bool loa
 
 void cedar::aux::gui::PluginManagerDialog::updatePluginPaths()
 {
-#pragma acc kernels
   for (int row = 0; row < this->mpPluginList->rowCount(); ++row)
   {
     this->updatePluginPath(row);
@@ -434,7 +429,6 @@ void cedar::aux::gui::PluginManagerDialog::updatePluginPath(int row)
 void cedar::aux::gui::PluginManagerDialog::removePlugin(const std::string& pluginName)
 {
   std::vector<int> rows_to_remove;
-#pragma acc kernels
   for (int row = 0; row < this->mpPluginList->rowCount(); ++row)
   {
     if (this->getPluginNameFromRow(row) == pluginName)
@@ -444,7 +438,6 @@ void cedar::aux::gui::PluginManagerDialog::removePlugin(const std::string& plugi
   }
 
   // erase rows, starting from the last ones (so the other ones don't get shifted)
-#pragma acc kernels
   for (size_t i = 0; i < rows_to_remove.size(); ++i)
   {
     this->mpPluginList->removeRow(rows_to_remove.at(i));
@@ -465,7 +458,6 @@ std::string cedar::aux::gui::PluginManagerDialog::getPluginNameFromRow(int row) 
 
 int cedar::aux::gui::PluginManagerDialog::getPluginRowFromName(const std::string& pluginName) const
 {
-#pragma acc kernels
   for (int row = 0; row < this->mpPluginList->rowCount(); ++row)
   {
     if (this->getPluginNameFromRow(row) == pluginName)
@@ -480,12 +472,10 @@ int cedar::aux::gui::PluginManagerDialog::getPluginRowFromName(const std::string
 void cedar::aux::gui::PluginManagerDialog::openInfoDialog()
 {
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       std::string plugin_name = this->getPluginNameFromRow(row);
@@ -500,12 +490,10 @@ void cedar::aux::gui::PluginManagerDialog::openInfoDialog()
 void cedar::aux::gui::PluginManagerDialog::loadSelectedPlugins()
 {
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       std::string plugin_name = this->getPluginNameFromRow(row);
@@ -524,19 +512,16 @@ void cedar::aux::gui::PluginManagerDialog::removeSelectedPlugins()
   std::vector<std::string> to_remove;
 
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       to_remove.push_back(this->getPluginNameFromRow(row));
     }
   }
 
-#pragma acc kernels
   for (size_t i = 0; i < to_remove.size(); ++i)
   {
     cedar::aux::SettingsSingleton::getInstance()->removePlugin(to_remove.at(i));
@@ -567,7 +552,6 @@ void cedar::aux::gui::PluginManagerDialog::removeSearchPathClicked()
 {
   QList<QListWidgetItem*> selected = this->mpSearchPathList->selectedItems();
 
-#pragma acc kernels
   for (int i = 0; i < selected.size(); ++i)
   {
     int index = this->mpSearchPathList->row(selected[i]);

@@ -385,7 +385,6 @@ void cedar::proc::experiment::StepPropertyParameter::allowType(const std::string
 
 bool cedar::proc::experiment::StepPropertyParameter::isAllowType(const std::string& type)
 {
-#pragma acc kernels
   for (std::string allowed_type : allowedTypes)
   {
     if (allowed_type == type)
@@ -399,7 +398,6 @@ bool cedar::proc::experiment::StepPropertyParameter::isAllowType(const std::stri
 void cedar::proc::experiment::StepPropertyParameter::disallowType(const std::string& type)
 {
   int i = 0;
-#pragma acc kernels
   for (std::string allowed_type : allowedTypes)
   {
     if (allowed_type == type)
@@ -474,7 +472,6 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
   {
     if (step->hasSlotForRole(role))
     {
-#pragma acc kernels
       for (auto data : step->getDataSlots(role))
       {
         list.push_back(data.first);
@@ -494,7 +491,6 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
   }
 
   std::vector<std::string> step_parameter_paths = configurable->listAllParameters();
-#pragma acc kernels
   for (const auto& parameter_path : step_parameter_paths)
   {
     try
@@ -509,7 +505,6 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
       std::string parameter_type = cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->getTypeId(parameter);
       if (this->getAllowedTypes().size() > 0)
       {
-#pragma acc kernels
         for (auto type : this->getAllowedTypes())
         {
           if (type == parameter_type)

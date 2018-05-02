@@ -173,7 +173,6 @@ void cedar::dyn::RateToSpaceCode::interpolate()
 {
   const cv::Mat& input = this->getInput("input")->getData<cv::Mat>();
   this->mInterpolatedCenters.resize(this->mDimensionality);
-#pragma acc kernels
   for (unsigned int i = 0; i < this->mDimensionality; ++i)
   {
 //    double real_value = std::max(this->_mLowerLimits->at(i), static_cast<double>(input.at<float>(i, 0)));
@@ -253,7 +252,6 @@ void cedar::dyn::RateToSpaceCode::inputConnectionChanged(const std::string& inpu
 void cedar::dyn::RateToSpaceCode::outputSizesChanged()
 {
   std::vector<int> sizes_signed;
-#pragma acc kernels
   for (unsigned int i = 0; i < _mOutputSizes->size(); ++i)
   {
     sizes_signed.push_back(_mOutputSizes->at(i));

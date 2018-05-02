@@ -98,7 +98,6 @@ void cedar::aux::Recorder::step(cedar::unit::Time)
   auto mode = this->getSerializationMode();
 
   // Writing the first value of every DataSpectator queue.
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     boost::static_pointer_cast<cedar::aux::DataSpectator>(data_spectator.second)->writeFirstRecordData(mode);
@@ -164,7 +163,6 @@ void cedar::aux::Recorder::unregisterData(const std::string& name)
 void cedar::aux::Recorder::unregisterData(cedar::aux::ConstDataPtr data)
 {
   QWriteLocker locker(mpListLock);
-#pragma acc kernels
   for (auto it = mDataSpectators.begin(); it != mDataSpectators.end(); ++it)
   {
     auto casted = boost::static_pointer_cast<cedar::aux::DataSpectator>(it->second);
@@ -198,7 +196,6 @@ void cedar::aux::Recorder::prepareStart()
 
   // find the minimal time to write to file. This should the smallest stepTime in the DataSpectator threads.
   cedar::unit::Time min(1000.0 * cedar::unit::milli * cedar::unit::seconds);
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     auto casted = boost::static_pointer_cast<cedar::aux::DataSpectator>(data_spectator.second);
@@ -286,7 +283,6 @@ cedar::unit::Time cedar::aux::Recorder::getRecordIntervalTime(const std::string&
 
 cedar::unit::Time cedar::aux::Recorder::getRecordIntervalTime(cedar::aux::ConstDataPtr data) const
 {
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)
@@ -304,7 +300,6 @@ bool cedar::aux::Recorder::isRegistered(const std::string& name) const
 
 bool cedar::aux::Recorder::isRegistered(cedar::aux::ConstDataPtr data) const
 {
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)
@@ -322,7 +317,6 @@ void cedar::aux::Recorder::renameRegisteredData(cedar::aux::ConstDataPtr data, c
   {
     CEDAR_THROW(cedar::aux::RecorderException, "Cannot rename data while recorder is running");
   }
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)
@@ -337,7 +331,6 @@ void cedar::aux::Recorder::renameRegisteredData(cedar::aux::ConstDataPtr data, c
 
 void cedar::aux::Recorder::takeSnapshot()
 {
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     auto casted = boost::static_pointer_cast<cedar::aux::DataSpectator>(data_spectator.second);
@@ -349,7 +342,6 @@ std::map<std::string, cedar::unit::Time> cedar::aux::Recorder::getRegisteredData
 {
   std::map<std::string, cedar::unit::Time> registeredData;
 
-#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     auto casted = boost::static_pointer_cast<cedar::aux::DataSpectator>(data_spectator.second);
@@ -384,7 +376,6 @@ std::string cedar::aux::Recorder::getTimeStamp()
 void cedar::aux::Recorder::startAllRecordings()
 {
   QReadLocker locker(mpListLock);
-#pragma acc kernels
   for (auto thread : mDataSpectators)
   {
     thread.second->start();
@@ -395,14 +386,12 @@ void cedar::aux::Recorder::stopAllRecordings()
 {
   QReadLocker locker(mpListLock);
   //First performing a requestStop() to stop all thread as fast as possible without blocking
-#pragma acc kernels
   for (auto thread : mDataSpectators)
   {
     thread.second->requestStop();
   }
 
   //Waiting for each thread stopped.
-#pragma acc kernels
   for (auto thread : mDataSpectators)
   {
     thread.second->stop();

@@ -91,7 +91,6 @@ template <typename CVT> void cvMatHelper<CVT>::initExternalHeader(
   }
   else
   {
-#pragma acc kernels
     for (int i = 0; i < mat.dims; ++i)
     {
       extheader.mSizes.push_back(mat.size[i]);
@@ -132,7 +131,6 @@ template <typename CVT> bool cvMatHelper<CVT>::checkCollatedDataForWrite(
     {
       return false;
     }
-#pragma acc kernels
     for (size_t i = 0; i < mLocalHeader.mSizes.size(); ++i)
     {
       if (mLocalHeader.mSizes.at(i) != mat.size[i])
@@ -182,7 +180,6 @@ template <typename CVT> bool cvMatHelper<CVT>::checkCollatedDataForRead(
       return false;
     }
 
-#pragma acc kernels
     for (size_t i = 0; i < this->mLocalHeader.mSizes.size(); ++i)
     {
       if (mLocalHeader.mSizes.at(i) != extheader.mSizes.at(i))

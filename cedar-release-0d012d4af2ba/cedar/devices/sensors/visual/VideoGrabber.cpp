@@ -122,7 +122,6 @@ void cedar::dev::sensors::visual::VideoGrabber::init(double speedFactor)
   QObject::connect (_mSpeedFactor.get(),SIGNAL(valueChanged()),this, SLOT(speedFactorChanged()));
 
   // watch filename on every channel
-#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     QObject::connect
@@ -203,7 +202,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onCreateGrabber()
   unsigned int num_channels = getNumChannels();
 
   // check if filenames are there (no filename could happen on startup in the processingGui)
-#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     if (getVideoChannel(channel)->_mSourceFileName->getPath() == ".")
@@ -215,7 +213,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onCreateGrabber()
   }
 
   // open capture one by one
-#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     cv::VideoCapture capture(getVideoChannel(channel)->_mSourceFileName->getPath());
@@ -236,7 +233,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onCreateGrabber()
 
   // all grabbers successfully initialized, now search for the smallest avi-file
   unsigned int smallest = UINT_MAX;
-#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     unsigned int len = getVideoChannel(channel)->mVideoCapture.get(CEDAR_OPENCV_CONSTANT(CAP_PROP_FRAME_COUNT));
@@ -273,7 +269,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onCreateGrabber()
 void cedar::dev::sensors::visual::VideoGrabber::onCloseGrabber()
 {
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     // there is no cv::VideoCapture.close() method, so we assign an empty one. The old will be released automatically
@@ -302,7 +297,6 @@ void cedar::dev::sensors::visual::VideoGrabber::onGrab(unsigned int channel)
     if (_mLooped->getValue())
     {
       // rewind all channels and grab first frame for all channels up to this channel
-#pragma acc kernels
       for (unsigned int i = 0; i < this->getNumChannels(); ++i)
       {
         getVideoChannel(i)->mVideoCapture.set(CEDAR_OPENCV_CONSTANT(CAP_PROP_POS_FRAMES), 0);
@@ -381,7 +375,6 @@ void cedar::dev::sensors::visual::VideoGrabber::setPositionRelative(double newPo
 
   // set to new values
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getVideoChannel(channel)->mVideoCapture.set
@@ -416,7 +409,6 @@ void cedar::dev::sensors::visual::VideoGrabber::setPositionAbsolute(unsigned int
 
   // set new position
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     (getVideoChannel(channel)->mVideoCapture).set

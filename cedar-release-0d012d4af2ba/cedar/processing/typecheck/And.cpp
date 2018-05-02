@@ -53,7 +53,6 @@
 cedar::proc::DataSlot::VALIDITY
   cedar::proc::typecheck::And::check(cedar::proc::ConstDataSlotPtr slot, cedar::aux::ConstDataPtr data, std::string& info) const
 {
-#pragma acc kernels
   for (const auto& check : this->mChecks)
   {
     if (check(slot, data, info) != this->validityOk())

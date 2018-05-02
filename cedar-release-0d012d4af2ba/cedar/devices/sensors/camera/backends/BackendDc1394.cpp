@@ -172,7 +172,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readGrabModesFromLibDc()
 
   int num_modes = cam_video_modes.num;
   //  std::cout << "Camera Video Modes:" << std::endl;
-#pragma acc kernels
   for (int i=0; i<num_modes; i++)
   {
 //    std::cout << " - " << cam_video_modes.modes[i]
@@ -245,7 +244,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFrameRatesFromLibDc
 //#endif
 
   int libdc_mode_index = -1;
-#pragma acc kernels
   for (unsigned int i = 0; i < cam_video_modes.num; ++i)
   {
     if (cam_video_modes.modes[i] == mode_id)
@@ -262,7 +260,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFrameRatesFromLibDc
   // search every FrameRate::Id in the LibDc structures, and set if available
 
   int num_cedar_framerates = cedar::dev::sensors::camera::FrameRate::type().list().size();
-#pragma acc kernels
   for (int rate = 0; rate < num_cedar_framerates; ++rate)
   {
     cedar::dev::sensors::camera::FrameRate::Id rate_id
@@ -270,7 +267,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFrameRatesFromLibDc
 
     int libdc_framerate_index = -1;
     int num_libdc_framerates = mode_framerates.num;
-#pragma acc kernels
     for (int i=0; i<num_libdc_framerates; i++)
     {
 
@@ -397,7 +393,6 @@ unsigned int cedar::dev::sensors::camera::BackendDc1394::getBusIdFromGuid(unsign
   }
 
   // search all cameras for the one with the given guid
-#pragma acc kernels
   for (unsigned int bus_id = 0; bus_id < cams_on_bus; ++bus_id)
   {
     //only lower 32bit of guid
@@ -423,7 +418,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFeaturesFromLibDc()
 
   //synchronize every feature (i.e. property) with the representing object
   int num_properties = cedar::dev::sensors::camera::Property::type().list().size();
-#pragma acc kernels
   for (int prop = 0; prop < num_properties; ++prop)
   {
     cedar::dev::sensors::camera::Property::Id prop_id
@@ -435,7 +429,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFeaturesFromLibDc()
 
     //search for current property in the feature-list
     int libdc_feature_index = -1;
-#pragma acc kernels
     for (int i = 0 ; i < DC1394_FEATURE_NUM; i++)
     {
       cedar::dev::sensors::camera::Property::Id test_id = CAMERA_PROPERTY_NOT_SUPPORTED;
@@ -497,7 +490,6 @@ void cedar::dev::sensors::camera::BackendDc1394::readFeaturesFromLibDc()
         p_prop->mAutoCapable = false;
         p_prop->mManualCapable = false;
 
-#pragma acc kernels
         for (unsigned int i=0; i<num_modes;++i)
         {
           if (feature.modes.modes[i] == DC1394_FEATURE_MODE_AUTO)

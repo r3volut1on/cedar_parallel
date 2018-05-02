@@ -194,7 +194,6 @@ void cedar::dev::sensors::visual::Grabber::emergencyCleanup()
                                            );
 
   //cleanup every instantiated grabber
-#pragma acc kernels
   for (std::vector<Grabber*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
   {
     // only cedar::dev::sensors::visual::Grabber::doCleanUp() and xxxGrabber::onCleanUp() methods invoked
@@ -314,7 +313,6 @@ bool cedar::dev::sensors::visual::Grabber::applyParameter()
   if (grabber_created)
   {
     // update state
-#pragma acc kernels
     for (unsigned int channel = 0; channel < getNumChannels(); ++channel)
     {
       std::string channelinfo = onGetSourceInfo(channel);
@@ -370,7 +368,6 @@ void cedar::dev::sensors::visual::Grabber::closeGrabber()
 
   // reset the common-things from all grabbers
   unsigned int num_channels = _mChannels->size();
-#pragma acc kernels
   for (unsigned int channel=0; channel < num_channels; channel++)
   {
     this->getGrabberChannel(channel)->mChannelInfo="";
@@ -500,7 +497,6 @@ void cedar::dev::sensors::visual::Grabber::grab()
   try
   {
     unsigned int num_channels = getNumChannels();
-#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       try
@@ -561,7 +557,6 @@ void cedar::dev::sensors::visual::Grabber::grab()
   if (mRecording)
   {
     unsigned int num_channels = getNumChannels();
-#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       try
@@ -642,7 +637,6 @@ void cedar::dev::sensors::visual::Grabber::setSnapshotName(const std::string& sn
   }
   else
   {
-#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       getGrabberChannel(channel)->_mSnapshotName->setValue(name + this->getChannelSaveFilenameAddition(channel) + ext);
@@ -724,7 +718,6 @@ void cedar::dev::sensors::visual::Grabber::saveSnapshot(unsigned int channel) co
 void cedar::dev::sensors::visual::Grabber::saveSnapshotAllCams() const
 {
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     saveSnapshot(channel);
@@ -775,7 +768,6 @@ void cedar::dev::sensors::visual::Grabber::setRecordName(const std::string& reco
   }
   else
   {
-#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       getGrabberChannel(channel)->_mRecordName->setValue(name + this->getChannelSaveFilenameAddition(channel) + ext);
@@ -840,7 +832,6 @@ void cedar::dev::sensors::visual::Grabber::startRecording
   // this is independent from the speed of the avi-file or the camera framerate
 
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     // create writer
@@ -911,7 +902,6 @@ void cedar::dev::sensors::visual::Grabber::stopRecording()
 
     // delete the videowriter
     unsigned int num_channels = getNumChannels();
-#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       getGrabberChannel(channel)->mVideoWriter = cv::VideoWriter();

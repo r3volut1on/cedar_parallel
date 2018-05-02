@@ -193,7 +193,6 @@ void cedar::proc::steps::Projection::reconfigure(bool triggerSubsequent)
     // ... compute which indices need to be compressed
     mIndicesToCompress.clear();
 
-#pragma acc kernels
     for (unsigned int index = 0; index < input_dimensionality; ++index)
     {
       if (_mDimensionMappings->getValue()->isDropped(index))
@@ -208,7 +207,6 @@ void cedar::proc::steps::Projection::reconfigure(bool triggerSubsequent)
     {
       std::vector<unsigned int> mapped_indices;
 
-#pragma acc kernels
       for (unsigned int index = 0; index < input_dimensionality; ++index)
       {
         if (!_mDimensionMappings->getValue()->isDropped(index))
@@ -313,7 +311,6 @@ void cedar::proc::steps::Projection::reconfigure(bool triggerSubsequent)
   // reset constness of all mappings
   this->_mOutputDimensionSizes->unconstAll();
 
-#pragma acc kernels
   for (unsigned int input_dim = 0; input_dim < input_dimensionality; ++input_dim)
   {
     if (_mDimensionMappings->getValue()->isDropped(input_dim))
@@ -365,7 +362,6 @@ void cedar::proc::steps::Projection::initializeOutputMatrix()
     // convert the sizes of the output dimensions to signed integers so that
     // OpenCV can handle it
     std::vector<int> sizes(dimensionality);
-#pragma acc kernels
     for (int dim = 0; dim < dimensionality; ++dim)
     {
       sizes[dim] = _mOutputDimensionSizes->at(dim);
@@ -421,7 +417,6 @@ void cedar::proc::steps::Projection::expand1Dto2D()
     output = output.t();
   }
 
-#pragma acc kernels
   for (int i = 0; i < input.rows; ++i)
   {
     input.row(i).copyTo(output);
@@ -468,7 +463,6 @@ void cedar::proc::steps::Projection::expand2Dto3D()
   unsigned int i = 0;
   // do this lookup only once, assuming that mapping does not change at run time...
   mMappingLookup.resize(number_of_mappings);
-#pragma acc kernels
   for (i = 0; i < number_of_mappings; ++i)
   {
     mMappingLookup.at(i) = mapping->lookUp(i);
@@ -482,14 +476,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
   {
     if (mMappingLookup.at(0) == 1) // not flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(target_index, x, y) = value;
@@ -499,14 +490,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
     }
     else // flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(target_index, y, x) = value;
@@ -519,14 +507,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
   {
     if (mMappingLookup.at(0) == 0) // not flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[1]; ++ target_index)
           {
             output.at<T>(x, target_index, y) = value;
@@ -536,14 +521,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
     }
     else // flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(y, target_index, x) = value;
@@ -556,14 +538,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
   {
     if (mMappingLookup.at(0) == 0) // not flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[2]; ++target_index)
           {
             output.at<T>(x, y, target_index) = value;
@@ -573,14 +552,11 @@ void cedar::proc::steps::Projection::expand2Dto3D()
     }
     else // flipped
     {
-#pragma acc kernels
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[2]; ++ target_index)
           {
             output.at<T>(y, x, target_index) = value;
@@ -630,7 +606,6 @@ void cedar::proc::steps::Projection::expand1Dto3D()
   unsigned int i = 0;
   // do this lookup only once, assuming that mapping does not change at run time...
   mMappingLookup.resize(number_of_mappings);
-#pragma acc kernels
   for (i = 0; i < number_of_mappings; ++i)
   {
     mMappingLookup.at(i) = mapping->lookUp(i);
@@ -645,15 +620,12 @@ void cedar::proc::steps::Projection::expand1Dto3D()
     {
       T value;
       // outer loop
-#pragma acc kernels
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[1]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[2]; ++y)
           {
             output.at<T>(source_index, x, y) = value;
@@ -666,15 +638,12 @@ void cedar::proc::steps::Projection::expand1Dto3D()
     {
       T value;
       // outer loop
-#pragma acc kernels
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[0]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[2]; ++y)
           {
             output.at<T>(x, source_index, y) = value;
@@ -687,15 +656,12 @@ void cedar::proc::steps::Projection::expand1Dto3D()
     {
       T value;
       // outer loop
-#pragma acc kernels
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[0]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[1]; ++y)
           {
             output.at<T>(x, y, source_index) = value;
@@ -753,7 +719,6 @@ void cedar::proc::steps::Projection::expandMDtoND()
   unsigned int i = 0;
   // do this lookup only once, assuming that mapping does not change at run time...
   mMappingLookup.resize(number_of_mappings);
-#pragma acc kernels
   for (i = 0; i < number_of_mappings; ++i)
   {
     mMappingLookup.at(i) = mapping->lookUp(i);
@@ -764,7 +729,6 @@ void cedar::proc::steps::Projection::expandMDtoND()
     const std::vector<int>& output_index = output_iterator.getCurrentIndexVector();
 
     // compute the corresponding index in the input matrix
-#pragma acc kernels
     for (i = 0; i < number_of_mappings; ++i)
     {
       input_index[i] = output_index.at(mMappingLookup.at(i));
@@ -889,7 +853,6 @@ void cedar::proc::steps::Projection::compress3Dto1D()
   // in order to do that, we first have to find a vector containing
   // the sizes of the temporary 2D matrix ...
   std::vector<int> sizes;
-#pragma acc kernels
   for (unsigned int i = 0; i < input_dimensionality; ++i)
   {
     if (i != mIndicesToCompress.at(0))

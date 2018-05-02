@@ -124,7 +124,6 @@ cedar::dev::sensors::visual::NetGrabber::~NetGrabber()
 void cedar::dev::sensors::visual::NetGrabber::onCloseGrabber()
 {
   unsigned int num_channels = getNumChannels();
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getNetChannel(channel)->mpMatNetReader.reset();
@@ -150,7 +149,6 @@ void cedar::dev::sensors::visual::NetGrabber::onCreateGrabber()
   std::stringstream info;
   info << "Initialize NetGrabber with " << num_channels << " channels ..." << std::endl;
 
-#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     info << "Channel " << channel << ": capture from YARP-hannel: "
@@ -166,7 +164,6 @@ void cedar::dev::sensors::visual::NetGrabber::onCreateGrabber()
   cedar::dev::sensors::visual::NetChannel::MatNetReaderPtr yarp_reader;
 
   // loop until connection established or an error occurs
-#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels; ++channel)
   {
     const std::string channel_name = getNetChannel(channel)->_mpYarpChannelName->getValue();

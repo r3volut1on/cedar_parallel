@@ -252,7 +252,6 @@ void cedar::proc::gui::ExperimentDialog::runExperiment()
   QString details;
 
   bool issues_found = false;
-#pragma acc kernels
   for (const auto& issue_list_pair : issues)
   {
     const auto& list = issue_list_pair.second;
@@ -264,7 +263,6 @@ void cedar::proc::gui::ExperimentDialog::runExperiment()
       details += "The following ";
       details += issue;
       details += " occurred:\n\n";
-#pragma acc kernels
       for (const auto& item : list)
       {
         details += QString::fromStdString(item) + "\n";
@@ -329,7 +327,6 @@ void cedar::proc::gui::ExperimentDialog::experimentRunning(bool status)
 
 void cedar::proc::gui::ExperimentDialog::setActionSequenceWidgetsEnabled(bool enabled)
 {
-#pragma acc kernels
   for (int i = 0; i < this->mActionSequences->count(); ++i)
   {
     auto child = this->mActionSequences->itemAt(i)->widget();
@@ -351,7 +348,6 @@ void cedar::proc::gui::ExperimentDialog::redraw()
   this->clearActionSequences();
   std::vector<cedar::proc::experiment::ActionSequencePtr> action_sequences =
       this->mExperiment->getActionSequences();
-#pragma acc kernels
   for (unsigned int i = 0; i < action_sequences.size(); i++)
   {
     cedar::proc::experiment::ActionSequencePtr action_seq = action_sequences[i];
