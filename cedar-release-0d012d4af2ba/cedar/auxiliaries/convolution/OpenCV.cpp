@@ -163,7 +163,6 @@ void cedar::aux::conv::OpenCV::translateAnchor
   point.assign(2, -1);
 
 #pragma acc kernels
-#pragma acc kernels
   for (size_t i = 0; i < 2; ++i)
   {
     if (anchor_vector.size() > i && sizes.size() > i)
@@ -213,7 +212,6 @@ void cedar::aux::conv::OpenCV::translateAnchor
   const std::vector<int> anchor_vector = kernel->getAnchor();
   auto dim = kernel->getDimensionality();
   cv::Mat kernel_mat = kernel->getKernel().clone();
-#pragma acc kernels
   for (size_t d = 0; d < dim; ++d)
   {
     sizes.push_back(static_cast<int>(kernel->getSize(d)));
@@ -614,7 +612,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
   case cedar::aux::conv::Mode::Same:
     {
       cv::Mat result = 0.0 * matrix;
-#pragma acc kernels
       for (size_t i = 0; i < kernelList->size(); ++i)
       {
         cedar::aux::kernel::ConstKernelPtr kernel = kernelList->getKernel(i);
@@ -633,7 +630,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
         cv::Mat matrix_full = createFullMatrix(matrix, kernelList, borderType);
 
         cv::Mat result = 0.0 * matrix_full;
-#pragma acc kernels
         for (size_t i = 0; i < kernelList->size(); ++i)
         {
           cedar::aux::kernel::ConstKernelPtr kernel = kernelList->getKernel(i);
@@ -667,7 +663,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
         else
         {
           cv::Mat result = 0.0 * matrix.clone();
-#pragma acc kernels
           for (size_t i = 0; i < kernelList->size(); ++i)
           {
             cedar::aux::kernel::ConstKernelPtr kernel = kernelList->getKernel(i);
@@ -907,7 +902,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
     case cedar::aux::conv::Mode::Same:
       {
         cv::Mat result = 0.0 * matrix;
-#pragma acc kernels
         for (size_t i = 0; i < this->getKernelList()->size(); ++i)
         {
           cv::Mat convolved;
@@ -971,7 +965,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
           cv::Mat matrix_full = createFullMatrix(matrix, borderType);
           cv::Mat result = 0.0 * matrix_full;
 
-#pragma acc kernels
           for (size_t i = 0; i < this->getKernelList()->size(); ++i)
           {
             cv::Mat convolved;
@@ -1048,7 +1041,6 @@ cv::Mat cedar::aux::conv::OpenCV::convolve
           {
             cv::Mat result = 0.0 * matrix.clone();
 
-#pragma acc kernels
             for (size_t i = 0; i < this->getKernelList()->size(); ++i)
             {
               cv::Mat convolved;
@@ -1194,7 +1186,6 @@ cv::Mat cedar::aux::conv::OpenCV::cvConvolve
       int col_offset_right = (adapted_kernel_cols - flipped_kernel.cols + 1) / 2;
 
       // then sum over image-sized sections of the kernel
-#pragma acc kernels
       for (int start_row = 0; start_row < num_complete_sums_row; start_row += 1)
       {
         // construct ranges that lie within the kernel size
@@ -1209,7 +1200,6 @@ cv::Mat cedar::aux::conv::OpenCV::cvConvolve
                     std::min((start_row + 1) * matrix.rows - row_offset_top, flipped_kernel.rows)
                   );
 
-#pragma acc kernels
         for (int start_col = 0; start_col < num_complete_sums_col; start_col += 1)
         {
           cv::Range summed_col_range
@@ -1280,7 +1270,6 @@ void cedar::aux::conv::OpenCV::setKernelList(cedar::aux::conv::KernelListPtr ker
   mKernelRemovedConnection.disconnect();
   this->Engine::setKernelList(kernelList);
   this->mKernelTypes.clear();
-#pragma acc kernels
   for (size_t i = 0; i < this->getKernelList()->size(); ++i)
   {
     this->updateKernelType(i);

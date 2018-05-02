@@ -82,7 +82,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::timerEvent(QTimerEvent*)
 void cedar::dev::gui::KinematicChainCommandWidget::setDecimals(unsigned int decimals)
 {
 #pragma acc kernels
-#pragma acc kernels
   for(unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
   {
     mCommandBoxes[j]->setDecimals(decimals);
@@ -91,7 +90,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::setDecimals(unsigned int deci
 
 void cedar::dev::gui::KinematicChainCommandWidget::setSingleStep(double singleStep)
 {
-#pragma acc kernels
   for(unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
   {
     mCommandBoxes[j]->setSingleStep(singleStep);
@@ -109,7 +107,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::changeWorkingMode(int mode)
 void cedar::dev::gui::KinematicChainCommandWidget::commandJoints()
 {
   std::vector<double> command_vector;
-#pragma acc kernels
   for(unsigned int i = 0; i < mpKinematicChain->getNumberOfJoints(); ++i)
   {
     command_vector.push_back(mCommandBoxes[i]->value());
@@ -134,7 +131,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::commandJoints()
 void cedar::dev::gui::KinematicChainCommandWidget::stopMovement()
 {
   // js: don't need to change the user selection mpModeBox->setCurrentIndex(1);
-#pragma acc kernels
   for(unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
   {
     mpKinematicChain->setJointVelocity(j, 0);
@@ -151,7 +147,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::update()
   {
   case 0:
 #pragma acc kernels
-#pragma acc kernels
     for (unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
     {
       mCommandBoxes[j]->blockSignals(true);
@@ -160,7 +155,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::update()
     }
     break;
   case 1:
-#pragma acc kernels
     for (unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
     {
       mCommandBoxes[j]->blockSignals(true);
@@ -170,7 +164,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::update()
     break;
 
   case 2:
-#pragma acc kernels
     for (unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
     {
       mCommandBoxes[j]->blockSignals(true);
@@ -240,7 +233,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::initWindow()
   mpGridLayout->addWidget(mpKeepMovingBox, 5, 0);
   connect(mpKeepMovingBox, SIGNAL(stateChanged(int)), this, SLOT(setKeepSendingState(int)));
 
-#pragma acc kernels
   for (unsigned int i = 0; i < mpKinematicChain->getNumberOfJoints(); ++i)
   {
     // add label

@@ -91,7 +91,6 @@ void cedar::aux::gui::EnumParameter::parameterValueChanged()
   int index = -1;
   QString current_value = QString::fromStdString(parameter->getValue().name());
 #pragma acc kernels
-#pragma acc kernels
   for (int i = 0; i < this->mpEdit->count(); ++i)
   {
     if (this->mpEdit->itemData(i) == current_value)
@@ -115,7 +114,6 @@ void cedar::aux::gui::EnumParameter::parameterPointerChanged()
   int select_index = -1;
   int first_enabled = -1;
   parameter->lockForRead();
-#pragma acc kernels
   for (size_t i = 0; i < parameter->getEnumDeclaration().list().size(); ++i)
   {
     const cedar::aux::Enum& enum_val = parameter->getEnumDeclaration().list().at(i);

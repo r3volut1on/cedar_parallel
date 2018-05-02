@@ -99,7 +99,6 @@ void cedar::aux::EnumParameter::enable(cedar::aux::EnumId value)
 void cedar::aux::EnumParameter::selectFirstEnabled()
 {
 #pragma acc kernels
-#pragma acc kernels
   for (size_t i = 0; i < this->mEnumDeclaration->list().size(); ++i)
   {
     if (this->isEnabled(this->mEnumDeclaration->list().at(i)))
@@ -129,7 +128,6 @@ void cedar::aux::EnumParameter::enableAll()
 
 void cedar::aux::EnumParameter::disableAll()
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->mEnumDeclaration->list().size(); ++i)
   {
     this->disable(this->mEnumDeclaration->list().at(i));

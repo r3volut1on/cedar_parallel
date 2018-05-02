@@ -85,7 +85,6 @@ int cedar::aux::gl::Scene::addObjectVisualization(cedar::aux::gl::ObjectVisualiz
 
   mObjectVisualizations.push_back(pObjectVisualization);
 #pragma acc kernels
-#pragma acc kernels
   for (int i=0; i<mViewers.size(); i++)
   {
     mViewers[i]->initGl(pObjectVisualization);
@@ -102,7 +101,6 @@ int cedar::aux::gl::Scene::addViewer(cedar::aux::gui::Viewer* pViewer)
 
 int cedar::aux::gl::Scene::removeViewer(cedar::aux::gui::Viewer* pViewer)
 {
-#pragma acc kernels
   for (int i=0; i<mViewers.size(); i++)
   {
     if (mViewers[i] == pViewer)
@@ -135,7 +133,6 @@ void cedar::aux::gl::Scene::draw()
   glPushMatrix();
 
   // draw all items in the scene
-#pragma acc kernels
   for (int i = 0; i < mObjectVisualizations.size(); ++i)
   {
     mObjectVisualizations[i]->draw();
@@ -151,11 +148,9 @@ void cedar::aux::gl::Scene::draw()
     glColor3f(1.0, 1.0, 1.0);
     const float numberOfPatches = 100;
     glNormal3f(0.0, 0.0, 1.0);
-#pragma acc kernels
     for (int j=0; j<numberOfPatches; ++j)
     {
       glBegin(GL_QUAD_STRIP);
-#pragma acc kernels
         for (int i=0; i<=numberOfPatches; ++i)
         {
           glVertex2f(
@@ -210,7 +205,6 @@ void cedar::aux::gl::Scene::initGl()
   glLightfv(GL_LIGHT0, GL_POSITION, position);
 
   // let all items in the scene initialize their resources in the current Gl context
-#pragma acc kernels
   for (int i = 0; i < mObjectVisualizations.size(); ++i)
   {
     mObjectVisualizations[i]->initializeGl();

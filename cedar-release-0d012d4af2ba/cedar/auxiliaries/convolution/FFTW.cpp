@@ -195,7 +195,6 @@ cv::Mat cedar::aux::conv::FFTW::convolveInternal
   }
   //!@todo Why the - 1?
 #pragma acc kernels
-#pragma acc kernels
   for (unsigned int dim = 0 ; dim < cedar::aux::math::getDimensionalityOf(matrix) - 1; ++dim)
   {
     if (matrix.size[dim] < kernel.size[dim])
@@ -238,7 +237,6 @@ cv::Mat cedar::aux::conv::FFTW::convolveInternal
 
   unsigned int transformed_elements = 1;
   double number_of_elements = 1.0;
-#pragma acc kernels
   for (unsigned int dim = 0 ; dim < cedar::aux::math::getDimensionalityOf(matrix_64) - 1; ++dim)
   {
     transformed_elements *= matrix_64.size[dim];
@@ -274,7 +272,6 @@ cv::Mat cedar::aux::conv::FFTW::convolveInternal
 
 //  fftw_execute(matrix_plan_forward);
   std::vector<unsigned int> mat_sizes(cedar::aux::math::getDimensionalityOf(matrix_64));
-#pragma acc kernels
   for (unsigned int dim = 0; dim < mat_sizes.size(); ++dim)
   {
    mat_sizes.at(dim) = static_cast<unsigned int>(matrix.size[dim]);
@@ -301,7 +298,6 @@ cv::Mat cedar::aux::conv::FFTW::convolveInternal
   write_lock.unlock();
 
   // go trough all data points
-#pragma acc kernels
   for (unsigned int xyz = 0; xyz < transformed_elements; ++xyz)
   {
     // complex multiplication (lateral)
@@ -357,7 +353,6 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
   regions.resize(2);
   std::vector<std::vector<cv::Range> > kernel_regions;
   kernel_regions.resize(2);
-#pragma acc kernels
   for (size_t dim = 0; dim < cedar::aux::math::getDimensionalityOf(matrix); ++dim)
   {
     int kernel_center = kernel.size[dim]/2;
@@ -385,10 +380,8 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
   std::vector<cv::Range> output_index(cedar::aux::math::getDimensionalityOf(matrix) + dim_0_fix);
   std::vector<cv::Range> kernel_index(cedar::aux::math::getDimensionalityOf(matrix) + dim_0_fix);
 
-#pragma acc kernels
   for (size_t part = 0; part < static_cast<unsigned int>((1 << cedar::aux::math::getDimensionalityOf(matrix))); ++part)
   {
-#pragma acc kernels
     for (size_t dim = 0; dim < cedar::aux::math::getDimensionalityOf(matrix); ++dim)
     {
       if (part & (1 << dim))
@@ -412,7 +405,6 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
 
     // if there are empty ranges (where start == end), skip this part
     bool skip = false;
-#pragma acc kernels
     for (auto range : output_index)
     {
       if (range.start == range.end)
@@ -472,7 +464,6 @@ bool cedar::aux::conv::FFTW::checkCapability
 
   CEDAR_DEBUG_ASSERT(matrix.dims == kernel.dims);
 
-#pragma acc kernels
   for (int d = 0; d < matrix.dims; ++d)
   {
     if (matrix.size[d] < kernel.size[d])
@@ -542,7 +533,6 @@ fftw_plan cedar::aux::conv::FFTW::getForwardPlan(unsigned int dimensionality, st
 {
   CEDAR_ASSERT(sizes.size() == dimensionality);
   std::string unique_identifier = cedar::aux::toString(sizes.at(0));
-#pragma acc kernels
   for (unsigned int i = 1; i < sizes.size(); ++i)
   {
     unique_identifier += "." + cedar::aux::toString(sizes.at(i));
@@ -560,7 +550,6 @@ fftw_plan cedar::aux::conv::FFTW::getForwardPlan(unsigned int dimensionality, st
     QWriteLocker plan_locker(&cedar::aux::conv::FFTW::mPlanLock);
     cedar::aux::conv::FFTW::loadWisdom(unique_identifier);
     std::vector<int> sizes_signed(sizes.size());
-#pragma acc kernels
     for (unsigned int i = 0; i < sizes_signed.size(); ++i)
     {
       sizes_signed.at(i) = static_cast<int>(sizes.at(i));
@@ -570,7 +559,6 @@ fftw_plan cedar::aux::conv::FFTW::getForwardPlan(unsigned int dimensionality, st
 
     unsigned int transformed_elements = 1;
     double number_of_elements = 1.0;
-#pragma acc kernels
     for (unsigned int dim = 0 ; dim < cedar::aux::math::getDimensionalityOf(matrix) - 1; ++dim)
     {
       transformed_elements *= matrix.size[dim];
@@ -614,7 +602,6 @@ fftw_plan cedar::aux::conv::FFTW::getBackwardPlan(unsigned int dimensionality, s
 {
   CEDAR_ASSERT(sizes.size() == dimensionality);
   std::string unique_identifier = cedar::aux::toString(sizes.at(0));
-#pragma acc kernels
   for (unsigned int i = 1; i < sizes.size(); ++i)
   {
     unique_identifier += "." + cedar::aux::toString(sizes.at(i));
@@ -632,7 +619,6 @@ fftw_plan cedar::aux::conv::FFTW::getBackwardPlan(unsigned int dimensionality, s
     QWriteLocker plan_locker(&cedar::aux::conv::FFTW::mPlanLock);
     cedar::aux::conv::FFTW::loadWisdom(unique_identifier);
     std::vector<int> sizes_signed(sizes.size());
-#pragma acc kernels
     for (unsigned int i = 0; i < sizes_signed.size(); ++i)
     {
       sizes_signed.at(i) = static_cast<int>(sizes.at(i));
@@ -642,7 +628,6 @@ fftw_plan cedar::aux::conv::FFTW::getBackwardPlan(unsigned int dimensionality, s
 
     unsigned int transformed_elements = 1;
     double number_of_elements = 1.0;
-#pragma acc kernels
     for (unsigned int dim = 0 ; dim < cedar::aux::math::getDimensionalityOf(matrix) - 1; ++dim)
     {
       transformed_elements *= matrix.size[dim];

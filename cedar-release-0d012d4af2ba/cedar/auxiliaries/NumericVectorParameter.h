@@ -160,7 +160,6 @@ public:
     this->mLimits.setLower(minimum);
 
 #pragma acc kernels
-#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
       if (this->mValues[i] < minimum)
@@ -183,7 +182,6 @@ public:
   {
     this->mLimits.setUpper(maximum);
 
-#pragma acc kernels
     for (size_t i = 0; i < this->size(); ++i)
     {
       if (this->mValues[i] > maximum)

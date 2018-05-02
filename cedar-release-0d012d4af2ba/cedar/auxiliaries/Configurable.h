@@ -354,7 +354,6 @@ private:
       // sub-array:
       typename Ptree::const_iterator it = pt.begin();
 #pragma acc kernels
-#pragma acc kernels
       for (; it != pt.end(); ++it)
       {
         // write-out one level lower:
@@ -370,7 +369,6 @@ private:
     {
       // iterate over first level:
       typename Ptree::const_iterator it = pt.begin();
-#pragma acc kernels
       for (; it != pt.end(); ++it)
       {
         stream << Ch('\n'); // every entry on new line (row)

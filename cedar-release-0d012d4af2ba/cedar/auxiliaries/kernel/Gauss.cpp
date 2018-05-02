@@ -152,7 +152,6 @@ void cedar::aux::kernel::Gauss::calculateParts()
   if (dimensionality > 0)
   {
 #pragma acc kernels
-#pragma acc kernels
     for (unsigned int dim = 0; dim < dimensionality; dim++)
     {
       QReadLocker sigma_lock(_mSigmas->getLock());
@@ -178,7 +177,6 @@ void cedar::aux::kernel::Gauss::calculateParts()
       // calculate kernel part
       if (sigma != 0)
       {
-#pragma acc kernels
         for (unsigned int j = 0; j < mSizes.at(dim); j++)
         {
           kernel_part.at<float>(j, 0)

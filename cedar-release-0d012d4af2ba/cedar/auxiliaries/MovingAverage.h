@@ -102,7 +102,6 @@ public:
   {
     stream << "{cedar::aux::MovingAverage " << &average << "; buffer: [";
 #pragma acc kernels
-#pragma acc kernels
     for (size_t i = 0; i < average.size(); ++i)
     {
       if (i > 0)

@@ -74,7 +74,6 @@ mIsAdvanced(false)
 cedar::aux::Configurable::~Configurable()
 {
 #pragma acc kernels
-#pragma acc kernels
   for (auto parameter_connection_pair : this->mNameChangedConnections)
   {
     parameter_connection_pair.second.disconnect();
@@ -106,7 +105,6 @@ void cedar::aux::Configurable::addDeprecatedName(cedar::aux::ParameterPtr parame
   )
   {
     auto deprecated_names = param_iter->second;
-#pragma acc kernels
     for (auto iter = deprecated_names.begin(); iter != deprecated_names.end(); ++iter)
     {
       const std::string& other_deprecated_name = *iter;
@@ -135,7 +133,6 @@ void cedar::aux::Configurable::addDeprecatedName(cedar::aux::ParameterPtr parame
 size_t cedar::aux::Configurable::countAdvanced() const
 {
   size_t advanced_count = 0;
-#pragma acc kernels
   for (auto iter = mParameterList.begin(); iter != mParameterList.end(); ++iter)
   {
     cedar::aux::ConstParameterPtr parameter = *iter;
@@ -145,7 +142,6 @@ size_t cedar::aux::Configurable::countAdvanced() const
     }
   }
 
-#pragma acc kernels
   for (auto iter = this->mChildren.begin(); iter != this->mChildren.end(); ++iter)
   {
     cedar::aux::ConfigurablePtr conf = iter->second;
@@ -180,13 +176,11 @@ void cedar::aux::Configurable::updateLockSet()
 
 void cedar::aux::Configurable::appendLocks(std::set<QReadWriteLock*>& locks)
 {
-#pragma acc kernels
   for (ParameterList::iterator iter = this->mParameterList.begin(); iter != this->mParameterList.end(); ++iter)
   {
     (*iter)->appendLocks(locks);
   }
 
-#pragma acc kernels
   for (Children::iterator iter = this->mChildren.begin(); iter != this->mChildren.end(); ++iter)
   {
     iter->second->appendLocks(locks);
@@ -196,7 +190,6 @@ void cedar::aux::Configurable::appendLocks(std::set<QReadWriteLock*>& locks)
 
 void cedar::aux::Configurable::configurationLoaded()
 {
-#pragma acc kernels
   for (ParameterList::iterator iter = this->mParameterList.begin(); iter != this->mParameterList.end(); ++iter)
   {
     (*iter)->emitChangedSignal();
@@ -215,20 +208,17 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
 {
   std::vector<std::string> parameter_paths;
 
-#pragma acc kernels
   for (auto parameter : this->mParameterList)
   {
     parameter_paths.push_back(parameter->getName());
 
     if (parameter->canHaveConfigurableChildren())
     {
-#pragma acc kernels
       for (size_t i = 0; i < parameter->getNumberOfConfigurableChildren(); ++i)
       {
         auto child = parameter->getConfigurableChild(i);
         auto child_parameter_paths = child->listAllParameters();
 
-#pragma acc kernels
         for (auto child_path : child_parameter_paths)
         {
           parameter_paths.push_back(parameter->getName() + "[" + parameter->childIndexToString(i) + "]." + child_path);
@@ -237,12 +227,10 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
     }
   }
 
-#pragma acc kernels
   for (const auto& name_child_iter : this->mChildren)
   {
     auto child_parameter_paths = name_child_iter.second->listAllParameters();
 
-#pragma acc kernels
     for (auto child_path : child_parameter_paths)
     {
       parameter_paths.push_back(name_child_iter.first + "." + child_path);
@@ -368,7 +356,6 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
   }
 
   // then, check if it belongs to any of the children of this
-#pragma acc kernels
   for (auto name_child_pair : this->mChildren)
   {
     const auto& child_name = name_child_pair.first;
@@ -386,7 +373,6 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
   }
 
   // check if it is part of an object parameter
-#pragma acc kernels
   for (auto parameter : this->mParameterList)
   {
     if (parameter->hasSingleConfigurableChild())
@@ -405,7 +391,6 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
     }
     else if (parameter->canHaveConfigurableChildren())
     {
-#pragma acc kernels
       for (size_t i = 0; i < parameter->getNumberOfConfigurableChildren(); ++i)
       {
         auto child = parameter->getConfigurableChild(i);
@@ -480,7 +465,6 @@ void cedar::aux::Configurable::writeOldConfig(const std::string& filename)
 void cedar::aux::Configurable::oldFormatToNew(cedar::aux::ConfigurationNode& node)
 {
   // process all children of the current node
-#pragma acc kernels
   for (cedar::aux::ConfigurationNode::iterator iter = node.begin(); iter != node.end(); ++iter)
   {
     std::string data = iter->second.data();
@@ -506,7 +490,6 @@ void cedar::aux::Configurable::oldFormatToNew(cedar::aux::ConfigurationNode& nod
 
 void cedar::aux::Configurable::newFormatToOld(cedar::aux::ConfigurationNode& node)
 {
-#pragma acc kernels
   for (cedar::aux::ConfigurationNode::iterator iter = node.begin(); iter != node.end(); ++iter)
   {
     std::string data = iter->second.data();
@@ -749,7 +732,6 @@ void cedar::aux::Configurable::writeConfiguration(cedar::aux::ConfigurationNode&
 
 void cedar::aux::Configurable::readConfiguration(const cedar::aux::ConfigurationNode& node)
 {
-#pragma acc kernels
   for (ParameterList::iterator iter = this->mParameterList.begin(); iter != this->mParameterList.end(); ++iter)
   {
     cedar::aux::ParameterPtr& parameter = *iter;
@@ -765,7 +747,6 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
       {
         // if so, see if there is a node for any of them
         const std::vector<std::string>& depr_names = depr_iter->second;
-#pragma acc kernels
         for (auto iter = depr_names.begin(); iter != depr_names.end(); ++iter)
         {
           const std::string& deprecated_name = *iter;
@@ -791,7 +772,6 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
         std::string error_message;
         error_message = "Mandatory parameter " + parameter->getName() + " not found in configuration. Node names are:";
 
-#pragma acc kernels
         for (cedar::aux::ConfigurationNode::const_iterator node_iter = node.begin();
              node_iter != node.end();
              ++node_iter)
@@ -819,7 +799,6 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
     (*iter)->setChangedFlag(false);
   } // for parameter
 
-#pragma acc kernels
   for (Children::iterator child = this->mChildren.begin(); child != this->mChildren.end(); ++child)
   {
     try

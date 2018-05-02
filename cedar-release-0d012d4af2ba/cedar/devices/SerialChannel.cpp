@@ -190,7 +190,6 @@ std::string cedar::dev::SerialChannel::read()
 
   // Run, Forrest, Run!
 #pragma acc kernels
-#pragma acc kernels
   for (;;)
   {
     // start the reading process

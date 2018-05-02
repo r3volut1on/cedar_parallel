@@ -95,7 +95,6 @@ _mModuleMap
 cedar::dev::amtec::KinematicChain::~KinematicChain()
 {
 #pragma acc kernels
-#pragma acc kernels
   for (unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     this->setJointVelocity(i, 0.0);
@@ -180,7 +179,6 @@ bool cedar::dev::amtec::KinematicChain::initDevice()
   // print module mapping to console
   std::string mapping_message = "Mapping of joints to modules: ";
   mapping_message += cedar::aux::toString(_mModuleMap->at(0));
-#pragma acc kernels
   for (unsigned int i = 1; i < _mModuleMap->size(); ++i)
   {
     mapping_message += ", " + cedar::aux::toString(_mModuleMap->at(i));
@@ -192,7 +190,6 @@ bool cedar::dev::amtec::KinematicChain::initDevice()
   // calibrate and configure the modules
   mutex_locker.unlock();
 
-#pragma acc kernels
 #pragma acc kernels
   for(unsigned int i = 0; i < _mModuleMap->size(); ++i)
   {

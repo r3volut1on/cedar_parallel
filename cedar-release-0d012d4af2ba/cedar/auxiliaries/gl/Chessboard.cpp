@@ -77,10 +77,8 @@ void cedar::aux::gl::Chessboard::draw()
     double w = mWidth/mNumberOfColumns;
     glTranslated(l/2, w/2, 0);
 #pragma acc kernels
-#pragma acc kernels
     for (int i=0; i < mNumberOfRows; i++)
     {
-#pragma acc kernels
       for (int j=0; j < mNumberOfColumns; j++)
       {
         if(((i+j) % 2) == 0)
@@ -93,10 +91,8 @@ void cedar::aux::gl::Chessboard::draw()
         } // end if
         drawBlock(l, w, mHeight, mIsDrawnAsWireFrame);
         glTranslated(0, w, 0);
-#pragma acc kernels
       } // end for (cols)
       glTranslated(l, -mWidth, 0);
-#pragma acc kernels
     } // end for (rows)
   }
 }

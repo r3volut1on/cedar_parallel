@@ -91,7 +91,6 @@ public:
     cv::MatIterator_<T> iter_dest = result.begin<T>();
     auto end = values.end<T>();
 #pragma acc kernels
-#pragma acc kernels
     for ( ; iter_src != end; ++iter_src, ++iter_dest)
     {
       *iter_dest = static_cast<T>(compute(static_cast<double>(*iter_src)));

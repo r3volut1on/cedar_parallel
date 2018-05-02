@@ -90,7 +90,6 @@ double cedar::aux::math::distancePointEllipse(double a, double b, double u, doub
   double d2;
   double discriminant;
 #pragma acc kernels
-#pragma acc kernels
   for (unsigned int i = 0; i < number_of_roots; i++)
   {
     x0_candidate = roots[i];

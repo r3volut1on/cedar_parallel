@@ -200,7 +200,6 @@ public:
   {
     NodePtr node;
 #pragma acc kernels
-#pragma acc kernels
     for (auto iter = this->mNodesById.begin(); iter != this->mNodesById.end(); ++iter)
     {
       if (iter->second->getPayload() == payload)
@@ -236,7 +235,6 @@ public:
     std::vector<std::set<NodePtr> > cycles;
 
     // per definition, if all strongly connected components consist of only one node, the graph is acyclic
-#pragma acc kernels
     for (auto iter = strongly_connected_components.begin(); iter != strongly_connected_components.end(); ++iter)
     {
       if (iter->size() > 1)
@@ -263,7 +261,6 @@ public:
 
     auto edges = mDirectedEdges.at(source_id);
 
-#pragma acc kernels
     for (auto edge_it = edges.begin(); edge_it != edges.end(); ++edge_it)
     {
       IndexType target_id = edge_it->first;
@@ -297,7 +294,6 @@ public:
 
       // iterate over all its direct successors
       auto successors = this->getDirectSuccessors(current);
-#pragma acc kernels
       for (auto iter = successors.begin(); iter != successors.end(); ++iter)
       {
         auto successor = *iter;
@@ -336,7 +332,6 @@ public:
     std::map<NodePtr, unsigned int> low_link;
     std::vector<NodePtr> node_stack;
 
-#pragma acc kernels
     for (auto node_iter = this->mNodesById.begin(); node_iter != this->mNodesById.end(); ++node_iter)
     {
       NodePtr node = node_iter->second;
@@ -372,7 +367,6 @@ public:
 
     auto successors = this->getDirectSuccessors(node);
 
-#pragma acc kernels
     for (auto suc_iter = successors.begin(); suc_iter != successors.end(); ++suc_iter)
     {
       NodePtr successor = *suc_iter;

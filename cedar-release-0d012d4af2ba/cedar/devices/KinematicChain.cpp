@@ -166,7 +166,6 @@ std::vector<double> cedar::dev::KinematicChain::getJointAngles() const
   std::vector<double> dummy(getNumberOfJoints());
 
 #pragma acc kernels
-#pragma acc kernels
   for(unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     dummy[i] = getJointAngle(i);
@@ -178,7 +177,6 @@ cv::Mat cedar::dev::KinematicChain::getCachedJointAngles() const
 {
   cv::Mat dummy = cv::Mat::zeros(getNumberOfJoints(), 1, CV_64FC1);
 
-#pragma acc kernels
 #pragma acc kernels
   for (unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
@@ -211,7 +209,6 @@ std::vector<double> cedar::dev::KinematicChain::getJointVelocities() const
 
   QReadLocker locker(&mVelocitiesLock);
 
-#pragma acc kernels
   for (unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     dummy[i] = mJointVelocities.at<double>(i,0);
@@ -247,7 +244,6 @@ std::vector<double> cedar::dev::KinematicChain::getJointAccelerations() const
 {
   std::vector<double> dummy(getNumberOfJoints());
 
-#pragma acc kernels
   for (unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     dummy[i] = mJointAccelerations.at<double>(i,0);
@@ -294,7 +290,6 @@ void cedar::dev::KinematicChain::setJointAngles(const std::vector<double>& angle
     return;
   }
 
-#pragma acc kernels
   for(unsigned i = 0; i < getNumberOfJoints(); i++)
   {
     double angle = angles[i];
@@ -324,7 +319,6 @@ void cedar::dev::KinematicChain::setJointAngles(const cv::Mat& angles)
     return;
   }
 
-#pragma acc kernels
   for (unsigned i = 0; i < getNumberOfJoints(); i++)
   {
     //!@todo: use applyAngleLimits() ?
@@ -380,7 +374,6 @@ bool cedar::dev::KinematicChain::setJointVelocities(const std::vector<double>& v
 
   bool hardware_velocity = true;
 
-#pragma acc kernels
   for(unsigned i = 0; i < getNumberOfJoints(); i++)
   {
     // locking done in setJointVelocity()
@@ -411,7 +404,6 @@ bool cedar::dev::KinematicChain::setJointVelocities(const cv::Mat& velocities)
 
   bool hardware_velocity = true;
 
-#pragma acc kernels
   for (unsigned i = 0; i < getNumberOfJoints(); i++)
   {
     // locking done in setJointVelocity()
@@ -461,7 +453,6 @@ bool cedar::dev::KinematicChain::setJointAccelerations(const std::vector<double>
   }
 
   QWriteLocker locker(&mAccelerationsLock);
-#pragma acc kernels
   for(unsigned int i = 0; i < getNumberOfJoints(); ++i)
   {
     mJointAccelerations.at<double>(i,0) = accelerations[i];
@@ -630,7 +621,6 @@ void cedar::dev::KinematicChain::initializeFromJointList()
   cv::Mat T;
   cv::Mat p;
   cv::Mat omega = cv::Mat::zeros(3, 1, CV_64FC1);
-#pragma acc kernels
   for (unsigned int j=0; j<getNumberOfJoints(); j++)
   {
     // create and store twist
@@ -667,7 +657,6 @@ void cedar::dev::KinematicChain::initializeFromJointList()
 void cedar::dev::KinematicChain::applyAngleLimits(cv::Mat& /*angles*/)
 {
 // TODO: jokeit, why is this commented-out?
-#pragma acc kernels
 //  for (unsigned i = 0; i < getNumberOfJoints(); i++)
 //  {
 //    double angle = angles.at<double>(i, 0);
@@ -681,7 +670,6 @@ void cedar::dev::KinematicChain::applyAngleLimits(cv::Mat& /*angles*/)
 void cedar::dev::KinematicChain::applyVelocityLimits(cv::Mat& /*velocities*/)
 {
 // TODO: jokeit, why is this commented-out?
-#pragma acc kernels
 //  for (unsigned i = 0; i < getNumberOfJoints(); i++)
 //  {
 //    double velocity = velocities.at<double>(i, 0);
@@ -799,7 +787,6 @@ void cedar::dev::KinematicChain::calculateCartesianJacobian
 
   // calculate Jacobian column by column
   cv::Mat column;
-#pragma acc kernels
   for (unsigned int j = 0; j <=  jointIndex; j++)
   {
     column = cedar::aux::math::wedgeTwist<double>
@@ -864,7 +851,6 @@ void cedar::dev::KinematicChain::calculateCartesianJacobianTemporalDerivative
   cv::Mat S1;
   cv::Mat S2;
   mTransformationsLock.lockForRead();
-#pragma acc kernels
   for (unsigned int j = 0; j <= jointIndex; j++)
   {
     S1 = cedar::aux::math::wedgeTwist<double>(calculateTwistTemporalDerivative(j)) * point_world;
@@ -972,10 +958,8 @@ cv::Mat cedar::dev::KinematicChain::calculateSpatialJacobian(unsigned int index)
 {
   cv::Mat jacobian = cv::Mat::zeros(6, getNumberOfJoints(), CV_64FC1);
   mTransformationsLock.lockForRead();
-#pragma acc kernels
   for (unsigned int j = 0; j <= index; j++)
   {
-#pragma acc kernels
     for (int i = 0; i < 6; i++)
     {
       jacobian.at<double>(i, j) = mJointTwists[j].at<double>(i, 0);
@@ -989,14 +973,12 @@ cv::Mat cedar::dev::KinematicChain::calculateSpatialJacobianTemporalDerivative(u
 {
   // create k-th column
   cv::Mat J = cv::Mat::zeros(6, getNumberOfJoints(), CV_64FC1);
-#pragma acc kernels
   for (unsigned int i=0; i<=index; i++)
   {
     // create i-th column
     cv::Mat column = cv::Mat::zeros(6, 1, CV_64FC1);
     column = calculateTwistTemporalDerivative(i);
     // export to matrix
-#pragma acc kernels
     for (unsigned int j=0; j<6; j++)
     {
       J.at<double>(j, i) = column.at<double>(j, 0);
@@ -1010,7 +992,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
   // calculate transformation to (j-1)-th joint frame
   cv::Mat g = cv::Mat::zeros(4, 4, CV_64FC1);
   // g is a product of j-1 exponentials, so the temporal derivative is a sum with j-1 summands
-#pragma acc kernels
   for (unsigned int k = 0; k < jointIndex; k++)
   {
     /*******************************************************************************************************************
@@ -1018,7 +999,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
      ******************************************************************************************************************/
     cv::Mat s_k = cv::Mat::eye(4, 4, CV_64FC1); // summand where the factor with the positive sign theta_k is derived
     // factors before the k-th
-#pragma acc kernels
     for (unsigned int j = 0; j < k; j++)
     {
       // j-th factor stays the same for j < k
@@ -1047,7 +1027,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
 //      cedar::aux::math::write(mTwistExponentials[k]);
 //    }
     // factors after the k-th
-#pragma acc kernels
     for (unsigned int j = k+1; j < jointIndex; j++)
     {
       // j-th factor stays the same for j > k
@@ -1073,7 +1052,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
     t_k = mProductsOfExponentials[jointIndex-1]
             * cedar::aux::math::wedgeTwist<double>(mReferenceJointTwists[jointIndex]);
     // factors before the k-th
-#pragma acc kernels
     for (unsigned int j = jointIndex-1; j > k; j--)
     {
       // j-th factor stays the same for j > k
@@ -1082,7 +1060,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
     // k-th factor is derived by time
     t_k = t_k * cedar::aux::math::wedgeTwist<double>(mReferenceJointTwists[k]) * mTwistExponentials[k].inv();
     // factors after the k-th
-#pragma acc kernels
     for (int j = k-1; j >= 0; j--)
     {
       // j-th factor stays the same for j < k
@@ -1111,7 +1088,6 @@ cv::Mat cedar::dev::KinematicChain::calculateTwistTemporalDerivative(unsigned in
   }
 
 //  std::cout << "twist exponentials:" << std::endl;
-#pragma acc kernels
 //  for (unsigned int l = 0; l <= jointIndex; l++)
 //  {
 //    cedar::aux::math::write(mTwistExponentials[l]);
@@ -1176,7 +1152,6 @@ void cedar::dev::KinematicChain::calculateTransformations()
   mJointTransformations[0] = mProductsOfExponentials[0] * mReferenceJointTransformations[0];
   mJointTwists[0] = mReferenceJointTwists[0];
   // other joints
-#pragma acc kernels
   for (unsigned int i = 1; i < getNumberOfJoints(); i++)
   {
     cedar::aux::math::expTwist<double>
@@ -1218,7 +1193,6 @@ void cedar::dev::KinematicChain::setInitialConfigurations(std::map<std::string, 
   QWriteLocker wlock(&mCurrentInitialConfigurationLock);
 
   mInitialConfigurations.clear();
-#pragma acc kernels
   for( std::map< std::string, cv::Mat >::const_iterator it = configs.begin(); it != configs.end(); ++it)
   {
     mInitialConfigurations[ it->first ] = it->second.clone();
@@ -1354,7 +1328,6 @@ bool cedar::dev::KinematicChain::applyInitialConfiguration(unsigned int index)
   }
 
   unsigned int j = 0;
-#pragma acc kernels
   for( std::map< std::string, cv::Mat >::const_iterator it = mInitialConfigurations.begin(); it != mInitialConfigurations.end(); it++ )
   {
     if (index == j)
@@ -1374,7 +1347,6 @@ unsigned int cedar::dev::KinematicChain::getCurrentInitialConfigurationIndex()
   QReadLocker lock(&mCurrentInitialConfigurationLock);
   unsigned int j = 0;
 
-#pragma acc kernels
   for( std::map< std::string, cv::Mat >::const_iterator it = mInitialConfigurations.begin(); it != mInitialConfigurations.end(); it++ )
   {
     if (it->first == mCurrentInitialConfiguration)
@@ -1411,7 +1383,6 @@ std::vector<std::string> cedar::dev::KinematicChain::getInitialConfigurationIndi
   QReadLocker lock(&mCurrentInitialConfigurationLock);
   std::vector<std::string> result;
 
-#pragma acc kernels
   for( std::map<std::string,cv::Mat>::const_iterator it = mInitialConfigurations.begin(); it != mInitialConfigurations.end(); ++it )
   {
     result.push_back( (*it).first );

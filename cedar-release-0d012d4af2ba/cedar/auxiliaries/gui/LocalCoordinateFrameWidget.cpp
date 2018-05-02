@@ -209,10 +209,8 @@ void cedar::aux::gui::LocalCoordinateFrameWidget::initWindow()
 
 
 #pragma acc kernels
-#pragma acc kernels
   for(unsigned int i = 3; i < 6; i++)
   {
-#pragma acc kernels
     for(unsigned int j = 1; j < 4; j++)
     {
       // add rotation label
@@ -243,10 +241,8 @@ void cedar::aux::gui::LocalCoordinateFrameWidget::update()
   cv::Mat T = mpLocalCoordinateFrame->getTransformation().clone();
 
   // update rotation matrix
-#pragma acc kernels
   for(unsigned int i = 0; i < 3; i++)
   {
-#pragma acc kernels
     for(unsigned int j = 0; j < 3; j++)
     {
       QLabel* p_label = static_cast<QLabel*>(mpGridLayout->itemAtPosition(i+3, (j+1)*2)->widget());

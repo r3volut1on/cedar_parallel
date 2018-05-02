@@ -103,7 +103,6 @@ public:
 
       // find the label
 #pragma acc kernels
-#pragma acc kernels
       for (const auto& pair : this->mpPlot->mTitleIndex)
       {
         if (pair.second == label_id)
@@ -214,7 +213,6 @@ void cedar::aux::gui::Multi0DPlot::doDetach(cedar::aux::ConstDataPtr /* data */)
 void cedar::aux::gui::Multi0DPlot::timerEvent(QTimerEvent *pEvent)
 {
   // write data into appropriate matrices
-#pragma acc kernels
   for (const auto& path_data_pair : this->mData)
   {
     const auto& path = path_data_pair.first;

@@ -259,7 +259,6 @@ void cedar::aux::Settings::loadDefaultPlugins()
 {
   const std::set<std::string>& plugins = this->pluginsToLoad();
 #pragma acc kernels
-#pragma acc kernels
   for (std::set<std::string>::const_iterator iter = plugins.begin(); iter != plugins.end(); ++ iter)
   {
     std::string action = "reading";

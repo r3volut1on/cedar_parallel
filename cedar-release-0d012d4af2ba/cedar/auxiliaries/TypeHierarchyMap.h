@@ -278,7 +278,6 @@ public:
         visited.insert(this->shared_from_this());
 
 #pragma acc kernels
-#pragma acc kernels
         for (auto child : this->mChildren)
         {
           child->print(indentation + " ", visited);
@@ -294,7 +293,6 @@ public:
           bases.insert(this->shared_from_this());
         }
 
-#pragma acc kernels
         for (auto child : this->mChildren)
         {
           child->findBases(instance, bases);
@@ -312,7 +310,6 @@ public:
         else
         {
           // check all children
-#pragma acc kernels
           for (ConstNodePtr child : this->mChildren)
           {
             // isDerived can avoid checking all the children; this should save some time.
@@ -414,7 +411,6 @@ public:
         else
         {
           // ... or it is a parent of the parents of this node, or their parents, and so on
-#pragma acc kernels
           for (const_parents_iterator iter = this->mParents.begin(); iter != this->mParents.end(); ++iter)
           {
             CEDAR_ASSERT(iter->lock());
@@ -474,7 +470,6 @@ public:
       {
         std::set<NodePtr> nodes;
         node->listAllConnectedNodes(nodes);
-#pragma acc kernels
         for (typename std::set<NodePtr>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter)
         {
           NodePtr current_node = *iter;
@@ -514,7 +509,6 @@ public:
           to_explore.pop();
 
           // insert all unexplored children
-#pragma acc kernels
           for (children_iterator iter = current->mChildren.begin(); iter != current->mChildren.end(); ++iter)
           {
             if (nodes.find(*iter) == nodes.end())
@@ -524,7 +518,6 @@ public:
             }
           }
           // insert all unexplored parents
-#pragma acc kernels
           for (parents_iterator iter = current->mParents.begin(); iter != current->mParents.end(); ++iter)
           {
             CEDAR_ASSERT(iter->lock());
@@ -550,7 +543,6 @@ public:
           to_explore.pop();
 
           // insert all unexplored children
-#pragma acc kernels
           for (const_children_iterator iter = current->mChildren.begin(); iter != current->mChildren.end(); ++iter)
           {
             if (nodes.find(*iter) == nodes.end())
@@ -560,7 +552,6 @@ public:
             }
           }
           // insert all unexplored parents
-#pragma acc kernels
           for (const_parents_iterator iter = current->mParents.begin(); iter != current->mParents.end(); ++iter)
           {
             CEDAR_ASSERT(iter->lock());

@@ -143,7 +143,6 @@ std::vector<cedar::aux::Path> cedar::aux::Path::listSubdirectories() const
   boost::filesystem::directory_iterator end_iter;
   std::vector<cedar::aux::Path> folders;
 #pragma acc kernels
-#pragma acc kernels
   for (boost::filesystem::directory_iterator dir_iter(this->absolute().toString()); dir_iter != end_iter ; ++dir_iter)
   {
     if (boost::filesystem::is_directory(dir_iter->status()))
@@ -170,7 +169,6 @@ std::vector<cedar::aux::Path> cedar::aux::Path::listFiles() const
 
   boost::filesystem::directory_iterator end_iter;
   std::vector<cedar::aux::Path> files;
-#pragma acc kernels
   for (boost::filesystem::directory_iterator dir_iter(this->absolute().toString()); dir_iter != end_iter ; ++dir_iter)
   {
     if (boost::filesystem::is_regular_file(dir_iter->status()))
@@ -198,7 +196,6 @@ std::vector<cedar::aux::Path> cedar::aux::Path::listFilesThatMatchRe(const std::
 
   boost::regex regex(regexStr);
 
-#pragma acc kernels
   for (const auto& path : files)
   {
     std::string absolute_path = path.absolute().toString();
@@ -383,7 +380,6 @@ void cedar::aux::Path::fromString(const std::string& path)
 
   // the path can either start with a specification of the protocol, or be a plain path
   PARSE_STATE state = STATE_PROTOCOL_OR_PATH;
-#pragma acc kernels
   for (size_t i = 0; i < path.size(); ++i)
   {
     const char& c = path.at(i);

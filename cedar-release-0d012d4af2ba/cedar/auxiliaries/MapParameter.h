@@ -102,7 +102,6 @@ public:
   {
     this->mValues.clear();
 #pragma acc kernels
-#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
     {
       this->mValues[iter->first] = iter->second.get_value<T>();
@@ -113,7 +112,6 @@ public:
   void writeToNode(cedar::aux::ConfigurationNode& root) const
   {
     cedar::aux::ConfigurationNode map_node;
-#pragma acc kernels
     for (auto iter = this->mValues.begin(); iter != this->mValues.end(); ++iter)
     {
       const std::string& key = iter->first;
@@ -170,7 +168,6 @@ public:
   //!@brief checks if a value is already contained in this map
   bool containsValue(const T& value) const
   {
-#pragma acc kernels
     for (const auto& pair : this->mValues)
     {
       if (pair.second == value)

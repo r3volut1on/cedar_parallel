@@ -93,7 +93,6 @@ namespace cedar
     {
       // The implicit ordering of the set is used to impose the canonical lock order here.
 #pragma acc kernels
-#pragma acc kernels
       for (LockSet::iterator iter = locks.begin(); iter != locks.end(); ++iter)
       {
         // switch based on the lock type
@@ -121,7 +120,6 @@ namespace cedar
     inline void unlock(LockSet& locks)
     {
       // The implicit ordering of the set is used to impose the canonical lock order here.
-#pragma acc kernels
       for (LockSet::iterator iter = locks.begin(); iter != locks.end(); ++iter)
       {
         if (iter->second != cedar::aux::LOCK_TYPE_DONT_LOCK)
@@ -140,7 +138,6 @@ namespace cedar
         return;
       }
 
-#pragma acc kernels
       for (std::set<QReadWriteLock*>::const_iterator iter = locks.begin(); iter != locks.end(); ++iter)
       {
         // switch based on the lock type
@@ -170,7 +167,6 @@ namespace cedar
         return;
       }
 
-#pragma acc kernels
       for (std::set<QReadWriteLock*>::const_iterator iter = locks.begin(); iter != locks.end(); ++iter)
       {
         (*iter)->unlock();

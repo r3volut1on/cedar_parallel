@@ -85,7 +85,6 @@ void cedar::aux::Log::addLoggerAtFront(cedar::aux::LogInterfacePtr logger, cedar
 void cedar::aux::Log::removeLogger(cedar::aux::LogInterfacePtr logger)
 {
 #pragma acc kernels
-#pragma acc kernels
   for (std::vector<LogHandler>::iterator i = this->mHandlers.begin(); i != this->mHandlers.end();)
   {
     const LogHandler& handler = *i;
@@ -105,7 +104,6 @@ void cedar::aux::Log::log(cedar::aux::LOG_LEVEL level, const std::string& messag
 {
   bool was_accepted = false;
   // see if any of the filters match
-#pragma acc kernels
   for (size_t i = 0; i < this->mHandlers.size(); ++i)
   {
     LogHandler& handler = this->mHandlers.at(i);

@@ -102,7 +102,6 @@ inline unsigned int MatrixTypeWrapper<cv::Mat>::getElementCount() const
 {
   unsigned int size = 1;
 #pragma acc kernels
-#pragma acc kernels
   for (size_t i = 0; i < mHeader.mSizes.size(); ++i)
   {
     size *= static_cast<unsigned int>(mHeader.mSizes.at(i));
@@ -169,7 +168,6 @@ template <>
 inline unsigned int MatrixTypeWrapper< cv::Mat_<float> >::getElementCount() const
 {
   unsigned int size = 1;
-#pragma acc kernels
   for (size_t i = 0; i < mHeader.mSizes.size(); ++i)
   {
     size *= static_cast<unsigned int>(mHeader.mSizes.at(i));

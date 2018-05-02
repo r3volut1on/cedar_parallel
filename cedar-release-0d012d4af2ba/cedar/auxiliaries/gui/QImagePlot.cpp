@@ -223,7 +223,6 @@ void cedar::aux::gui::detail::QImagePlotLegend::setGradient(cedar::aux::ColorGra
 {
   this->mGradient = QLinearGradient(0, 1, 0, 0);
 #pragma acc kernels
-#pragma acc kernels
   for (auto stop_color_pair : gradient->getStops())
   {
     this->mGradient.setColorAt(static_cast<qreal>(stop_color_pair.first), stop_color_pair.second);
@@ -374,7 +373,6 @@ void cedar::aux::gui::QImagePlot::contextMenuEvent(QContextMenuEvent *pEvent)
   p_legend->setEnabled(this->mLegendAvailable);
 
   QMenu* p_jet = menu.addMenu("color jet");
-#pragma acc kernels
   for (auto enum_id : cedar::aux::ColorGradient::StandardGradients::type().list())
   {
     auto p_action = p_jet->addAction(QString::fromStdString(enum_id.prettyString()));

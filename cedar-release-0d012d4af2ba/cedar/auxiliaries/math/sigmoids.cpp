@@ -74,10 +74,8 @@ cv::Mat cedar::aux::math::sigmoid(const cv::Mat& mat, const double beta, const d
 {
   cv::Mat result = mat.clone();
 #pragma acc kernels
-#pragma acc kernels
   for (int col = 0; col < mat.cols; col++)
   {
-#pragma acc kernels
     for (int row = 0; row < mat.rows; row++)
     {
       result.at<T>(row,col) = sigmoidExp(mat.at<T>(row,col),beta,threshold);
@@ -92,10 +90,8 @@ template CEDAR_AUX_LIB_EXPORT cv::Mat cedar::aux::math::sigmoid<float>(const cv:
 template<typename T>
 void cedar::aux::math::sigmoid(const cv::Mat& mat, cv::Mat& result, const double beta, const double threshold)
 {
-#pragma acc kernels
   for (int col = 0; col < mat.cols; col++)
   {
-#pragma acc kernels
     for (int row = 0; row < mat.rows; row++)
     {
       result.at<T>(row,col) = sigmoidExp(mat.at<T>(row,col),beta,threshold);
@@ -139,7 +135,6 @@ std::vector<double> cedar::aux::math::sigmoid(const std::vector<double>& x, cons
 {
   std::vector<double> buffer;
   buffer.resize(x.size());
-#pragma acc kernels
   for (unsigned int i = 0; i < x.size(); i++)
   {
     buffer[i] = sigmoidExp(x[i], beta, threshold);
