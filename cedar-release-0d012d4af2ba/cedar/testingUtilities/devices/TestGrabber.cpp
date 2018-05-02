@@ -164,7 +164,7 @@ void cedar::test::dev::TestGrabber::onCreateGrabber()
   std::stringstream init_message;
   unsigned int num_channels = getNumChannels();
   init_message << ": Initialize test grabber with " << getNumChannels() << " channels ..." << std::endl;
-#pragma acc kernels
+//#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     init_message << "Channel " << channel << ": capture from Source: "
@@ -178,6 +178,10 @@ void cedar::test::dev::TestGrabber::onCreateGrabber()
 
   //-------------------------------------------------
   // load pictures one by one
+//
+
+//
+
 #pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
