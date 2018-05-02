@@ -121,6 +121,7 @@ void cedar::aux::gui::Log::scrollBarRangeChanged(int, int max)
 
 void cedar::aux::gui::Log::timerEvent(QTimerEvent*)
 {
+#pragma acc kernels
   for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
   {
     QTableWidget* p_table = pane_iter->second;
@@ -132,6 +133,7 @@ void cedar::aux::gui::Log::timerEvent(QTimerEvent*)
 
 void cedar::aux::gui::Log::outdateAllMessages()
 {
+#pragma acc kernels
   for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
   {
     QTableWidget* p_table = pane_iter->second;
@@ -145,6 +147,7 @@ void cedar::aux::gui::Log::outdateAllMessages(QTableWidget* pPane)
 {
   int threshold = 200;
 
+#pragma acc kernels
   for (int i = 0; i < pPane->rowCount(); ++i)
   {
     this->setMessageCurrentness(pPane, i, threshold);
@@ -158,6 +161,7 @@ void cedar::aux::gui::Log::updatePaneCurrentness(QTableWidget* pPane)
   int delta_high = -5;
   int delta_low = -1;
 
+#pragma acc kernels
   for (int i = 0; i < pPane->rowCount(); ++i)
   {
     int currentness = this->getMessageCurrentness(pPane, i);
@@ -183,6 +187,7 @@ int cedar::aux::gui::Log::getMessageCurrentness(QTableWidget* pPane, int message
 
 void cedar::aux::gui::Log::setMessageCurrentness(QTableWidget* pPane, int message, int currentness)
 {
+#pragma acc kernels
   for (int i = 0; i < pPane->columnCount(); ++i)
   {
     QColor background(currentness, currentness, currentness);
@@ -299,6 +304,7 @@ void cedar::aux::gui::Log::postMessage
   {
     pTable->removeRow(0);
   }
+#pragma acc kernels
   for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
   {
     if (pane_iter->second == pTable)
@@ -369,6 +375,7 @@ void cedar::aux::gui::Log::showContextMenu(const QPoint& point)
   {
     QTableWidget* p_current_table = dynamic_cast<QTableWidget*>(this->currentWidget());
     p_current_table->setRowCount(0);
+#pragma acc kernels
     for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
     {
       if (pane_iter->second == p_current_table)
@@ -380,6 +387,7 @@ void cedar::aux::gui::Log::showContextMenu(const QPoint& point)
   }
   else if (a == p_delete_all)
   {
+#pragma acc kernels
     for (int i = 0; i < this->count(); ++i)
     {
       QTableWidget* p_current_table = dynamic_cast<QTableWidget*>(this->widget(i));
@@ -414,6 +422,7 @@ QString cedar::aux::gui::Log::logLevelToString(cedar::aux::LOG_LEVEL level) cons
 
 void cedar::aux::gui::Log::updateAllMessageCounts()
 {
+#pragma acc kernels
   for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
   {
     this->updateMessageCount(pane_iter->first, pane_iter->second);

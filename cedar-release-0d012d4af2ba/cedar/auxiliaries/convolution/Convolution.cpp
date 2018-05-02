@@ -180,6 +180,7 @@ void cedar::aux::conv::Convolution::updateEngineCapabilities()
   }
 
   const std::vector<cedar::aux::Enum>& modes = cedar::aux::conv::Mode::type().list();
+#pragma acc kernels
   for (size_t i = 0; i < modes.size(); ++i)
   {
     const cedar::aux::Enum& enum_value = modes.at(i);
@@ -192,6 +193,7 @@ void cedar::aux::conv::Convolution::updateEngineCapabilities()
 
   this->_mBorderType->enableAll();
   const std::vector<cedar::aux::Enum>& border_types = cedar::aux::conv::BorderType::type().list();
+#pragma acc kernels
   for (size_t i = 0; i < border_types.size(); ++i)
   {
     const cedar::aux::Enum& enum_value = border_types.at(i);

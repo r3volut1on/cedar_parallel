@@ -297,6 +297,7 @@ bool cedar::aux::gui::ImagePlot::doConversion()
       cv::Mat channels[3];
       double min_all = std::numeric_limits<double>::max(), max_all = -std::numeric_limits<double>::max();
       cv::split(copy, channels);
+#pragma acc kernels
       for (size_t c = 0; c < 3; ++c)
       {
         double min, max;

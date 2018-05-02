@@ -74,6 +74,7 @@ void cedar::dev::gl::KinematicChain::draw()
   if (mIsVisible)
   {
     drawBase();
+#pragma acc kernels
     for (unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); j++)
     {
       drawSegment(j);

@@ -208,6 +208,7 @@ void cedar::dev::gui::ComponentParameter::fillRobots(QTreeWidgetItem* pItem)
 {
   auto robot_names = cedar::dev::RobotManagerSingleton::getInstance()->getRobotNames();
 
+#pragma acc kernels
   for (auto iter = robot_names.begin(); iter != robot_names.end(); ++iter)
   {
     const std::string& robot_name = *iter;
@@ -226,6 +227,7 @@ void cedar::dev::gui::ComponentParameter::fillComponents(QTreeWidgetItem* pItem,
 {
   auto components = robot->listComponentSlots();
 
+#pragma acc kernels
   for (auto iter = components.begin(); iter != components.end(); ++iter)
   {
     const std::string& component_name = *iter;

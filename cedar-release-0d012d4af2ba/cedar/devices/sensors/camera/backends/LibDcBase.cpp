@@ -220,6 +220,7 @@ std::string cedar::dev::sensors::camera::LibDcBase::getAllFeaturesAsString()
       CEDAR_THROW(cedar::dev::sensors::camera::LibDcInitException, err_message);
     }
     // add them to the feature string
+#pragma acc kernels
     for (int i = 0 ; i < DC1394_FEATURE_NUM; i++)
     {
       features << dc1394_feature_get_string(cam_features->feature[i].id) << std::endl;

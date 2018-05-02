@@ -218,6 +218,7 @@ int cedar::aux::gui::Configurable::getRootIndexForItem(QTreeWidgetItem* pItem) c
     p_root = p_root->parent();
   }
 
+#pragma acc kernels
   for (int i = 0; i < this->mpPropertyTree->topLevelItemCount(); ++i)
   {
     if (this->mpPropertyTree->topLevelItem(i) == p_root)
@@ -333,6 +334,7 @@ void cedar::aux::gui::Configurable::display(std::vector<cedar::aux::Configurable
 
   this->mpPropertyTree->setItemDelegateForColumn(PARAMETER_EDITOR_COLUMN, new cedar::aux::gui::Configurable::DataDelegate(this, false));
 
+#pragma acc kernels
   for (auto configurable : configurables)
   {
     this->appendRootConfigurable(configurable);
@@ -392,6 +394,7 @@ void cedar::aux::gui::Configurable::append(size_t configurableIndex, cedar::aux:
   this->makeHeading(advanced_node, "advanced", 3);
   advanced_node->setExpanded(false);
 
+#pragma acc kernels
   for (auto parameter : configurable->getParameters())
   {
     auto parent = pItem;
@@ -402,6 +405,7 @@ void cedar::aux::gui::Configurable::append(size_t configurableIndex, cedar::aux:
     this->append(configurableIndex, parameter, parent, pathSoFar);
   }
 
+#pragma acc kernels
   for (auto name_child_pair : configurable->configurableChildren())
   {
     const std::string& child_name = name_child_pair.first;
@@ -491,6 +495,7 @@ void cedar::aux::gui::Configurable::appendObjectListParameter
   const std::string& path
 )
 {
+#pragma acc kernels
   for (size_t i = 0; i < objectListParameter->getNumberOfConfigurableChildren(); ++i)
   {
     cedar::aux::ConfigurablePtr configurable = objectListParameter->getConfigurableChild(i);
@@ -521,6 +526,7 @@ void cedar::aux::gui::Configurable::objectListParameterValueChanged()
   }
 
   // iterate in reverse because we erase children, thus changing the index of all following children
+#pragma acc kernels
   for (int child_index = item->childCount() - 1; child_index >= 0; --child_index)
   {
     auto child_item = item->child(child_index);
@@ -551,6 +557,7 @@ void cedar::aux::gui::Configurable::objectParameterValueChanged()
   }
 
   // iterate in reverse because we erase children, thus changing the index of all following children
+#pragma acc kernels
   for (int child_index = item->childCount() - 1; child_index >= 0; --child_index)
   {
     auto child_item = item->child(child_index);
@@ -587,6 +594,7 @@ void cedar::aux::gui::Configurable::disconnect(QTreeWidgetItem* item)
 
 void cedar::aux::gui::Configurable::clear()
 {
+#pragma acc kernels
   for (QTreeWidgetItemIterator iter(this->mpPropertyTree); *iter != nullptr; ++iter)
   {
     this->mpPropertyTree->closePersistentEditor(*iter, PARAMETER_EDITOR_COLUMN);
@@ -600,6 +608,7 @@ void cedar::aux::gui::Configurable::clear()
     delete p_delegate;
   }
 
+#pragma acc kernels
   for (auto parameter_connetion_pair : this->mParameterRenamedConnections)
   {
     parameter_connetion_pair.second.disconnect();
@@ -636,6 +645,7 @@ QTreeWidgetItem* cedar::aux::gui::Configurable::getItemForParameter(cedar::aux::
 {
   CEDAR_DEBUG_ASSERT(parameter != nullptr);
 
+#pragma acc kernels
   for (QTreeWidgetItemIterator iter(this->mpPropertyTree); *iter != nullptr; ++iter)
   {
     auto item = *iter;

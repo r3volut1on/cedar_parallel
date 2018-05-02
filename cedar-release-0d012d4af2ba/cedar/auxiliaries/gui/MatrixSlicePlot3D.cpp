@@ -213,6 +213,7 @@ void cedar::aux::gui::MatrixSlicePlot3D::slicesFromMat(const cv::Mat& mat)
   unsigned int column = 0;
   unsigned int row = 0;
 
+#pragma acc kernels
   for (unsigned int tile = 0; tile < tiles; tile++, column++)
   {
     if (column >= columns)
@@ -254,13 +255,16 @@ void cedar::aux::gui::MatrixSlicePlot3D::slicesFromMat(const cv::Mat& mat)
   // for each tile, copy content to right place
   unsigned int max_rows = static_cast<unsigned int>(mat.size[0]);
   unsigned int max_columns = static_cast<unsigned int>(mat.size[1]);
+#pragma acc kernels
   for (unsigned int tile = 0; tile < tiles; ++tile)
   {
     // current tile offset
     unsigned int row_offset = (mat.size[0] + 1) * (tile / columns);
     unsigned int column_offset = (mat.size[1] + 1) * (tile % columns);
+#pragma acc kernels
     for (unsigned int row = 0; row < max_rows; ++row)
     {
+#pragma acc kernels
       for (unsigned int column = 0; column < max_columns; ++column)
       {
         std::vector<int> index;
@@ -349,6 +353,7 @@ void cedar::aux::gui::MatrixSlicePlot3D::fillContextMenu(QMenu& menu)
   QMenu* p_slice_menu = menu.addMenu("sliced dimension");
 
 #ifndef CEDAR_SLICE_PLOT_OPENCV_BACKWARDS_COMPATIBILITY_MODE
+#pragma acc kernels
   for (int d = 0; d < 3; ++d)
   {
     QString action_str = QString("along %1").arg(d);

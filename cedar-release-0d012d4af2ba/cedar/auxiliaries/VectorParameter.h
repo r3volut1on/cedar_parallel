@@ -192,6 +192,7 @@ public:
   {
     this->mValues.clear();
     this->mSingleValueConst.clear();
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
     {
       try
@@ -215,6 +216,7 @@ public:
   void writeToNode(cedar::aux::ConfigurationNode& root) const
   {
     cedar::aux::ConfigurationNode vector_node;
+#pragma acc kernels
     for (T value : this->mValues)
     {
       cedar::aux::ConfigurationNode value_node;
@@ -311,6 +313,7 @@ public:
   //!@brief checks if a value is already contained in this vector
   bool contains(const T& value) const
   {
+#pragma acc kernels
     for (const_iterator iter = this->begin(); iter != this->end(); ++iter)
     {
       if ((*iter) == value)
@@ -362,6 +365,7 @@ public:
 
     // make sure the defaults vector is at least as big as the current vector
     this->mDefaults.resize(std::max(this->mDefaults.size(), this->mValues.size()));
+#pragma acc kernels
     for (size_t i = 0; i < this->mValues.size(); ++i)
     {
       this->mDefaults.at(i) = this->mValues.at(i);
@@ -370,6 +374,7 @@ public:
     this->mValues.resize(size, value);
 
     // restore previous value
+#pragma acc kernels
     for (size_t i = 0; i < this->mValues.size() && i < this->mDefaults.size(); ++i)
     {
       this->mValues.at(i) = this->mDefaults.at(i);
@@ -395,6 +400,7 @@ public:
     if (this->mSize != 0) // there is only a default dimensionality and one value, construct vector
     {
       mDefaults.clear();
+#pragma acc kernels
       for (size_t i = 0; i < this->mSize; ++i)
       {
         mDefaults.push_back(this->mDefaultValue);
@@ -415,6 +421,7 @@ public:
     bool changed = (this->mValues.size() != values.size());
 
     this->resize(values.size(), this->mDefaultValue, true);
+#pragma acc kernels
     for (size_t i = 0; i < values.size(); ++i)
     {
       if (this->mValues[i] != values[i])

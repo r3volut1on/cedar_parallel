@@ -65,6 +65,7 @@ cv::Mat cedar::aux::math::TransferFunction::compute(const cv::Mat& values) const
     cv::MatConstIterator_<float> iter_src = values.begin<float>();
     cv::MatIterator_<float> iter_dest = result.begin<float>();
     auto end = values.end<float>();
+#pragma acc kernels
     for ( ; iter_src != end; ++iter_src, ++iter_dest)
     {
       *iter_dest = static_cast<float>(compute(static_cast<double>(*iter_src)));
@@ -75,6 +76,7 @@ cv::Mat cedar::aux::math::TransferFunction::compute(const cv::Mat& values) const
     cv::MatConstIterator_<double> iter_src = values.begin<double>();
     cv::MatIterator_<double> iter_dest = result.begin<double>();
     auto end = values.end<double>();
+#pragma acc kernels
     for ( ; iter_src != end; ++iter_src, ++iter_dest)
     {
       *iter_dest = compute(*iter_src);

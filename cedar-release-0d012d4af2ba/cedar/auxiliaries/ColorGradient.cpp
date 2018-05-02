@@ -79,6 +79,7 @@ Qwt3D::StandardColor cedar::aux::ColorGradient::toQwt3DStandardColor(size_t step
   Qwt3D::StandardColor col;
   std::vector<Qwt3D::RGBA> qwt_colors;
   qwt_colors.resize(steps);
+#pragma acc kernels
   for (size_t i = 0; i < steps; ++i)
   {
     double step = static_cast<double>(i) / static_cast<double>(steps - 1); // - 1 because we want to reach the last color
@@ -248,6 +249,7 @@ void cedar::aux::ColorGradient::updateLookupTable()
   mLookupTableG.resize(256);
   mLookupTableB.resize(256);
 
+#pragma acc kernels
   for (size_t gray = 0; gray < mLookupTableR.size(); ++ gray)
   {
     QColor color;
@@ -313,10 +315,12 @@ cv::Mat cedar::aux::ColorGradient::applyTo(const cv::Mat& matrix, bool limits, d
 
   const unsigned char* p_in;
   unsigned char* p_converted;
+#pragma acc kernels
   for (int i = 0; i < rows; ++i)
   {
     p_in = in_converted.ptr<unsigned char>(i);
     p_converted = converted.ptr<unsigned char>(i);
+#pragma acc kernels
     for (int j = 0; j < cols; ++j)
     {
       size_t v = static_cast<size_t>(p_in[j]);
