@@ -236,7 +236,6 @@ _mNoiseCorrelationKernelConvolution(new cedar::aux::conv::Convolution())
 
   // setup default kernels
   std::vector<cedar::aux::kernel::KernelPtr> kernel_defaults;
-#pragma acc kernels
   for (unsigned int i = 0; i < 1; i++)
   {
     cedar::aux::kernel::GaussPtr kernel
@@ -305,7 +304,7 @@ void cedar::dyn::NeuralField::discreteMetricChanged()
   data_items.push_back(this->mSigmoidalActivation);
   data_items.push_back(this->mLateralInteraction);
 
-#pragma acc kernels
+  #pragma acc kernels
   for (size_t i = 0; i < data_items.size(); ++i)
   {
     if (this->_mDiscreteMetric->getValue() == true)
@@ -364,7 +363,6 @@ void cedar::dyn::NeuralField::slotKernelAdded(size_t kernelIndex)
 void cedar::dyn::NeuralField::transferKernelsToConvolution()
 {
   this->getConvolution()->getKernelList()->clear();
-#pragma acc kernels
   for (size_t kernel = 0; kernel < this->_mKernels->size(); ++ kernel)
   {
     this->addKernelToConvolution(this->_mKernels->at(kernel));
@@ -422,7 +420,6 @@ void cedar::dyn::NeuralField::readConfiguration(const cedar::aux::ConfigurationN
       this->_mKernels->clear();
     }
 
-#pragma acc kernels
     for (unsigned int i = 0; i < num_kernels; ++i)
     {
       // find the configuration node for the kernel
@@ -620,14 +617,14 @@ void cedar::dyn::NeuralField::updateMatrices()
   int dimensionality = static_cast<int>(this->getDimensionality());
 
   std::vector<int> sizes(dimensionality);
-#pragma acc kernels
+  #pragma acc kernels
   for (int dim = 0; dim < dimensionality; ++dim)
   {
     sizes[dim] = _mSizes->at(dim);
   }
   // check if matrices become too large
   double max_size = 1.0;
-#pragma acc kernels
+  #pragma acc kernels
   for (int dim = 0; dim < dimensionality; ++dim)
   {
     max_size *= sizes[dim];
@@ -668,7 +665,7 @@ void cedar::dyn::NeuralField::updateMatrices()
   this->unlockAll();
   if (dimensionality > 0) // only adapt kernel in non-0D case
   {
-#pragma acc kernels
+    #pragma acc kernels
     for (unsigned int i = 0; i < _mKernels->size(); i++)
     {
       this->_mKernels->at(i)->setDimensionality(dimensionality);

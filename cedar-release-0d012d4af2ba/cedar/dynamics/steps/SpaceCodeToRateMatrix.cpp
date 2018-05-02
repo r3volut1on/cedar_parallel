@@ -164,10 +164,10 @@ void cedar::dyn::SpaceCodeToRateMatrix::compute(const cedar::proc::Arguments&)
   const cv::Mat& input = this->mInput->getData();
   output = 0.0;
 
-#pragma acc kernels
+  #pragma acc kernels
+  {
   for (unsigned int row = 0; row < rows; ++row)
   {
-#pragma acc kernels
     for (unsigned int col = 0; col < cols; ++col)
     {
       std::vector<cv::Range> ranges(3, cv::Range::all());
@@ -182,6 +182,7 @@ void cedar::dyn::SpaceCodeToRateMatrix::compute(const cedar::proc::Arguments&)
       cv::minMaxLoc(temp, &min, &max, &min_loc, &max_loc);
       output.at<float>(row,col) = this->mWeights->getData().at<float>(max_loc.y,0);
     }
+  }
   }
 }
 
