@@ -149,6 +149,7 @@ std::string cedar::aux::PluginProxy::getNormalizedSearchPath() const
   subpaths_to_remove.push_back("Release");
   subpaths_to_remove.push_back("/");
 
+#pragma acc kernels
   for (auto iter = subpaths_to_remove.begin(); iter != subpaths_to_remove.end(); )
   {
     const std::string& subpath = *iter;

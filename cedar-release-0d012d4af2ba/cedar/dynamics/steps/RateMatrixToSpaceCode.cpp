@@ -183,6 +183,7 @@ void cedar::dyn::RateMatrixToSpaceCode::interpolate()
     const cv::Mat& values = this->getInput("values")->getData<cv::Mat>();
     if (mDimensionality == 3)
     {
+#pragma acc kernels
       for (int row = 0; row < input.rows; ++row)
       {
         for (int col = 0; col < input.cols; ++col)

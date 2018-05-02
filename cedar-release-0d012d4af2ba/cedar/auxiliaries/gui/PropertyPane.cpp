@@ -116,6 +116,7 @@ void cedar::aux::gui::PropertyPane::resetContents()
 
 void cedar::aux::gui::PropertyPane::disconnect()
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->mSlotConnections.size(); i++)
   {
     if (this->mSlotConnections[i].connected())

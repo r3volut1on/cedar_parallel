@@ -163,6 +163,7 @@ void cedar::proc::ProjectionMapping::initialize(unsigned int numberOfMappings)
   {
     // could not find a mapping, initialize
     mMapping.clear();
+#pragma acc kernels
     for (unsigned int i = 0; i < numberOfMappings; ++i)
     {
       mMapping[i] = msDropIndex;

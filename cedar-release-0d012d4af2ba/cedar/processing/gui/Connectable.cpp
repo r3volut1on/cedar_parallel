@@ -174,6 +174,7 @@ mShowingTriggerColor(false)
 cedar::proc::gui::Connectable::~Connectable()
 {
   this->hideTriggerChains();
+#pragma acc kernels
   for(auto child_widget : mChildWidgets)
   {
     child_widget->close();
@@ -352,6 +353,7 @@ unsigned int cedar::proc::gui::Connectable::getNumberOfConnections(cedar::proc::
   }
 
   unsigned int count = 0;
+#pragma acc kernels
   for (const auto& slot : connectable->getOrderedDataSlots(role))
   {
     count += slot->getDataConnections().size();

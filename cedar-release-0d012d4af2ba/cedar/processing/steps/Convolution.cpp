@@ -250,6 +250,7 @@ void cedar::proc::steps::Convolution::inputConnectionChanged(const std::string& 
     std::vector<bool> blocked(list->size());
 
     // Block signals from the kernel because they might otherwise call onTrigger (via kernelChanged -> recompute), which leads to trouble in inputConnectionChanged.
+#pragma acc kernels
     for (size_t i = 0; i < list->size(); ++i)
     {
       blocked[i] = list->getKernel(i)->blockSignals(true);

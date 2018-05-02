@@ -87,6 +87,7 @@ bool cedar::proc::experiment::ActionSequence::checkValidity(std::vector<std::str
 {
   bool all_valid = this->_mCondition->getValue()->checkValidity(errors, warnings);
 
+#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSet->size(); ++i)
   {
     bool action_valid = this->_mActionSet->at(i)->checkValidity(errors, warnings);

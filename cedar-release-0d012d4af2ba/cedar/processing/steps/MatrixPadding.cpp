@@ -237,6 +237,7 @@ void cedar::proc::steps::MatrixPadding::compute3D()
   int top, bottom, left, right;
   top = bottom = border1;
   left = right = border2;
+#pragma acc kernels
   for (int d0 = 0; d0 < input.size[0]; ++d0)
   {
     cv::Mat input_slice (input.size[1], input.size[2], input.type(), input.data + input.step[0] * d0);

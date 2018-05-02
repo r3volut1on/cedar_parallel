@@ -162,6 +162,7 @@ void cedar::aux::conv::OpenCV::translateAnchor
   std::vector<int> point;
   point.assign(2, -1);
 
+#pragma acc kernels
   for (size_t i = 0; i < 2; ++i)
   {
     if (anchor_vector.size() > i && sizes.size() > i)

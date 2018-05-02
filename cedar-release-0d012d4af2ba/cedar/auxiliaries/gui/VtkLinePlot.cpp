@@ -302,6 +302,7 @@ bool cedar::aux::gui::VtkLinePlot::canDetach(cedar::aux::ConstDataPtr data) cons
 {
   if(this->mPlotSeriesVector.size() > 1)
   {
+#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)
@@ -333,6 +334,7 @@ void cedar::aux::gui::VtkLinePlot::PlotSeries::buildXAxis(unsigned int new_size)
 {
   vtkIdType old_size = this->mpVtkTable->GetNumberOfRows();
   this->mpVtkTable->SetNumberOfRows(new_size);
+#pragma acc kernels
   for (unsigned int i = old_size; i < new_size; ++i)
   {
     this->mpVtkTable->SetValue(i, this->mXColumn, static_cast<double>(i));

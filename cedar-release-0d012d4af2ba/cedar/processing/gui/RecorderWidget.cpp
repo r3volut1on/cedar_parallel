@@ -95,6 +95,7 @@ void cedar::proc::gui::RecorderWidget::refreshWidget()
   displayed_roles.push_back(cedar::proc::DataRole::BUFFER);
   displayed_roles.push_back(cedar::proc::DataRole::OUTPUT);
 
+#pragma acc kernels
   for (auto role : displayed_roles)
   {
     if (!this->mConnectable->hasSlotForRole(role))

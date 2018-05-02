@@ -156,6 +156,7 @@ void cedar::proc::gui::ArchitectureScriptEditor::scriptStatusChanged(QString new
   auto script = dynamic_cast<cedar::proc::CppScript*>(QObject::sender());
   CEDAR_DEBUG_ASSERT(script);
 
+#pragma acc kernels
   for (int row = 0; row < this->mpScriptList->rowCount(); ++row)
   {
     if (this->mpScriptList->item(row, M_NAME_COL)->text() == QString::fromStdString(script->getName()))

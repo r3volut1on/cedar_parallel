@@ -199,6 +199,7 @@ public:
   NodePtr getNodeByPayload(const NodePayload& payload) const
   {
     NodePtr node;
+#pragma acc kernels
     for (auto iter = this->mNodesById.begin(); iter != this->mNodesById.end(); ++iter)
     {
       if (iter->second->getPayload() == payload)

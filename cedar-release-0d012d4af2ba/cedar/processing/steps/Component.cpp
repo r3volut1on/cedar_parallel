@@ -143,6 +143,7 @@ void cedar::proc::steps::Component::compute(const cedar::proc::Arguments&)
 
   // read values from the inputs
   std::vector<std::string> data_names = this->getComponent()->getDataNames(cedar::dev::Component::COMMANDED);
+#pragma acc kernels
   for (auto name_iter = data_names.begin(); name_iter != data_names.end(); ++name_iter)
   {
     const std::string& name = *name_iter;

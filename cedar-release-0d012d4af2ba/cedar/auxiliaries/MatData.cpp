@@ -82,6 +82,7 @@ std::string cedar::aux::MatData::getDescription() const
         description += " (";
       }
 
+#pragma acc kernels
       for (int i = 0; i < mat.dims; ++i)
       {
         if (i > 0)
@@ -324,6 +325,7 @@ void cedar::aux::MatData::serializeHeader(std::ostream& stream, cedar::aux::Seri
   QReadLocker locker(this->mpLock);
   stream << "Mat" << ",";
   stream << cedar::aux::math::matrixTypeToString(mData) << ",";
+#pragma acc kernels
   for(int i =0; i < mData.dims;i++)
   {
     if (i > 0)

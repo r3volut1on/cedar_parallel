@@ -87,6 +87,7 @@ cedar::proc::Trigger::~Trigger()
 
   QReadLocker lock(this->mListeners.getLockPtr());
 
+#pragma acc kernels
   for (auto listener : this->mListeners.member())
   {
     listener->noLongerTriggeredBy(boost::static_pointer_cast<cedar::proc::Trigger>(this->shared_from_this()));

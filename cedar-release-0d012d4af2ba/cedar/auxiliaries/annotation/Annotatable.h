@@ -102,6 +102,7 @@ public:
   template <typename T>
   bool hasAnnotation() const
   {
+#pragma acc kernels
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *annotation = this->mAnnotations[i].get();

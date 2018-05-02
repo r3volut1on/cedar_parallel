@@ -109,6 +109,7 @@ void cedar::aux::Lockable::lockAll(cedar::aux::LOCK_TYPE lockType, LockSetHandle
   CEDAR_ASSERT(lockSet < this->mLockSets.size());
 
   QReadWriteLock* p_last = NULL;
+#pragma acc kernels
   for (Locks::const_iterator iter = this->mLockSets[lockSet].begin(); iter != this->mLockSets[lockSet].end(); ++iter)
   {
     QReadWriteLock* p_lock = iter->first;

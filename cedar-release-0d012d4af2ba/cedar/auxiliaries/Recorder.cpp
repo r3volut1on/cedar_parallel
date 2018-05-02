@@ -98,6 +98,7 @@ void cedar::aux::Recorder::step(cedar::unit::Time)
   auto mode = this->getSerializationMode();
 
   // Writing the first value of every DataSpectator queue.
+#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     boost::static_pointer_cast<cedar::aux::DataSpectator>(data_spectator.second)->writeFirstRecordData(mode);

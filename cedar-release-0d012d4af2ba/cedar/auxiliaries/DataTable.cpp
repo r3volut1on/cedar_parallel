@@ -181,6 +181,7 @@ void cedar::aux::DataTable::RowCollection::append(ConstRowCollectionPtr other)
   // both collections must be from the same table
   CEDAR_ASSERT(other->mDataTable.lock() == this->mDataTable.lock());
 
+#pragma acc kernels
   for (auto row : other->mRows)
   {
     this->appendRow(row);

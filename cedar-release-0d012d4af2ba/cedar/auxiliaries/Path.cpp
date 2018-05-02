@@ -142,6 +142,7 @@ std::vector<cedar::aux::Path> cedar::aux::Path::listSubdirectories() const
 
   boost::filesystem::directory_iterator end_iter;
   std::vector<cedar::aux::Path> folders;
+#pragma acc kernels
   for (boost::filesystem::directory_iterator dir_iter(this->absolute().toString()); dir_iter != end_iter ; ++dir_iter)
   {
     if (boost::filesystem::is_directory(dir_iter->status()))

@@ -151,6 +151,7 @@ private:
     num_elements= getElementCount();
     element_size= getElementSize();
 
+#pragma acc kernels
     for (i= 0; i< num_elements; i++)
     {
       // we use memcpy as we only know the sizes of the data at runtime

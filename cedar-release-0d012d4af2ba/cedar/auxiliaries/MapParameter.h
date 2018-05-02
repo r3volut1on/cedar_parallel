@@ -101,6 +101,7 @@ public:
   void readFromNode(const cedar::aux::ConfigurationNode& root)
   {
     this->mValues.clear();
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
     {
       this->mValues[iter->first] = iter->second.get_value<T>();

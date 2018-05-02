@@ -84,6 +84,7 @@ void cedar::aux::Log::addLoggerAtFront(cedar::aux::LogInterfacePtr logger, cedar
 
 void cedar::aux::Log::removeLogger(cedar::aux::LogInterfacePtr logger)
 {
+#pragma acc kernels
   for (std::vector<LogHandler>::iterator i = this->mHandlers.begin(); i != this->mHandlers.end();)
   {
     const LogHandler& handler = *i;

@@ -89,6 +89,7 @@ public:
   {
     char* p = memarray;
     CEDAR_DEBUG_ASSERT(this->mSizes.size() == static_cast<size_t>(this->mDims));
+#pragma acc kernels
     for (size_t i = 0; i < this->mSizes.size(); ++i)
     {
       *reinterpret_cast<int*>(p) = this->mSizes.at(i);

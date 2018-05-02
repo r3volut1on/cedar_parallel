@@ -124,6 +124,7 @@ std::ostream& cedar::aux::operator<< (std::ostream& stream, const cedar::aux::St
   stream << "." << std::endl;
   stream << "Backtrace contains " << trace.size() << " items:" << std::endl;
 
+#pragma acc kernels
   for (size_t i = 0; i < trace.size(); ++i)
   {
     stream << "  [" << i << "] " << trace.at(i) << std::endl;
@@ -325,6 +326,7 @@ void cedar::aux::write(cv::Mat matrix)
   switch (matrix.type())
   {
   case CV_8U:
+#pragma acc kernels
     for(int i = 0; i < matrix.rows; i++)
     {
       for (int j = 0; j < matrix.cols; j++)

@@ -185,6 +185,7 @@ void cedar::proc::sources::Camera::updateFrame()
 {
   if (this->getCameraGrabber()->isCreated())
   {
+#pragma acc kernels
     for (int i = 0; i < 5; ++i)
     {
       cedar::aux::sleep(cedar::unit::Time(50.0 * cedar::unit::milli * cedar::unit::seconds));

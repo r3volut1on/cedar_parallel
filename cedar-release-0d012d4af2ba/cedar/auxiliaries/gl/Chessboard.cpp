@@ -76,6 +76,7 @@ void cedar::aux::gl::Chessboard::draw()
     double l = mLength/mNumberOfRows;
     double w = mWidth/mNumberOfColumns;
     glTranslated(l/2, w/2, 0);
+#pragma acc kernels
     for (int i=0; i < mNumberOfRows; i++)
     {
       for (int j=0; j < mNumberOfColumns; j++)

@@ -81,6 +81,7 @@ cedar::proc::gui::AdvancedParameterLinker::~AdvancedParameterLinker()
 
 void cedar::proc::gui::AdvancedParameterLinker::disconnect()
 {
+#pragma acc kernels
   for (auto& connection : this->mSignalConnections)
   {
     connection.disconnect();

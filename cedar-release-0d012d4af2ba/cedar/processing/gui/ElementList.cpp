@@ -157,6 +157,7 @@ cedar::proc::gui::ElementList::TabBase(pParent)
 
   // first, go trough all element declaration entries and put them in the map, thus ordering them
   auto entries = ElementManagerSingleton::getInstance()->getDeclarations();
+#pragma acc kernels
   for (const auto& base_declaration : entries)
   {
     auto declaration = boost::dynamic_pointer_cast<cedar::proc::ConstElementDeclaration>(base_declaration);

@@ -84,6 +84,7 @@ int cedar::aux::gl::Scene::addObjectVisualization(cedar::aux::gl::ObjectVisualiz
   QWriteLocker write_locker(&mObjectVisualizationLock);
 
   mObjectVisualizations.push_back(pObjectVisualization);
+#pragma acc kernels
   for (int i=0; i<mViewers.size(); i++)
   {
     mViewers[i]->initGl(pObjectVisualization);

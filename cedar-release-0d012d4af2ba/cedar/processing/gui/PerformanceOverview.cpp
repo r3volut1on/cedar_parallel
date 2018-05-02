@@ -175,6 +175,7 @@ void cedar::proc::gui::PerformanceOverview::refresh()
 
 void cedar::proc::gui::PerformanceOverview::addGroup(cedar::proc::ConstGroupPtr group)
 {
+#pragma acc kernels
   for (const auto& name_element_pair : group->getElements())
   {
     auto element = name_element_pair.second;

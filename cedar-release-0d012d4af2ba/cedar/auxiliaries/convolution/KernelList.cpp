@@ -90,6 +90,7 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
   if (this->size() > 1)
   {
     unsigned int dim = this->getKernel(0)->getDimensionality();
+#pragma acc kernels
     for (unsigned int i = 1; i < this->size(); ++i)
     {
       if (dim != this->getKernel(i)->getDimensionality())

@@ -292,6 +292,7 @@ void cedar::aux::gui::SceneWidget::updateObjectSelectionComboBox()
   mpComboBoxName->blockSignals(true);
   mpComboBoxName->clear();
   // fill combo box with names of objects in the scene
+#pragma acc kernels
   for (int i=0; i<mpScene->getNumberOfObjectVisualizations(); i++)
   {
     mpComboBoxName->addItem

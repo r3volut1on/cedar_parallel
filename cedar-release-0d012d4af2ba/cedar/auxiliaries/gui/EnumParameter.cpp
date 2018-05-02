@@ -90,6 +90,7 @@ void cedar::aux::gui::EnumParameter::parameterValueChanged()
   auto parameter = boost::dynamic_pointer_cast<cedar::aux::EnumParameter>(this->getParameter());
   int index = -1;
   QString current_value = QString::fromStdString(parameter->getValue().name());
+#pragma acc kernels
   for (int i = 0; i < this->mpEdit->count(); ++i)
   {
     if (this->mpEdit->itemData(i) == current_value)

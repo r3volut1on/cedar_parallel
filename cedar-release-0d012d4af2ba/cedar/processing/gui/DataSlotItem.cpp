@@ -126,6 +126,7 @@ bool cedar::proc::gui::DataSlotItem::canDuplicate() const
 
 void cedar::proc::gui::DataSlotItem::setHighlightedBySelection(bool highlight)
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->getConnections().size(); ++i)
   {
     this->getConnections().at(i)->setHighlightedBySelection(highlight);

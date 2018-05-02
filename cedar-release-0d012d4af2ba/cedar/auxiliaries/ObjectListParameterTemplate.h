@@ -116,6 +116,7 @@ public:
   virtual void readFromNode(const cedar::aux::ConfigurationNode& node)
   {
     this->clear();
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = node.begin(); iter != node.end(); ++iter)
     {
       const std::string& object_type = iter->first;

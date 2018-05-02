@@ -144,6 +144,7 @@ bool cedar::aux::gui::HistoryPlot0D::canAppend(cedar::aux::ConstDataPtr data) co
 
 bool cedar::aux::gui::HistoryPlot0D::canDetach(cedar::aux::ConstDataPtr data) const
 {
+#pragma acc kernels
   for (const auto& plot_data : this->mPlotData)
   {
     if (plot_data.mData == data)

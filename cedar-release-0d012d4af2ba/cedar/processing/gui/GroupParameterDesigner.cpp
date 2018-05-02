@@ -75,6 +75,7 @@ mGroup(group)
     boost::bind(&cedar::proc::gui::GroupParameterDesigner::translateCustomParameterRemoved, this, _1)
   );
 
+#pragma acc kernels
   for (auto parameter : this->mGroup->getCustomParameters())
   {
     this->addParameterToList(parameter);

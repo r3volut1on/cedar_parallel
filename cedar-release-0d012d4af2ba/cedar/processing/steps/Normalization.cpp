@@ -122,6 +122,7 @@ _mNormalizedDimensions
 unsigned int cedar::proc::steps::Normalization::getNumberOfNormalizedDimensions() const
 {
   unsigned int count = 0;
+#pragma acc kernels
   for (auto value : this->_mNormalizedDimensions->getValue())
   {
     if (value)

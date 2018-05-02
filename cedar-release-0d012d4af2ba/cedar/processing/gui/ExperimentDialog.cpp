@@ -252,6 +252,7 @@ void cedar::proc::gui::ExperimentDialog::runExperiment()
   QString details;
 
   bool issues_found = false;
+#pragma acc kernels
   for (const auto& issue_list_pair : issues)
   {
     const auto& list = issue_list_pair.second;

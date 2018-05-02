@@ -210,6 +210,7 @@ void cedar::proc::gui::Scene::deleteElements(QList<QGraphicsItem*>& items, bool 
     // go through the list of elements and check if there are any that need confirmation
     bool confirmation_needed = false;
 
+#pragma acc kernels
     for (auto item : items)
     {
       if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(item))

@@ -236,6 +236,7 @@ _mNoiseCorrelationKernelConvolution(new cedar::aux::conv::Convolution())
 
   // setup default kernels
   std::vector<cedar::aux::kernel::KernelPtr> kernel_defaults;
+#pragma acc kernels
   for (unsigned int i = 0; i < 1; i++)
   {
     cedar::aux::kernel::GaussPtr kernel

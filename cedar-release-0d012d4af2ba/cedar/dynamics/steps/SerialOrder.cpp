@@ -239,6 +239,7 @@ void cedar::dyn::SerialOrder::numberOfOrdinalPositionsChanged()
   if (new_number_of_positions > old_number_of_positions)
   {
     // for all new ordinal positions
+#pragma acc kernels
     for (unsigned int i = old_number_of_positions; i < new_number_of_positions; ++i)
     {
       // resize all relevant vectors and matrices to their new (larger) sizes and initialize their content

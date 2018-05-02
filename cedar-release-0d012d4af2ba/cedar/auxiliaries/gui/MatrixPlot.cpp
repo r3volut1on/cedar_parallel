@@ -306,6 +306,7 @@ void cedar::aux::gui::MatrixPlot::processChangedData()
         this->plot(iter->first, iter->second);
         if (dynamic_cast<cedar::aux::gui::MultiPlotInterface*>(mpCurrentPlotWidget))
         {
+#pragma acc kernels
           for (auto rest = ++iter; rest != map.end(); ++rest)
           {
             this->append(rest->first, rest->second);

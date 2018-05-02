@@ -115,6 +115,7 @@ public:
     if (this->mKernels.size() > 0)
     {
       // have to do this in reverse order
+#pragma acc kernels
       for (size_t i = this->mKernels.size() - 1; i > 0; --i)
       {
         this->mKernelRemovedSignal(i);

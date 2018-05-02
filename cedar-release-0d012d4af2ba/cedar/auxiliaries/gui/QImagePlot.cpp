@@ -222,6 +222,7 @@ void cedar::aux::gui::QImagePlot::setColorJet(cedar::aux::ColorGradientPtr gradi
 void cedar::aux::gui::detail::QImagePlotLegend::setGradient(cedar::aux::ColorGradientPtr gradient)
 {
   this->mGradient = QLinearGradient(0, 1, 0, 0);
+#pragma acc kernels
   for (auto stop_color_pair : gradient->getStops())
   {
     this->mGradient.setColorAt(static_cast<qreal>(stop_color_pair.first), stop_color_pair.second);

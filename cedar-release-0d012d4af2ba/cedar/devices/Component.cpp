@@ -73,6 +73,7 @@ void cedar::dev::Component::updateValues(cedar::dev::Component::DataType type)
 
   const std::map<std::string, DataSlot>& map = map_iter->second;
 
+#pragma acc kernels
   for (auto iter = map.begin(); iter != map.end(); ++iter)
   {
     const DataSlot& slot = iter->second;

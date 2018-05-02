@@ -353,6 +353,7 @@ private:
     {
       // sub-array:
       typename Ptree::const_iterator it = pt.begin();
+#pragma acc kernels
       for (; it != pt.end(); ++it)
       {
         // write-out one level lower:

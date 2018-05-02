@@ -92,6 +92,7 @@ std::vector<std::string> cedar::dev::RobotManager::Template::getConfigurationNam
 {
   std::vector<std::string> names;
 
+#pragma acc kernels
   for (auto iter = this->mNamedPaths.begin(); iter != this->mNamedPaths.end(); ++iter)
   {
     names.push_back(iter->first);
@@ -372,6 +373,7 @@ void cedar::dev::RobotManager::restore()
 
   robots = root.get_child("robots");
 
+#pragma acc kernels
   for(auto child_iter = robots.begin(); child_iter != robots.end(); ++child_iter)
   {
     if (child_iter->first != "robot")

@@ -548,6 +548,7 @@ void cedar::proc::gui::Ide::init(bool loadDefaultPlugins, bool redirectLogToGui,
   openable_dialogs.push_back(boost_ctrl);
 
   // need to iterate in reverse, actions are always added at the beginning of the menu
+#pragma acc kernels
   for (auto iter = openable_dialogs.rbegin(); iter != openable_dialogs.rend(); ++iter)
   {
     auto openable_dialog = *iter;
@@ -1959,6 +1960,7 @@ void cedar::proc::gui::Ide::loadPlotGroupsIntoComboBox()
 {
   this->mpPlotGroupsComboBox->clear();
   std::list<std::string> plot_group_names = this->mGroup->getPlotGroupNames();
+#pragma acc kernels
   for(auto it = plot_group_names.begin(); it != plot_group_names.end(); ++it)
   {
     this->mpPlotGroupsComboBox->addItem(QString::fromStdString(*it));

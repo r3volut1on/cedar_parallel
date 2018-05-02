@@ -139,6 +139,7 @@ void cedar::dev::sensors::camera::Grabber::init()
               );
 
   // enable/disable settings like byGuid or so
+#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     getCameraChannel(channel)->setBackendType(getCameraChannel(channel)->_mpBackendType->getValue());

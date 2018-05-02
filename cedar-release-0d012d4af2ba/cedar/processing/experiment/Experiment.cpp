@@ -129,6 +129,7 @@ bool cedar::proc::experiment::Experiment::checkValidity(std::vector<std::string>
 
   bool all_valid = true;
 
+#pragma acc kernels
   for (unsigned int i = 0; i < this->_mActionSequences->size(); ++i)
   {
     bool valid = this->_mActionSequences->at(i)->checkValidity(errors, warnings);

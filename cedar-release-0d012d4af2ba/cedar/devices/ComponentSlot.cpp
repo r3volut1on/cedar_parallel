@@ -74,6 +74,7 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, const cedar::dev::Com
   stream << std::endl;
 
   stream << "available components:" << std::endl;
+#pragma acc kernels
   for (auto iter = slot._mComponentConfigurations.begin(); iter != slot._mComponentConfigurations.end(); ++iter)
   {
     const std::string& type_name = iter->first;

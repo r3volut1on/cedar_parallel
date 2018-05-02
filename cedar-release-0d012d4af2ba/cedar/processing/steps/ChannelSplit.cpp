@@ -91,6 +91,7 @@ cedar::proc::steps::ChannelSplit::ChannelSplit()
   this->declareInput("three channel input");
 
   this->mChannelData.resize(4);
+#pragma acc kernels
   for (size_t i = 0; i < this->mChannelData.size(); ++i)
   {
     this->mChannelData.at(i) = cedar::aux::MatDataPtr(new cedar::aux::MatData(cv::Mat()));

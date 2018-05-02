@@ -385,6 +385,7 @@ void cedar::proc::experiment::StepPropertyParameter::allowType(const std::string
 
 bool cedar::proc::experiment::StepPropertyParameter::isAllowType(const std::string& type)
 {
+#pragma acc kernels
   for (std::string allowed_type : allowedTypes)
   {
     if (allowed_type == type)

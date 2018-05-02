@@ -95,6 +95,7 @@ cedar::aux::annotation::Annotation(copy)
 std::string cedar::aux::annotation::ColorSpace::getChannelCode() const
 {
   std::string code;
+#pragma acc kernels
   for (size_t i = 0; i < this->getNumberOfChannels(); ++i)
   {
     switch (this->getChannelType(i))

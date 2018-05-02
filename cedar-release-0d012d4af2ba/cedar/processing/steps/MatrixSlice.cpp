@@ -175,6 +175,7 @@ void cedar::proc::steps::MatrixSlice::setRanges(const std::vector<cv::Range>& ra
   bool lower_blocked = this->_mRangeLower->blockSignals(true);
   bool upper_blocked = this->_mRangeUpper->blockSignals(true);
 
+#pragma acc kernels
   for (size_t d = 0; d < ranges.size(); ++d)
   {
     this->_mRangeUpper->setValue(d, ranges.at(d).end);

@@ -194,6 +194,7 @@ void cedar::dev::sensors::visual::Grabber::emergencyCleanup()
                                            );
 
   //cleanup every instantiated grabber
+#pragma acc kernels
   for (std::vector<Grabber*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
   {
     // only cedar::dev::sensors::visual::Grabber::doCleanUp() and xxxGrabber::onCleanUp() methods invoked
@@ -497,6 +498,7 @@ void cedar::dev::sensors::visual::Grabber::grab()
   try
   {
     unsigned int num_channels = getNumChannels();
+#pragma acc kernels
     for(unsigned int channel = 0; channel < num_channels; ++channel)
     {
       try

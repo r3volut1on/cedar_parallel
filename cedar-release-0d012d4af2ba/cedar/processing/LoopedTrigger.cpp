@@ -172,6 +172,7 @@ void cedar::proc::LoopedTrigger::prepareStart()
 
   {
     QReadLocker locker(this->mListeners.getLockPtr());
+#pragma acc kernels
     for (auto listener : this->mListeners.member())
     {
       listener->callOnStart();

@@ -215,6 +215,7 @@ void cedar::proc::gui::ProjectionMappingParameter::propertyChanged()
     = boost::dynamic_pointer_cast<cedar::proc::ProjectionMappingParameter>(this->getParameter());
 
   // delete all the combo boxes
+#pragma acc kernels
   for (size_t i = 0; i < this->mComboBoxes.size(); ++i)
   {
     delete this->mComboBoxes.at(i);

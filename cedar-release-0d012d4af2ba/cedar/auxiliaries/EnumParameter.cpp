@@ -98,6 +98,7 @@ void cedar::aux::EnumParameter::enable(cedar::aux::EnumId value)
 
 void cedar::aux::EnumParameter::selectFirstEnabled()
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->mEnumDeclaration->list().size(); ++i)
   {
     if (this->isEnabled(this->mEnumDeclaration->list().at(i)))

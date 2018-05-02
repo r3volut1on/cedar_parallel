@@ -150,6 +150,7 @@ void cedar::aux::gui::ResourceDialog::fill()
 
   CEDAR_ASSERT(this->mpResourceList->invisibleRootItem() != NULL);
 
+#pragma acc kernels
   for (auto path_iter = paths.begin(); path_iter != paths.end(); ++path_iter)
   {
     this->appendDirectories(*path_iter, this->mpResourceList->invisibleRootItem());

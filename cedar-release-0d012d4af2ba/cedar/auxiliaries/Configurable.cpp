@@ -73,6 +73,7 @@ mIsAdvanced(false)
 
 cedar::aux::Configurable::~Configurable()
 {
+#pragma acc kernels
   for (auto parameter_connection_pair : this->mNameChangedConnections)
   {
     parameter_connection_pair.second.disconnect();

@@ -144,6 +144,7 @@ void cedar::proc::experiment::action::IterateDirectoryContents::updateDirectoryC
 
   QWriteLocker locker(this->mDirectoryContents.getLockPtr());
   this->mDirectoryContents.member().clear();
+#pragma acc kernels
   for (auto entry : files)
   {
     this->mDirectoryContents.member().push_back(entry.absolute());

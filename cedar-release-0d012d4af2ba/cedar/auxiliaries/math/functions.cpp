@@ -56,6 +56,7 @@ cv::Mat cedar::aux::math::boxMatrix
         )
 {
   std::vector<int> matrix_sizes_int(matrixSizes.size());
+#pragma acc kernels
   for (unsigned int i = 0; i < matrixSizes.size(); ++i)
   {
     matrix_sizes_int.at(i) = static_cast<int>(matrixSizes.at(i));

@@ -238,6 +238,7 @@ cedar::aux::ImageDatabase::ConstAnnotationPtr
       double prevFrame = 0.;
       double nextFrame = 0.;
       
+#pragma acc kernels
       for(auto iter = this->mFrameAnnotationMapping.begin(); iter!= this->mFrameAnnotationMapping.end(); ++iter)
       {
         //find closest annotations
@@ -412,6 +413,7 @@ unsigned int cedar::aux::ImageDatabase::Image::getImageColumns() const
 
 cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageByFilename(const cedar::aux::Path& fileName) const
 {
+#pragma acc kernels
   for (auto image : this->mImages)
   {
     if (image->getFileName() == fileName)

@@ -208,6 +208,7 @@ void cedar::aux::gui::LocalCoordinateFrameWidget::initWindow()
   mpGridLayout->addWidget(rotation_button, 2, 6);
 
 
+#pragma acc kernels
   for(unsigned int i = 3; i < 6; i++)
   {
     for(unsigned int j = 1; j < 4; j++)

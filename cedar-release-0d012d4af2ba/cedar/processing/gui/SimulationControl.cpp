@@ -348,6 +348,7 @@ void cedar::proc::gui::SimulationControl::setGroup(cedar::proc::gui::GroupPtr gr
 
 void cedar::proc::gui::SimulationControl::updateTriggerQualities()
 {
+#pragma acc kernels
   for (QTreeWidgetItemIterator iter(this->mpTree); auto p_item = *iter; ++iter)
   {
     auto trigger = this->getItemTrigger(p_item);
