@@ -109,7 +109,6 @@ void cedar::proc::gui::PlotWidgetPrivate::LabeledPlot::openPlotFromDeclaration(c
     try
     {
       auto declarations = cedar::aux::gui::PlotDeclarationManagerSingleton::getInstance()->find(mpData)->getData();
-#pragma acc kernels
       for (auto declaration : declarations)
       {
         if (declaration->getClassName() == declarationToFind)
@@ -273,7 +272,6 @@ mpLayout(new QGridLayout())
 
 cedar::proc::gui::PlotWidget::~PlotWidget()
 {
-#pragma acc kernels
   for(auto connection : this->mSignalConnections)
   {
     connection.disconnect();

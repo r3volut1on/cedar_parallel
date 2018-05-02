@@ -208,7 +208,6 @@ double cedar::proc::steps::Resize::linearInterpolationND
   bounds.resize(target.dims);
   interpolated_indices.resize(target.dims);
 
-#pragma acc kernels
   for (int d = 0; d < target.dims; ++d)
   {
     // calculate the factor by which the source must be resized
@@ -260,7 +259,6 @@ void cedar::proc::steps::Resize::linearInterpolationNDRecursion
     std::vector<int> index;
     index.resize(target.dims, 0);
     // iterate over all possible combinations
-#pragma acc kernels
     for(unsigned int i = 0; i < num_combinations; ++i)
     {
       // build interpolation index: the first n - 1 dimensions

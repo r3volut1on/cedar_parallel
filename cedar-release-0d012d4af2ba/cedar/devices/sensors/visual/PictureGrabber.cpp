@@ -109,7 +109,6 @@ void cedar::dev::sensors::visual::PictureGrabber::init()
   cedar::aux::LogSingleton::getInstance()->allocating(this);
 
   // watch filename on every channel
-#pragma acc kernels
   for (unsigned int channel=0; channel<_mChannels->size(); ++channel)
   {
     QObject::connect

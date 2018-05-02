@@ -236,7 +236,6 @@ void cedar::proc::gui::StickyNote::contextMenuEvent(QGraphicsSceneContextMenuEve
   QMenu menu;
   QMenu* colors = menu.addMenu("color");
 
-#pragma acc kernels
   for (auto color : cedar::proc::gui::SettingsSingleton::getInstance()->getUserDefinedColors())
   {
     if (color->hasName())

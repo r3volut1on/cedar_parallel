@@ -106,7 +106,6 @@ void cedar::proc::gui::ToolBox::relayout()
     }
   }
 
-#pragma acc kernels
   for (int i = 0; i < widgets.size(); ++i)
   {
     QWidget *p_child = widgets.at(i);

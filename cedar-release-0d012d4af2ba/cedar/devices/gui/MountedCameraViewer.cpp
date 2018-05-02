@@ -170,7 +170,6 @@ void cedar::dev::gui::MountedCameraViewer::draw()
   qglviewer::Camera* viewer_camera = this->camera();
 #if QGLVIEWER_VERSION >= 0x020600
   qreal matrix[12];
-#pragma acc kernels
   for (int i = 0; i < 12; ++i)
   {
     matrix[i] = static_cast<qreal>(projection_matrix_double.at<double>(i));

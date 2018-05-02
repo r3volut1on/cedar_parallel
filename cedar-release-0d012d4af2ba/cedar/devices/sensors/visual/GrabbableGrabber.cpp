@@ -126,7 +126,6 @@ void cedar::dev::sensors::visual::GrabbableGrabber::onCreateGrabber()
   unsigned int num_channels = getNumChannels();
 
   // register this grabber in the grabbable object and store the readwrite-lock
-#pragma acc kernels
   for (unsigned int channel = 0; channel < num_channels;++channel)
   {
     getGrabbableChannel(channel)->mpGrabberLock

@@ -192,7 +192,6 @@ public:
   {
     this->mValues.clear();
     this->mSingleValueConst.clear();
-#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
     {
       try

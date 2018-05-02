@@ -238,7 +238,6 @@ private:
   {
     this->mCachedData = boost::dynamic_pointer_cast<ConstDataType>(this->mSlot->getData());
 
-#pragma acc kernels
     for (auto relation : this->mOutputRelations)
     {
       relation->update(this->mCachedData, this->mpConnectable);

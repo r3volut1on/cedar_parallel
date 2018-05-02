@@ -117,7 +117,6 @@ public:
   mSearchedPaths(searchedPaths)
   {
     std::string message = "The following paths were searched:";
-#pragma acc kernels
     for (size_t i = 0; i < searchedPaths.size(); ++i)
     {
       message += "\n";

@@ -189,7 +189,6 @@ std::string cedar::dev::SerialChannel::read()
   mTimer.async_wait(boost::bind(&cedar::dev::SerialChannel::timeoutExpired, this, boost::asio::placeholders::error));
 
   // Run, Forrest, Run!
-#pragma acc kernels
   for (;;)
   {
     // start the reading process

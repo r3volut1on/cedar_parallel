@@ -82,7 +82,6 @@ std::ostream& cedar::dev::operator<<(std::ostream& stream, const cedar::dev::Rob
 
   std::vector<std::string> slot_list = robot.listComponentSlots();
 
-#pragma acc kernels
   for (auto slot_iter = slot_list.begin(); slot_iter != slot_list.end(); ++slot_iter)
   {
     const std::string& slot_name = *slot_iter;
@@ -438,7 +437,6 @@ std::vector<std::string> cedar::dev::Robot::getComponentSlotNames() const
   std::vector<std::string> slot_names;
 
   // for all elements in the _mComponentSlots map
-#pragma acc kernels
   for(auto map_entry = mComponentSlots.begin(); map_entry != mComponentSlots.end(); ++map_entry)
   {
     // copy the key of the map (i.e., the name of the slot) into the vector

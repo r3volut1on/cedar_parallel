@@ -134,7 +134,6 @@ public:
   //! Returns the declaration that was used to instantiate the given object.
   cedar::aux::ConstPluginDeclarationPtr getDeclarationOf(ConstBaseTypePtr object) const
   {
-#pragma acc kernels
     for (auto declaration : this->mDeclarations)
     {
       if (declaration->isObjectInstanceOf(object))

@@ -159,7 +159,6 @@ void cedar::proc::gui::ElementTreeWidget::setGroup(cedar::proc::GroupPtr group)
 
 void cedar::proc::gui::ElementTreeWidget::addGroup(cedar::proc::GroupPtr group)
 {
-#pragma acc kernels
   for (const auto& name_element_pair : group->getElements())
   {
     this->translateElementAddedSignal(name_element_pair.second);

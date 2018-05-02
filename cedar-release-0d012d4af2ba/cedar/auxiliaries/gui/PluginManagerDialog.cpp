@@ -248,7 +248,6 @@ void cedar::aux::gui::PluginManagerDialog::populate()
 {
   // restore plugins to load from the settings
   auto known_plugins = cedar::aux::SettingsSingleton::getInstance()->getKnownPlugins();
-#pragma acc kernels
   for (auto iter = known_plugins.begin(); iter != known_plugins.end(); ++iter)
   {
     this->addPlugin(*iter);

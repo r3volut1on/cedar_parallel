@@ -116,7 +116,6 @@ void cedar::proc::gui::CouplingCollection::contextMenuEvent(QGraphicsSceneContex
 
 void cedar::proc::gui::CouplingCollection::unhideContents()
 {
-#pragma acc kernels
   for (const auto& component_weak : this->mComponents)
   {
     auto component = component_weak.lock();

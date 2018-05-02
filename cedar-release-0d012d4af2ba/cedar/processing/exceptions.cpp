@@ -43,7 +43,6 @@
 cedar::proc::TriggerCycleException::TriggerCycleException(const std::vector<std::set<cedar::proc::TriggerablePtr> >& cycles)
 {
   std::string message = "One or more cycles in the trigger connections were detected. They are:";
-#pragma acc kernels
   for (size_t i = 0; i < cycles.size(); ++i)
   {
     message += "\n";

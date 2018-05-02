@@ -123,7 +123,6 @@ cedar::aux::ArithmeticExpressionPtr cedar::aux::ArithmeticExpression::solveFor(c
   ExpressionPtr expressions [] = {left, right};
 
   // sort terms: put terms containing the variable to be solved for on the left, others on the right
-#pragma acc kernels
   for (size_t i = 0; i < 2; ++i)
   {
     ExpressionPtr expression = expressions[i];

@@ -65,7 +65,6 @@ void cedar::proc::typecheck::Matrix::addAcceptedDimensionality(unsigned int dime
 void cedar::proc::typecheck::Matrix::addAcceptedDimensionalityRange(unsigned int lowest, unsigned int highest)
 {
   //!@todo This is not the best way of storing this information. Rather, a class is needed that stores a set of mins and maxes
-#pragma acc kernels
   for (unsigned int d = lowest; d <= highest; ++d)
   {
     this->addAcceptedDimensionality(d);

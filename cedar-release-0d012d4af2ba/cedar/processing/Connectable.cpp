@@ -68,7 +68,6 @@ cedar::proc::Connectable::Connectable()
 mpConnectionLock(new QReadWriteLock()),
 mMandatoryConnectionsAreSet(true)
 {
-#pragma acc kernels
   for (size_t i = 0; i < cedar::proc::DataRole::type().list().size(); ++i)
   {
     const cedar::aux::Enum& e = cedar::proc::DataRole::type().list()[i];

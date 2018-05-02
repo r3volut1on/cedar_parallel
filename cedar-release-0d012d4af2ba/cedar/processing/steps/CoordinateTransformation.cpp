@@ -364,7 +364,6 @@ void cedar::proc::steps::CoordinateTransformation::compute(const cedar::proc::Ar
     dst_sizes[dim_1] = output.size[dim_1];
     dst_sizes[dim_sliced] = 1;
 
-#pragma acc kernels
     for (int d3 = 0; d3 < this->mInput->getData().size[dim_sliced]; ++d3)
     {
       range[dim_sliced].start = d3;

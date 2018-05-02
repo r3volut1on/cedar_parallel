@@ -91,7 +91,6 @@ template <typename CVT> void cvMatHelper<CVT>::initExternalHeader(
   }
   else
   {
-#pragma acc kernels
     for (int i = 0; i < mat.dims; ++i)
     {
       extheader.mSizes.push_back(mat.size[i]);

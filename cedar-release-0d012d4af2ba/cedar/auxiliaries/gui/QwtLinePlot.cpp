@@ -231,7 +231,6 @@ void cedar::aux::gui::QwtLinePlot::applyStyle(cedar::aux::ConstDataPtr data, siz
 
 void cedar::aux::gui::QwtLinePlot::getStyleFor(cedar::aux::ConstDataPtr data, QPen& pen, QBrush& brush) const
 {
-#pragma acc kernels
   for (auto plot_series : this->mPlotSeriesVector)
   {
     if (plot_series->mMatData == data)
@@ -341,7 +340,6 @@ bool cedar::aux::gui::QwtLinePlot::canDetach(cedar::aux::ConstDataPtr data) cons
 {
   if(this->mpPlot != nullptr && this->mPlotSeriesVector.size() > 1)
   {
-#pragma acc kernels
     for(auto plot_series : this->mPlotSeriesVector)
     {
       if(boost::dynamic_pointer_cast<cedar::aux::ConstData>(plot_series->mMatData) == data)

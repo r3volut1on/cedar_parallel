@@ -122,7 +122,6 @@ void cedar::proc::sources::Noise::updateMatrices()
   int dimensionality = static_cast<int>(_mDimensionality->getValue());
 
   std::vector<int> sizes(dimensionality);
-#pragma acc kernels
   for (int dim = 0; dim < dimensionality; ++dim)
   {
     sizes[dim] = _mSizes->at(dim);

@@ -88,7 +88,6 @@ void cedar::aux::gui::PluginInfoDialog::updateWidgets()
   {
     this->mpReadInfoBtn->setEnabled(false);
     auto declarations = this->mPlugin->getDeclaration();
-#pragma acc kernels
     for (size_t i = 0; i < declarations->size(); ++i)
     {
       auto declaration = declarations->at(i);

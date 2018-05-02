@@ -88,7 +88,6 @@ void cedar::proc::gui::ArchitectureConsistencyCheck::recheck()
 
   if (this->mIssues.size() > 0)
   {
-#pragma acc kernels
     for (size_t issue_id = 0; issue_id < this->mIssues.size(); ++issue_id)
     {
       auto issue = this->mIssues.at(issue_id);

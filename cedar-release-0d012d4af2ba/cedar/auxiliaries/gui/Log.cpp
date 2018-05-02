@@ -121,7 +121,6 @@ void cedar::aux::gui::Log::scrollBarRangeChanged(int, int max)
 
 void cedar::aux::gui::Log::timerEvent(QTimerEvent*)
 {
-#pragma acc kernels
   for (auto pane_iter = this->mpPanes.begin(); pane_iter != this->mpPanes.end(); ++pane_iter)
   {
     QTableWidget* p_table = pane_iter->second;

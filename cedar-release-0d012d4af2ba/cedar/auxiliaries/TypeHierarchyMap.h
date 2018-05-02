@@ -277,7 +277,6 @@ public:
                   << " <" << this << ">" << std::endl;
         visited.insert(this->shared_from_this());
 
-#pragma acc kernels
         for (auto child : this->mChildren)
         {
           child->print(indentation + " ", visited);

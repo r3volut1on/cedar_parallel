@@ -102,7 +102,6 @@ public:
       unsigned int label_id = static_cast<unsigned int>(std::round(value));
 
       // find the label
-#pragma acc kernels
       for (const auto& pair : this->mpPlot->mTitleIndex)
       {
         if (pair.second == label_id)

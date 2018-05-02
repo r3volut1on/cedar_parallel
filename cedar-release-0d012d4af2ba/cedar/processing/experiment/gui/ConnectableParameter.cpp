@@ -101,7 +101,6 @@ void cedar::proc::experiment::gui::ConnectableParameter::updateConnectables()
 {
   mpConnectableComboBox->clear();
   std::vector<std::string> steps = SupervisorSingleton::getInstance()->getExperiment()->getGroupSteps();
-#pragma acc kernels
   for (std::string step : steps)
   {
     mpConnectableComboBox->addItem(QString::fromStdString(step));

@@ -194,7 +194,6 @@ cv::Mat cedar::aux::conv::FFTW::convolveInternal
     return cv::Mat(1, 1, kernel.type(), cv::sum(kernel * cedar::aux::math::getMatrixEntry<double>(matrix, 0, 0)));
   }
   //!@todo Why the - 1?
-#pragma acc kernels
   for (unsigned int dim = 0 ; dim < cedar::aux::math::getDimensionalityOf(matrix) - 1; ++dim)
   {
     if (matrix.size[dim] < kernel.size[dim])

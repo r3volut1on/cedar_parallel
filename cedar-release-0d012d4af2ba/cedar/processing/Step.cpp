@@ -413,7 +413,6 @@ void cedar::proc::Step::onTrigger(cedar::proc::ArgumentsPtr arguments, cedar::pr
 #ifdef CEDAR_ENABLE_NAN_CHECK
   if (this->hasSlotForRole(cedar::proc::DataRole::OUTPUT))
   {
-#pragma acc kernels
     for (auto name_slot_pair : this->getDataSlots(cedar::proc::DataRole::OUTPUT))
     {
       auto data = name_slot_pair.second->getData();

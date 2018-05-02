@@ -146,7 +146,6 @@ void cedar::proc::GroupFileFormatV1::writeMetaData(cedar::proc::ConstGroupPtr gr
   if (!required_plugins.empty())
   {
     cedar::aux::ConfigurationNode required_plugins_node;
-#pragma acc kernels
     for (auto plugin_path : required_plugins)
     {
       cedar::aux::ConfigurationNode value_node;

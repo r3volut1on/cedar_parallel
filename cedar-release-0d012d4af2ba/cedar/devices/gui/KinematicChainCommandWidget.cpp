@@ -81,7 +81,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::timerEvent(QTimerEvent*)
 
 void cedar::dev::gui::KinematicChainCommandWidget::setDecimals(unsigned int decimals)
 {
-#pragma acc kernels
   for(unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
   {
     mCommandBoxes[j]->setDecimals(decimals);
@@ -146,7 +145,6 @@ void cedar::dev::gui::KinematicChainCommandWidget::update()
   switch(mpModeBox->currentIndex())
   {
   case 0:
-#pragma acc kernels
     for (unsigned int j = 0; j < mpKinematicChain->getNumberOfJoints(); ++j)
     {
       mCommandBoxes[j]->blockSignals(true);
