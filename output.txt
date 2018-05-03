@@ -1,0 +1,759 @@
+[  0%] Built target cedarunits
+[  0%] Built target unitTest_UnitMatrix
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/StringParameter.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/OpenCV.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Block.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/FFTW.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/LocalCoordinateFrame.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Scene.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/ObjectVisualization.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Engine.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/KernelList.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/ColorGradient.cpp.o
+[  1%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Torus.cpp.o
+[  2%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/Log.cpp.o
+[  2%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/DataSpectator.cpp.o
+[  2%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Pyramid.cpp.o
+[  2%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Convolution.cpp.o
+[  2%] Building CXX object cedar/auxiliaries/CMakeFiles/cedaraux.dir/UIntParameter.cpp.o
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp: In member function ‘cv::Mat cedar::aux::ColorGradient::applyTo(const cv::Mat&, bool, double, double)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:318:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+ #pragma acc kernels{
+                    ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:340:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:277:72: warning: unused parameter ‘limits’ [-Wunused-parameter]
+ cv::Mat cedar::aux::ColorGradient::applyTo(const cv::Mat& matrix, bool limits, double min, double max)
+                                                                        ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:342:3: error: expected unqualified-id before ‘if’
+   if (limits)
+   ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:349:3: error: expected unqualified-id before ‘return’
+   return converted;
+   ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ColorGradient.cpp:350:1: error: expected declaration before ‘}’ token
+ }
+ ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:836: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/ColorGradient.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/ColorGradient.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Data.h:46:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:113:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:162:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:182:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:203:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/detail/LoopedThreadWorker.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LoopedThread.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/detail/LoopedThreadWorker.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LoopedThread.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Settings.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.cpp:42:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Block.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:45:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:45:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Data.h:46:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataTemplate.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.h:48,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:113:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:162:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:182:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:203:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringVectorParameter.h:42:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Settings.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataSpectator.cpp:42:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/tools.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/IntVectorParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Convolution.cpp:42:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringVectorParameter.h:42:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Settings.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.cpp:42:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ParameterTemplate.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringParameter.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/IntVectorParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:49:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:40:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ParameterTemplate.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericParameter.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/UIntParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/UIntParameter.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Pyramid.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.h:44,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/IntVectorParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Separable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/Engine.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:884: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Block.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Block.cpp.o] Error 1
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Log.h:43:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/math/Limits.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:46,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DoubleVectorParameter.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::startsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:244:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h: In function ‘bool cedar::aux::endsWith(const string&, const string&)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/stringFunctions.h:267:18: error: invalid exit from OpenMP structured block
+           return false;
+                  ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Torus.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.h:44:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.h:47,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NamedConfigurable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/LocalCoordinateFrame.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:38:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator<(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:297:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:301:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h: In member function ‘virtual bool cedar::aux::PathTemplate<SeparatorT, StorageT>::operator==(const SelfType&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PathTemplate.h:325:16: error: invalid exit from OpenMP structured block
+         return false;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PluginDeclarationTemplate.h:47:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ParameterDeclaration.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringParameter.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h: In member function ‘cedar::aux::ConstPluginDeclarationPtr cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::getDeclarationOf(cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::ConstBaseTypePtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h:142:16: error: invalid exit from OpenMP structured block
+         return declaration;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h: In member function ‘cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::ConstBasePluginDeclarationPtr cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::getDeclarationNoThrow(const string&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h:194:16: error: invalid exit from OpenMP structured block
+         return declaration;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/PluginDeclarationTemplate.h:47:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/ParameterDeclaration.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/UIntParameter.cpp:39:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h: In member function ‘cedar::aux::ConstPluginDeclarationPtr cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::getDeclarationOf(cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::ConstBaseTypePtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h:142:16: error: invalid exit from OpenMP structured block
+         return declaration;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h: In member function ‘cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::ConstBasePluginDeclarationPtr cedar::aux::DeclarationManagerTemplate<BaseTypePtr>::getDeclarationNoThrow(const string&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DeclarationManagerTemplate.h:194:16: error: invalid exit from OpenMP structured block
+         return declaration;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/IntVectorParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:40:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/NumericVectorParameter.h:45:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/IntVectorParameter.h:43,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Kernel.h:42,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Separable.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.cpp:42:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h: In member function ‘bool cedar::aux::VectorParameter<T>::contains(const T&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/VectorParameter.h:321:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp: In member function ‘void cedar::aux::gl::Scene::draw()’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp:153:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+ #pragma acc kernels{
+                    ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/Scene.cpp:173:1: error: expected declaration before ‘}’ token
+ }
+ ^
+In file included from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Data.h:46:0,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/DataTemplate.h:45,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.h:41,
+                 from /home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:41:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:113:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation() const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:162:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘size_t cedar::aux::annotation::Annotatable::findAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:182:16: error: invalid exit from OpenMP structured block
+         return i;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h: In member function ‘bool cedar::aux::annotation::Annotatable::hasAnnotation(cedar::aux::annotation::AnnotationPtr) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/annotation/Annotatable.h:203:16: error: invalid exit from OpenMP structured block
+         return true;
+                ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp: In member function ‘void cedar::aux::conv::KernelList::calculateCombinedKernel()’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:155:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+ #pragma acc kernels{
+                    ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:168:77: error: ‘sizes’ was not declared in this scope
+     new_combined_kernel = cv::Mat(this->getKernel(0)->getDimensionality(), &sizes.front(), CV_32F);
+                                                                             ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:170:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+ #pragma acc kernels{
+                    ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/KernelList.cpp:184:3: error: expected declaration before ‘}’ token
+   }
+   ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp: In member function ‘virtual bool cedar::aux::conv::FFTW::checkCapability(cv::Mat, cv::Mat, cedar::aux::conv::BorderType::Id, cedar::aux::conv::Mode::Id) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:479:14: error: invalid exit from OpenMP structured block
+       return false;
+              ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:908: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Torus.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Torus.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:788: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/LocalCoordinateFrame.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/LocalCoordinateFrame.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:956: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Scene.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Scene.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:620: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Engine.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Engine.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:932: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Pyramid.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/Pyramid.cpp.o] Error 1
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp: In member function ‘void cedar::aux::gl::ObjectVisualization::loadVertexData(const QString&, unsigned int, cedar::aux::gl::ObjectVisualization::Vertex*)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:240:34: error: ‘text_stream’ referenced in target region does not have a mappable type
+       line = text_stream.readLine();
+                                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:240:12: error: ‘line’ referenced in target region does not have a mappable type
+       line = text_stream.readLine();
+            ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp: In member function ‘void cedar::aux::gl::ObjectVisualization::loadIndexData(const QString&, unsigned int, GLushort*)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:271:34: error: ‘text_stream’ referenced in target region does not have a mappable type
+       line = text_stream.readLine();
+                                  ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/gl/ObjectVisualization.cpp:271:12: error: ‘line’ referenced in target region does not have a mappable type
+       line = text_stream.readLine();
+            ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:860: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/ObjectVisualization.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/gl/ObjectVisualization.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:644: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/KernelList.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/KernelList.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:596: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Convolution.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/Convolution.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:716: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/Log.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/Log.cpp.o] Error 1
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringParameter.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/StringParameter.cpp:54:8: warning: ‘{anonymous}::registered’ defined but not used [-Wunused-variable]
+   bool registered = registerParameter();
+        ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:452: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/StringParameter.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/StringParameter.cpp.o] Error 1
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/OpenCV.cpp:54:8: warning: ‘{anonymous}::registered’ defined but not used [-Wunused-variable]
+   bool registered
+        ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:548: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/OpenCV.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/OpenCV.cpp.o] Error 1
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/UIntParameter.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/UIntParameter.cpp:55:8: warning: ‘{anonymous}::registered’ defined but not used [-Wunused-variable]
+   bool registered = registerParameter();
+        ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:668: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/DataSpectator.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/DataSpectator.cpp.o] Error 1
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:692: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/UIntParameter.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/UIntParameter.cpp.o] Error 1
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp: In member function ‘cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat&, const cv::Mat&) const’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:390:9: error: kernels construct inside of kernels region
+ #pragma acc kernels
+         ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:414:9: error: kernels construct inside of kernels region
+ #pragma acc kernels
+         ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp: In static member function ‘static fftw_plan_s* cedar::aux::conv::FFTW::getForwardPlan(unsigned int, std::vector<unsigned int>)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:547:23: error: ‘unique_identifier’ referenced in target region does not have a mappable type
+     unique_identifier += "." + cedar::aux::toString(sizes.at(i));
+                       ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp: In static member function ‘static fftw_plan_s* cedar::aux::conv::FFTW::getBackwardPlan(unsigned int, std::vector<unsigned int>)’:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:619:23: error: ‘unique_identifier’ referenced in target region does not have a mappable type
+     unique_identifier += "." + cedar::aux::toString(sizes.at(i));
+                       ^
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp: At global scope:
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/convolution/FFTW.cpp:73:8: warning: ‘{anonymous}::registered’ defined but not used [-Wunused-variable]
+   bool registered
+        ^
+cedar/auxiliaries/CMakeFiles/cedaraux.dir/build.make:500: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/FFTW.cpp.o' failed
+make[2]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/convolution/FFTW.cpp.o] Error 1
+CMakeFiles/Makefile2:85: recipe for target 'cedar/auxiliaries/CMakeFiles/cedaraux.dir/all' failed
+make[1]: *** [cedar/auxiliaries/CMakeFiles/cedaraux.dir/all] Error 2
+Makefile:160: recipe for target 'all' failed
+make: *** [all] Error 2
