@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -402,7 +402,6 @@ void cedar::proc::gui::GraphicsBase::writeConfiguration(cedar::aux::Configuratio
 
 bool cedar::proc::gui::GraphicsBase::hasGuiConnectionTo(GraphicsBase const* pTarget) const
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->mConnections.size(); ++i)
   {
     cedar::proc::gui::Connection* p_connection = this->mConnections.at(i);
@@ -801,7 +800,7 @@ QVariant cedar::proc::gui::GraphicsBase::itemChange(GraphicsItemChange change, c
       }
       break;
     }
-    
+
     case QGraphicsItem::ItemSelectedHasChanged:
     {
       this->itemSelectedChanged(value.toBool());
@@ -873,7 +872,7 @@ bool cedar::proc::gui::GraphicsBase::canResize() const
 void cedar::proc::gui::GraphicsBase::updateConnections()
 {
   QList<QGraphicsItem*> children = this->childItems();
-#pragma acc kernels
+
   for (int i = 0; i < children.size(); ++i)
   {
     if (cedar::proc::gui::GraphicsBase* child = dynamic_cast<cedar::proc::gui::GraphicsBase*>(children[i]))

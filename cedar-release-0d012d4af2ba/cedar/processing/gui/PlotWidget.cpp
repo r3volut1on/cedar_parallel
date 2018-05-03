@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -244,7 +244,7 @@ mConnectable(connectable),
 mGridSpacing(2),
 mColumns(2),
 mpLayout(new QGridLayout())
-{  
+{
   // make a copy of the data to be plotted
   this->mDataList.clear();
 #pragma acc kernels
@@ -362,7 +362,7 @@ void cedar::proc::gui::PlotWidget::fillGridWithPlots()
   };
 
   // iterate over all data slots
-#pragma acc kernels
+
   for (auto data_item : mDataList)
   {
     try
@@ -596,10 +596,8 @@ void cedar::proc::gui::PlotWidget::addPlotOfExternalData
 
 std::tuple<int, int> cedar::proc::gui::PlotWidget::findGridPositionOf(LabeledPlotPtr plot)
 {
-#pragma acc kernels
   for (int r = 0; r < this->mpLayout->rowCount(); ++r)
   {
-#pragma acc kernels
     for (int c = 0; c < this->mpLayout->columnCount(); ++c)
     {
       auto item = this->mpLayout->itemAtPosition(r, c);
@@ -713,9 +711,9 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
 
   cedar::aux::ConfigurationNode plot_settings;
 #pragma acc kernels
+{
   for (int row = 0; row < this->mpLayout->rowCount(); ++row)
   {
-#pragma acc kernels
     for (int col = 0; col < this->mpLayout->columnCount(); ++col)
     {
       auto layout_item = this->mpLayout->itemAtPosition(row, col);
@@ -725,7 +723,6 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
         auto widget = widget_item->widget();
         if (widget->layout())
         {
-#pragma acc kernels
           for (int i = 0; i < widget->layout()->count(); ++i)
           {
             auto item = dynamic_cast<QWidgetItem*>(widget->layout()->itemAt(i));
@@ -751,6 +748,7 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
       }
     }
   }
+}
 
   if (!plot_settings.empty())
   {
@@ -762,7 +760,7 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
 cedar::aux::ConfigurationNode cedar::proc::gui::PlotWidget::serialize(const cedar::proc::ElementDeclaration::DataList& dataList) const
 {
   cedar::aux::ConfigurationNode serialized_data;
-  
+
 #pragma acc kernels
   for (auto data_item: dataList)
   {
@@ -770,7 +768,7 @@ cedar::aux::ConfigurationNode cedar::proc::gui::PlotWidget::serialize(const ceda
     data_item->writeConfiguration(value_node);
     serialized_data.push_back(cedar::aux::ConfigurationNode::value_type("", value_node));
   }
-  
+
   return serialized_data;
 }
 
@@ -782,18 +780,17 @@ void cedar::proc::gui::PlotWidget::createAndShowFromConfiguration(const cedar::a
   int height = node.get<int>("height");
   int x = node.get<int>("position_x");
   int y = node.get<int>("position_y");
-  
+
   auto serialized_data_list = node.get_child("data_list");
   cedar::proc::ElementDeclaration::DataList data_list;
-  
-#pragma acc kernels
+
   for (auto data_item : serialized_data_list)
   {
     auto p_plot_data = cedar::proc::PlotDataPtr(new cedar::proc::PlotData());
     p_plot_data->readConfiguration(data_item.second);
     data_list.push_back(p_plot_data);
   }
-  
+
   auto p_plot_widget = new cedar::proc::gui::PlotWidget(pConnectable->getConnectable(), data_list);
   pConnectable->addPlotWidget(p_plot_widget, x, y, width, height);
 
@@ -826,8 +823,6 @@ void cedar::proc::gui::PlotWidget::createAndShowFromConfiguration(const cedar::a
       {
         continue;
       }
-
-#pragma acc kernels
       for (int i = 0; i < layout->count(); ++i)
       {
         auto item = dynamic_cast<QWidgetItem*>(layout->itemAt(i));

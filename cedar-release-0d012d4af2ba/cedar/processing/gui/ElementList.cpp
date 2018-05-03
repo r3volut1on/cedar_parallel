@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -659,6 +659,7 @@ void cedar::proc::gui::ElementList::reset()
 
   //!@todo This is inefficient; instead of resetting the entire list every time, just update each tab and create new ones if necessary
 #pragma acc kernels
+{
   for (const auto& category_name : cedar::proc::ElementManagerSingleton::getInstance()->listCategories())
   {
     CategoryTab *p_tab;
@@ -675,11 +676,9 @@ void cedar::proc::gui::ElementList::reset()
     }
 
     // sort the tabs alphabetically using bubble sort
-#pragma acc kernels
     for (int n = this->tabBar()->count(); n > 1; --n)
     {
       // start at i = 1 because the first tab is the favorites tab and should always stay in the first place
-#pragma acc kernels
       for (int i = 1; i < n - 1; ++i)
       {
         std::string text_1 = this->tabBar()->tabText(i).toStdString();
@@ -701,6 +700,7 @@ void cedar::proc::gui::ElementList::reset()
       mCategoryWidgets.erase(iter);
     }
   }
+}
 }
 
 void cedar::proc::gui::ElementList::updateSearchResults(QString searchText)

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -152,16 +152,17 @@ void cedar::proc::gui::GroupParameterDesigner::addParameterToList(cedar::aux::Pa
 void cedar::proc::gui::GroupParameterDesigner::fillParameterTypeBox()
 {
 #pragma acc kernels
+{
   for (auto category : cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->listCategories())
   {
     //!@todo category separator
-#pragma acc kernels
     for (auto declaration : cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->getCategoryEntries(category))
     {
       std::string class_name = declaration->getClassName();
       this->mpTypeSelector->addItem(QString::fromStdString(class_name));
     }
   }
+}
 }
 
 void cedar::proc::gui::GroupParameterDesigner::addClicked()

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -228,13 +228,11 @@ void cedar::proc::gui::ProjectionMappingParameter::propertyChanged()
     // including the option to drop an input
     QStringList output_dimensions;
     output_dimensions.push_back("drop");
-#pragma acc kernels
     for (unsigned int i = 0; i < parameter->getValue()->getOutputDimensionality(); ++i)
     {
       output_dimensions.push_back(cedar::aux::toString<unsigned int>(i).c_str());
     }
 
-#pragma acc kernels
     for (size_t i = 0; i < parameter->getValue()->getNumberOfMappings(); ++i)
     {
       QComboBox *p_widget = new QComboBox();

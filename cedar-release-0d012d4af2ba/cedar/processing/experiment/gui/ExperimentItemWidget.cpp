@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -131,13 +131,13 @@ void cedar::proc::experiment::gui::ExperimentItemWidget::objectParameterChanged(
   CEDAR_DEBUG_ASSERT(p_parameter->hasSingleConfigurableChild());
 
   QList<cedar::aux::gui::Parameter*> parameter_list = this->findChildren<cedar::aux::gui::Parameter*>();
-#pragma acc kernels
+
   for(cedar::aux::gui::Parameter* parameter : parameter_list)
   {
     if(parameter->getParameter().get() == p_parameter)
     {
       QLayoutItem* child;
-#pragma acc kernels
+
       for(int i=0; i < this->layout()->count() ; i++)
       {
         child = layout()->itemAt(i);
@@ -159,4 +159,3 @@ void cedar::proc::experiment::gui::ExperimentItemWidget::objectParameterChanged(
     }
   }
 }
-

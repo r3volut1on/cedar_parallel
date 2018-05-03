@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -146,7 +146,7 @@ cedar::proc::DataSlot::VALIDITY
     auto accepted_sizes = this->mAcceptedMinimumSizes.find(mat_data->getDimensionality());
     if (accepted_sizes != this->mAcceptedMinimumSizes.end())
     {
-#pragma acc kernels
+
       for (unsigned int i = 0; i < mat_data->getDimensionality(); ++i)
       {
         if (accepted_sizes->second.at(i).is_initialized())

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -452,7 +452,7 @@ void cedar::proc::gui::Ide::init(bool loadDefaultPlugins, bool redirectLogToGui,
   QObject::connect(this->mpActionEditPlotGroup, SIGNAL(triggered()), this, SLOT(editPlotGroup()));
   QObject::connect(this->mpActionDisplayPlotGroup, SIGNAL(triggered()), this, SLOT(displayPlotGroup()));
   QObject::connect(this->mpActionDeletePlotGroup, SIGNAL(triggered()), this, SLOT(deletePlotGroup()));
-  
+
 
 
   this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
@@ -934,6 +934,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
   // create a list of all items to be duplicated (take out items that will be duplicated by selected groups)
   QList<QGraphicsItem*> items_to_duplicate;
 #pragma acc kernels
+{
   for (auto item : selected)
   {
     item->setSelected(false);
@@ -952,7 +953,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
     if (add_to_list)
     {
       // check if the item has a parent within the selection
-#pragma acc kernels
       for (auto sub_item : selected)
       {
         if (sub_item->isAncestorOf(item))
@@ -972,6 +972,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
       items_to_duplicate.append(item);
     }
   }
+}
 
   if (items_to_duplicate.empty())
   {
@@ -990,6 +991,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
   std::vector<cedar::proc::DataConnectionPtr> duplicated_connections;
   // now try to find all connections between duplicated items
 #pragma acc kernels
+{
   for (auto connected_item : items_to_duplicate)
   {
     // first, try to get the underlying connectable and parent group for each item
@@ -1004,7 +1006,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
           // get a list of all outgoing connections for this element
           if (connectable->hasSlotForRole(cedar::proc::DataRole::OUTPUT))
           {
-#pragma acc kernels
             for (auto slot : connectable->getDataSlots(cedar::proc::DataRole::OUTPUT))
             {
               std::vector<cedar::proc::DataConnectionPtr> more_connections;
@@ -1013,7 +1014,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
             }
           }
           // now check if any of these connections point to an element in the list of duplicates
-#pragma acc kernels
           for (auto con : connections)
           {
             auto target = this->mpProcessingDrawer->getScene()->getGraphicsItemFor(con->getTarget()->getParentPtr());
@@ -1026,6 +1026,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
       }
     }
   }
+}
 
   std::vector<std::pair<cedar::proc::Connectable*, cedar::proc::OwnedDataPtr> > outgoing_slots;
   std::vector<std::pair<cedar::proc::Connectable*, cedar::proc::ExternalDataPtr> > receiving_slots;
@@ -1037,6 +1038,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
   }
   // perform the actual duplication
 #pragma acc kernels
+{
   for (int i = 0; i < items_to_duplicate.size(); ++i)
   {
     if (auto p_base = dynamic_cast<cedar::proc::gui::Element*>(items_to_duplicate.at(i)))
@@ -1055,12 +1057,11 @@ void cedar::proc::gui::Ide::duplicateSelected()
           auto mapped = new_pos - group->scenePos();
           auto mapped_center = group->mapFromScene(center);
           auto p_new = group->duplicate(mapped - (mapped_center - p_base->pos()), p_base->getElement()->getName());
-          
+
           // select the new item
           p_new->setSelected(true);
-          
+
           // replace any slots with new ones
-#pragma acc kernels
           for (auto& out : outgoing_slots)
           {
             if (out.first == p_base->getElement().get())
@@ -1068,7 +1069,6 @@ void cedar::proc::gui::Ide::duplicateSelected()
               out.second = boost::dynamic_pointer_cast<cedar::proc::Connectable>(p_new->getElement())->getOutputSlot(out.second->getName());
             }
           }
-#pragma acc kernels
           for (auto& in : receiving_slots)
           {
             if (in.first == p_base->getElement().get())
@@ -1084,6 +1084,7 @@ void cedar::proc::gui::Ide::duplicateSelected()
       }
     }
   }
+}
 
   // now duplicate connections between duplicated elements
 #pragma acc kernels
@@ -1525,7 +1526,7 @@ bool cedar::proc::gui::Ide::saveAs()
   this->mGroup->writeJson(file.toStdString());
   this->displayFilename(file.toStdString());
   this->setArchitectureChanged(false);
-  
+
   cedar::proc::gui::SettingsSingleton::getInstance()->appendArchitectureFileToHistory(file.toStdString());
 
   QString path = file.remove(file.lastIndexOf(QDir::separator()), file.length());
@@ -1899,7 +1900,7 @@ void cedar::proc::gui::Ide::editPlotGroup()
     this->setArchitectureChanged(true);
   }
 }
-  
+
 void cedar::proc::gui::Ide::renamePlotGroup()
 {
   bool ok;

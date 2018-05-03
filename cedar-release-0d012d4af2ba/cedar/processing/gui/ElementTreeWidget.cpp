@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -319,13 +319,13 @@ QTreeWidgetItem* cedar::proc::gui::ElementTreeWidget::getGroupItem(const std::st
 
   QTreeWidgetItem* p_last = this->invisibleRootItem();
 #pragma acc kernels
+{
   for (size_t path_index = 0; path.getElementCount() > 0 && path_index < path.getElementCount() - 1; ++path_index)
   {
     std::string component = path[path_index];
     QTreeWidgetItem* p_item = nullptr;
 
     // find the item that corresponds to the group
-#pragma acc kernels
     for (int i = 0; i < p_last->childCount(); ++i)
     {
       auto child = p_last->child(i);
@@ -353,6 +353,7 @@ QTreeWidgetItem* cedar::proc::gui::ElementTreeWidget::getGroupItem(const std::st
     }
     p_last = p_item;
   }
+}
 
   return p_last;
 }

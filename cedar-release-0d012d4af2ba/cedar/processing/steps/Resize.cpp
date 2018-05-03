@@ -261,10 +261,10 @@ void cedar::proc::steps::Resize::linearInterpolationNDRecursion
     index.resize(target.dims, 0);
     // iterate over all possible combinations
 #pragma acc kernels
+{
     for(unsigned int i = 0; i < num_combinations; ++i)
     {
       // build interpolation index: the first n - 1 dimensions
-#pragma acc kernels
       for (size_t j = 0; j < static_cast<size_t>(source.dims) - 1; ++j)
       {
         // decide if the lower or upper bound is used
@@ -284,6 +284,7 @@ void cedar::proc::steps::Resize::linearInterpolationNDRecursion
       // interpolate!
       interpolatedValues.at(i) = difference * (lower_value - upper_value) + upper_value;
     }
+  }
   }
   else
   {

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -264,7 +264,6 @@ void cedar::proc::gui::ExperimentDialog::runExperiment()
       details += "The following ";
       details += issue;
       details += " occurred:\n\n";
-#pragma acc kernels
       for (const auto& item : list)
       {
         details += QString::fromStdString(item) + "\n";

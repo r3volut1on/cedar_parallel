@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -103,6 +103,7 @@ void cedar::proc::Connectable::readConfiguration(const cedar::aux::Configuration
 void cedar::proc::Connectable::writeData(cedar::aux::ConfigurationNode& stored_data) const
 {
 #pragma acc kernels
+{
   for (auto role_enum : cedar::proc::DataRole::type().list())
   {
     if (!this->hasSlotForRole(role_enum.id()))
@@ -112,7 +113,6 @@ void cedar::proc::Connectable::writeData(cedar::aux::ConfigurationNode& stored_d
 
     cedar::aux::ConfigurationNode role_stored_data;
 
-#pragma acc kernels
     for (auto slot : this->getOrderedDataSlots(role_enum.id()))
     {
       std::stringstream stream;
@@ -130,6 +130,7 @@ void cedar::proc::Connectable::writeData(cedar::aux::ConfigurationNode& stored_d
       stored_data.push_back(cedar::aux::ConfigurationNode::value_type(role_enum.name(), role_stored_data));
     }
   }
+}
 }
 
 void cedar::proc::Connectable::writeDataFile(const cedar::aux::Path& file) const
@@ -152,6 +153,7 @@ void cedar::proc::Connectable::readDataFile(const cedar::aux::Path& file)
 void cedar::proc::Connectable::readData(const cedar::aux::ConfigurationNode& stored_data)
 {
 #pragma acc kernels
+{
   for (auto role_enum : cedar::proc::DataRole::type().list())
   {
     auto role_data_iter = stored_data.find(role_enum.name());
@@ -163,7 +165,6 @@ void cedar::proc::Connectable::readData(const cedar::aux::ConfigurationNode& sto
 
     const auto& role_node = role_data_iter->second;
 
-#pragma acc kernels
     for (const auto& subnode_iter : role_node)
     {
       const auto& slot_name = subnode_iter.first;
@@ -178,6 +179,7 @@ void cedar::proc::Connectable::readData(const cedar::aux::ConfigurationNode& sto
       }
     }
   }
+}
 }
 
 void cedar::proc::Connectable::redetermineInputValidity(const std::string& slot)
@@ -367,13 +369,13 @@ bool cedar::proc::Connectable::ownsDataOf(cedar::proc::ConstOwnedDataPtr slot) c
   owners.push_back(cedar::proc::DataRole::BUFFER);
   owners.push_back(cedar::proc::DataRole::OUTPUT);
 
-#pragma acc kernels
+
   for (auto role : owners)
   {
     std::map<DataRole::Id, SlotMap>::const_iterator map_iter = this->mSlotMaps.find(role);
     if (map_iter != this->mSlotMaps.end())
     {
-#pragma acc kernels
+
       for (SlotMap::const_iterator slot_iter = map_iter->second.begin(); slot_iter != map_iter->second.end(); ++slot_iter)
       {
         if (slot_iter->second->getData() == slot->getData())
@@ -405,7 +407,7 @@ bool cedar::proc::Connectable::hasSlotForRole(cedar::proc::DataRole::Id role) co
   if (iter == this->mDataConnectionsOrder.end())
   {
     return false;
-  }  
+  }
   return true;
 }
 
@@ -541,7 +543,7 @@ cedar::proc::DataSlot::VALIDITY cedar::proc::Connectable::updateInputValidity(ce
           locker = cedar::aux::Lockable::ReadLockerPtr(new cedar::aux::Lockable::ReadLocker(this));
         }
       }
-      
+
       auto external_data_slot = cedar::aux::asserted_pointer_cast<cedar::proc::ExternalData>(slot);
 
       // we assume the slot is valid and look for evidence to the contrary
@@ -669,9 +671,9 @@ void cedar::proc::Connectable::checkMandatoryConnections()
   mMissingMandatoryConnections.clear();
   // then test every input. If one is false, return that.
 #pragma acc kernels
+{
   for (const auto& role_slot_map_pair : this->mSlotMaps)
   {
-#pragma acc kernels
     for (const auto& name_slot_pair : role_slot_map_pair.second)
     {
       const auto& slot = name_slot_pair.second;
@@ -688,6 +690,7 @@ void cedar::proc::Connectable::checkMandatoryConnections()
       }
     }
   }
+}
 }
 
 cedar::proc::DataSlotPtr cedar::proc::Connectable::declareData
@@ -1263,13 +1266,13 @@ std::map<std::string, cedar::unit::Time> cedar::proc::Connectable::unregisterRec
   roles.push_back(cedar::proc::DataRole::OUTPUT);
   std::map<std::string, cedar::unit::Time> removed_recorded_data;
 #pragma acc kernels
+{
   for (auto role : roles)
   {
     // if any data of this step is recorded, we have to remove them from the recorder
     if (this->hasSlotForRole(role))
     {
       // we have to check every buffer if it is registered at recorder
-#pragma acc kernels
       for (auto slot : this->getDataSlots(role))
       {
         std::string data_path = slot.second->getDataPath().toString();
@@ -1283,6 +1286,7 @@ std::map<std::string, cedar::unit::Time> cedar::proc::Connectable::unregisterRec
       }
     }
   }
+}
   return removed_recorded_data;
 }
 
@@ -1292,14 +1296,14 @@ bool cedar::proc::Connectable::isRecorded() const
   slotTypes.push_back(cedar::proc::DataRole::BUFFER);
   slotTypes.push_back(cedar::proc::DataRole::OUTPUT);
 
-#pragma acc kernels
+
   for (unsigned int s = 0; s < slotTypes.size(); s++)
   {
 
     if (this->hasSlotForRole(slotTypes[s]))
     {
       cedar::proc::Connectable::SlotList dataSlots = this->getOrderedDataSlots(slotTypes[s]);
-#pragma acc kernels
+
       for (unsigned int i = 0; i < dataSlots.size(); i++)
       {
         if (cedar::aux::RecorderSingleton::getInstance()->isRegistered(dataSlots[i]->getDataPath().toString()))

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -81,7 +81,7 @@ mMainWindowState(new cedar::aux::StringParameter(this, "mainWindowState", ""))
 {
   cedar::aux::ConfigurablePtr ui_settings(new cedar::aux::Configurable());
   this->addConfigurableChild("ui", ui_settings);
-  
+
   ui_settings->addConfigurableChild("log", mLog);
   ui_settings->addConfigurableChild("steps", mSteps);
   ui_settings->addConfigurableChild("tools", mTools);
@@ -297,7 +297,6 @@ void cedar::proc::gui::Settings::setFavorite(const std::string& className, bool 
 
 bool cedar::proc::gui::Settings::isFavoriteElement(const std::string& className) const
 {
-#pragma acc kernels
   for (const auto& favorite : this->getFavedElements())
   {
     if (favorite == className)
@@ -554,7 +553,7 @@ void cedar::proc::gui::Settings::storeMainWindow(QMainWindow *pWindow)
   QByteArray window_state = pWindow->saveState();
   QByteArray window_state_hex = window_state.toHex();
   mMainWindowState->setValue(window_state_hex.constData());
-  
+
   QByteArray window_geometry = pWindow->saveGeometry();
   QByteArray window_geometry_hex = window_geometry.toHex();
   mMainWindowGeometry->setValue(window_geometry_hex.constData());
@@ -568,7 +567,7 @@ void cedar::proc::gui::Settings::restoreMainWindow(QMainWindow *pWindow)
   {
     std::cout << "Could not restore state of the main window." << std::endl;
   }
-  
+
   QByteArray window_geometry_hex(mMainWindowGeometry->getValue().c_str());
   QByteArray window_geometry = QByteArray::fromHex(window_geometry_hex);
   if (!pWindow->restoreGeometry(window_geometry))

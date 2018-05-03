@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -205,13 +205,12 @@ void cedar::proc::steps::Component::componentChanged()
   }
 
 #pragma acc kernels
+{
   for (auto type_it = types.begin(); type_it != types.end(); ++type_it)
   {
     cedar::dev::Component::DataType type = *type_it;
 
     std::vector<std::string> data_names = component->getDataNames(type);
-
-#pragma acc kernels
     for (auto name_iter = data_names.begin(); name_iter != data_names.end(); ++name_iter)
     {
       const std::string& name = *name_iter;
@@ -227,4 +226,5 @@ void cedar::proc::steps::Component::componentChanged()
       }
     }
   }
+}
 }

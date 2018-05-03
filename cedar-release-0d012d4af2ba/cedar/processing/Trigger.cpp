@@ -333,6 +333,7 @@ void cedar::proc::Trigger::exploreGroupTarget
 
   // go through all the output slots of the source connectable
 #pragma acc kernels
+{
   for (auto slot : source_connectable->getOrderedDataSlots(cedar::proc::DataRole::OUTPUT))
   {
 #ifdef DEBUG_TRIGGER_TREE_EXPLORATION
@@ -342,7 +343,7 @@ void cedar::proc::Trigger::exploreGroupTarget
     parent_group->getDataConnectionsFrom(source_connectable, slot->getName(), connections);
 
     // go through all connections originating from the slot and check if they go to the target group
-#pragma acc kernels
+
     for (auto connection : connections)
     {
       auto target_slot = connection->getTarget();
@@ -369,6 +370,7 @@ void cedar::proc::Trigger::exploreGroupTarget
       }
     }
   }
+}
 }
 
 /*!
@@ -591,15 +593,16 @@ void cedar::proc::Trigger::updateTriggeringOrder(std::set<cedar::proc::Trigger*>
     std::vector<std::set<cedar::proc::TriggerablePtr> > triggerable_cycles;
     triggerable_cycles.resize(cycles.size());
 #pragma acc kernels
+{
     for (size_t i = 0; i < cycles.size(); ++i)
     {
-#pragma acc kernels
       for (auto iter = cycles.at(i).begin(); iter != cycles.at(i).end(); ++iter)
       {
         auto node = *iter;
         triggerable_cycles.at(i).insert(node->getPayload());
       }
     }
+  }
 
     cedar::proc::TriggerCycleException exception(triggerable_cycles);
     CEDAR_THROW_EXCEPTION(exception);
@@ -756,7 +759,7 @@ void cedar::proc::Trigger::updateTriggeringOrderRecurseUpSource(cedar::proc::sou
 #ifdef DEBUG_TRIGGER_TREE_EXPLORATION
 /* DEBUG_TRIGGER_TREE_EXPLORATION */ std::cout << " Iterating connections." << std::endl;
 #endif
-#pragma acc kernels
+
   for (auto connection : group->getInputSlot(source->getName())->getDataConnections())
   {
     auto source_triggerable = dynamic_cast<cedar::proc::Triggerable*>(connection->getSource()->getParentPtr());
@@ -800,10 +803,11 @@ void cedar::proc::Trigger::trigger(cedar::proc::ArgumentsPtr arguments)
 #endif
 
 #pragma acc kernels
+{
   for (auto order_triggerables_pair : this->mTriggeringOrder.member())
   {
     auto triggerables = order_triggerables_pair.second;
-#pragma acc kernels
+
     for (cedar::proc::TriggerablePtr triggerable : triggerables)
     {
 #ifdef DEBUG_TRIGGERING
@@ -817,6 +821,7 @@ void cedar::proc::Trigger::trigger(cedar::proc::ArgumentsPtr arguments)
 #endif
     }
   }
+}
 #ifdef DEBUG_TRIGGERING
 /* DEBUG_TRIGGERING */ std::cout << "< Done triggering " << nameTrigger(this) << std::endl;
 #endif
@@ -892,7 +897,6 @@ void cedar::proc::Trigger::removeListener(cedar::proc::Triggerable* triggerable)
 
 std::vector<cedar::proc::TriggerablePtr>::iterator cedar::proc::Trigger::find(cedar::proc::Triggerable* triggerable)
 {
-#pragma acc kernels
   for (auto iter = this->mListeners.member().begin(); iter != this->mListeners.member().end(); ++iter)
   {
     if (iter->get() == triggerable)
@@ -925,7 +929,7 @@ void cedar::proc::Trigger::writeConfiguration(cedar::aux::ConfigurationNode& nod
 
   QReadLocker lock(this->mListeners.getLockPtr());
   cedar::aux::ConfigurationNode listeners;
-#pragma acc kernels
+
   for (cedar::proc::TriggerablePtr triggerable : this->mListeners.member())
   {
     cedar::aux::ConfigurationNode listener(boost::dynamic_pointer_cast<cedar::proc::Element>(triggerable)->getName());

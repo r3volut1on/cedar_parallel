@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -385,7 +385,7 @@ void cedar::proc::experiment::StepPropertyParameter::allowType(const std::string
 
 bool cedar::proc::experiment::StepPropertyParameter::isAllowType(const std::string& type)
 {
-#pragma acc kernels
+
   for (std::string allowed_type : allowedTypes)
   {
     if (allowed_type == type)
@@ -495,6 +495,7 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
 
   std::vector<std::string> step_parameter_paths = configurable->listAllParameters();
 #pragma acc kernels
+{
   for (const auto& parameter_path : step_parameter_paths)
   {
     try
@@ -509,7 +510,6 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
       std::string parameter_type = cedar::aux::ParameterDeclarationManagerSingleton::getInstance()->getTypeId(parameter);
       if (this->getAllowedTypes().size() > 0)
       {
-#pragma acc kernels
         for (auto type : this->getAllowedTypes())
         {
           if (type == parameter_type)
@@ -528,5 +528,6 @@ std::vector<std::string> cedar::proc::experiment::StepPropertyParameter::getList
     {
     }
   }
+}
   return list;
 }

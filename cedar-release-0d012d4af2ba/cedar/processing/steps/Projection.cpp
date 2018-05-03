@@ -483,13 +483,12 @@ void cedar::proc::steps::Projection::expand2Dto3D()
     if (mMappingLookup.at(0) == 1) // not flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(target_index, x, y) = value;
@@ -497,16 +496,16 @@ void cedar::proc::steps::Projection::expand2Dto3D()
         }
       }
     }
+    }
     else // flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(target_index, y, x) = value;
@@ -514,19 +513,19 @@ void cedar::proc::steps::Projection::expand2Dto3D()
         }
       }
     }
+    }
   }
   else if (std::find(mMappingLookup.begin(), mMappingLookup.end(), 1) == mMappingLookup.end()) // expand over dim 1
   {
     if (mMappingLookup.at(0) == 0) // not flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[1]; ++ target_index)
           {
             output.at<T>(x, target_index, y) = value;
@@ -534,16 +533,16 @@ void cedar::proc::steps::Projection::expand2Dto3D()
         }
       }
     }
+    }
     else // flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[0]; ++ target_index)
           {
             output.at<T>(y, target_index, x) = value;
@@ -551,19 +550,19 @@ void cedar::proc::steps::Projection::expand2Dto3D()
         }
       }
     }
+    }
   }
   else if (std::find(mMappingLookup.begin(), mMappingLookup.end(), 2) == mMappingLookup.end()) // expand over dim 2
   {
     if (mMappingLookup.at(0) == 0) // not flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[2]; ++target_index)
           {
             output.at<T>(x, y, target_index) = value;
@@ -571,22 +570,23 @@ void cedar::proc::steps::Projection::expand2Dto3D()
         }
       }
     }
+    }
     else // flipped
     {
 #pragma acc kernels
+{
       for (x = 0; x < input.size[0]; ++x)
       {
-#pragma acc kernels
         for (y = 0; y < input.size[1]; ++y)
         {
           value = input.at<T>(x, y);
-#pragma acc kernels
           for (target_index = 0; target_index < output.size[2]; ++ target_index)
           {
             output.at<T>(y, x, target_index) = value;
           }
         }
       }
+    }
     }
   }
   else
@@ -646,20 +646,20 @@ void cedar::proc::steps::Projection::expand1Dto3D()
       T value;
       // outer loop
 #pragma acc kernels
+{
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[1]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[2]; ++y)
           {
             output.at<T>(source_index, x, y) = value;
           }
         }
       }
+    }
       break;
     }
     case 1:
@@ -667,20 +667,20 @@ void cedar::proc::steps::Projection::expand1Dto3D()
       T value;
       // outer loop
 #pragma acc kernels
+{
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[0]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[2]; ++y)
           {
             output.at<T>(x, source_index, y) = value;
           }
         }
       }
+    }
       break;
     }
     case 2:
@@ -688,20 +688,20 @@ void cedar::proc::steps::Projection::expand1Dto3D()
       T value;
       // outer loop
 #pragma acc kernels
+{
       for (int source_index = 0; source_index < input.rows; ++ source_index)
       {
         // get value
         value = input.at<T>(source_index, 0);
-#pragma acc kernels
         for (x = 0; x < output.size[0]; ++x)
         {
-#pragma acc kernels
           for (y = 0; y < output.size[1]; ++y)
           {
             output.at<T>(x, y, source_index) = value;
           }
         }
       }
+    }
       break;
     }
     default:
@@ -1106,7 +1106,7 @@ void cedar::proc::steps::Projection::inputConnectionChanged(const std::string& i
   }
 
   unsigned int input_dimensionality = cedar::aux::math::getDimensionalityOf(this->mInput->getData());
-  
+
   this->_mDimensionMappings->initialize(input_dimensionality);
 
   this->reconfigure(false);

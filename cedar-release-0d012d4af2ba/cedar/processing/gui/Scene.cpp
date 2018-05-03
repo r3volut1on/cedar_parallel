@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -329,7 +329,6 @@ void cedar::proc::gui::Scene::emitSceneChanged()
 void cedar::proc::gui::Scene::helpEvent(QGraphicsSceneHelpEvent* pHelpEvent)
 {
   auto items = this->items(pHelpEvent->scenePos());
-#pragma acc kernels
   for (auto item : items)
   {
     if (auto base_item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(item))
@@ -392,7 +391,6 @@ void cedar::proc::gui::Scene::itemSelected()
 {
   // either show the resize handles if only one item is selected, or hide them if more than one is selected
   auto selected_items = this->selectedItems();
-#pragma acc kernels
   for (int i = 0; i < selected_items.size(); ++i)
   {
     if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(selected_items.at(i)))
@@ -523,7 +521,7 @@ void cedar::proc::gui::Scene::setMode(MODE mode, const QString& param)
 
 cedar::proc::gui::GraphicsBase* cedar::proc::gui::Scene::findConnectableItem(const QList<QGraphicsItem*>& items)
 {
-#pragma acc kernels
+
   for (int i = 0; i < items.size(); ++i)
   {
     if (auto graphics_item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items[i]))
@@ -540,7 +538,7 @@ cedar::proc::gui::GraphicsBase* cedar::proc::gui::Scene::findConnectableItem(con
 
 cedar::proc::gui::Group* cedar::proc::gui::Scene::findFirstGroupItem(const QList<QGraphicsItem*>& items)
 {
-#pragma acc kernels
+
   for (int i = 0; i < items.size(); ++i)
   {
     if (auto graphics_item = dynamic_cast<cedar::proc::gui::Group*>(items[i]))
@@ -604,7 +602,7 @@ void cedar::proc::gui::Scene::mousePressEvent(QGraphicsSceneMouseEvent *pMouseEv
     {
       if (!dynamic_cast<cedar::proc::gui::ResizeHandle*>(items.at(0)))
       {
-#pragma acc kernels
+
         for (int i = 0; i < items.size(); ++i)
         {
           if (auto graphics_base = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items.at(i)))
@@ -648,7 +646,7 @@ QList<QGraphicsItem*> cedar::proc::gui::Scene::getSelectedParents() const
   auto selected = this->selectedItems();
   QList<QGraphicsItem*> selected_parents;
 
-#pragma acc kernels
+
   for (int i = 0; i < selected.size(); ++i)
   {
     auto item = selected.at(i);
@@ -689,7 +687,7 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   bool target_is_root_group = true;
 
   // ... and look for a new one
-#pragma acc kernels
+
   for (int i = 0; i < items_under_mouse.size(); ++i)
   {
     if (items_under_mouse.at(i)->isSelected())
@@ -724,7 +722,7 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   // highlight the source groups
   if (potential_target_group_found)
   {
-#pragma acc kernels
+
     for (int i = 0; i < selected.size(); ++i)
     {
       auto item = selected.at(i);
@@ -743,7 +741,6 @@ void cedar::proc::gui::Scene::highlightTargetGroups(const QPointF& mousePosition
   }
   else
   {
-#pragma acc kernels
     for (int i = 0; i < selected.size(); ++i)
     {
       auto item = selected.at(i);
@@ -793,7 +790,7 @@ void cedar::proc::gui::Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *pMouse
 
   // reset highlighting of the groups from which the items are being removed
   auto selected = this->selectedItems();
-#pragma acc kernels
+
   for (int i = 0; i < selected.size(); ++i)
   {
     auto item = selected.at(i);
@@ -1057,7 +1054,7 @@ void cedar::proc::gui::Scene::connectModeProcessMousePress(QGraphicsSceneMouseEv
 
       // Highlight all potential connection targets
       QList<QGraphicsItem*> all_items = this->items();
-#pragma acc kernels
+
       for (int i = 0; i < all_items.size(); ++i)
       {
         if (cedar::proc::gui::GraphicsBase* item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(all_items.at(i)))
@@ -1093,7 +1090,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseMove(QGraphicsSceneMouseEve
     {
       cedar::proc::gui::GraphicsBase* target;
       bool connected = false;
-#pragma acc kernels
+
       for (int i = 0; i < items.size() && !connected; ++i)
       {
         if
@@ -1160,11 +1157,11 @@ void cedar::proc::gui::Scene::connectModeProcessMouseRelease(QGraphicsSceneMouse
   if (items.size() > 0)
   {
     bool connected = false;
-#pragma acc kernels
+
     for (int i = 0; i < items.size() && !connected; ++i)
     {
       cedar::proc::gui::GraphicsBase *target;
-      if 
+      if
       (
         (target = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items[i]))
           && mpConnectionStart->canConnectTo(target) != cedar::proc::gui::CONNECT_NO
@@ -1235,7 +1232,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseRelease(QGraphicsSceneMouse
             break;
         } // switch (mpConnectionStart->getGroup())
       }
-      else if 
+      else if
       (
         (target = dynamic_cast<cedar::proc::gui::GraphicsBase*>(items[i]))
           && mpConnectionStart == target
@@ -1260,7 +1257,7 @@ void cedar::proc::gui::Scene::connectModeProcessMouseRelease(QGraphicsSceneMouse
   }
 
   QList<QGraphicsItem*> all_items = this->items();
-#pragma acc kernels
+
   for (int i = 0; i < all_items.size(); ++i)
   {
     if (cedar::proc::gui::GraphicsBase* item = dynamic_cast<cedar::proc::gui::GraphicsBase*>(all_items.at(i)))
@@ -1592,7 +1589,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
     case MODE_HIDE_ALL:
     {
       QList<QGraphicsItem *> selected_items = this->items();
-#pragma acc kernels
+
       for (int i = 0; i < selected_items.size(); ++i)
       {
         if (dynamic_cast<cedar::proc::gui::TriggerItem*>(selected_items.at(i)))
@@ -1605,7 +1602,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
     case MODE_SHOW_ALL:
     {
       QList<QGraphicsItem *> selected_items = this->items();
-#pragma acc kernels
+
       for (int i = 0; i < selected_items.size(); ++i)
       {
         if (dynamic_cast<cedar::proc::gui::TriggerItem*>(selected_items.at(i)))
@@ -1629,7 +1626,7 @@ void cedar::proc::gui::Scene::handleTriggerModeChange()
 void cedar::proc::gui::Scene::selectAll()
 {
   QList<QGraphicsItem*> selected_items = this->items();
-#pragma acc kernels
+
   for (int i = 0; i < selected_items.size(); ++i)
   {
     selected_items.at(i)->setSelected(true);
@@ -1639,7 +1636,7 @@ void cedar::proc::gui::Scene::selectAll()
 void cedar::proc::gui::Scene::selectNone()
 {
   QList<QGraphicsItem*> selected_items = this->items();
-#pragma acc kernels
+
   for (int i = 0; i < selected_items.size(); ++i)
   {
     selected_items.at(i)->setSelected(false);

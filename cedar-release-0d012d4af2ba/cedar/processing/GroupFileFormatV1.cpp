@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -146,7 +146,6 @@ void cedar::proc::GroupFileFormatV1::writeMetaData(cedar::proc::ConstGroupPtr gr
   if (!required_plugins.empty())
   {
     cedar::aux::ConfigurationNode required_plugins_node;
-#pragma acc kernels
     for (auto plugin_path : required_plugins)
     {
       cedar::aux::ConfigurationNode value_node;
@@ -328,7 +327,7 @@ void cedar::proc::GroupFileFormatV1::read
      * it.
      */
     cedar::aux::ConfigurationNode root_copy = root;
-#pragma acc kernels
+
     for (auto parameter : group->getParameters())
     {
       auto param_iter = root_copy.find(parameter->getName());
@@ -840,6 +839,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
   }
 
 #pragma acc kernels
+{
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin();
       iter != root.end();
       ++iter)
@@ -851,7 +851,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
         = group->getElement<cedar::proc::Trigger>(trigger_node.get_child("name").get_value<std::string>());
       const cedar::aux::ConfigurationNode& listeners = trigger_node.get_child("listeners");
 
-#pragma acc kernels
+
       for (cedar::aux::ConfigurationNode::const_iterator listener_iter = listeners.begin();
           listener_iter != listeners.end();
           ++listener_iter)
@@ -888,6 +888,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
       // no listeners declared -- this is ok.
     }
   }
+}
 }
 
 void cedar::proc::GroupFileFormatV1::readSteps
