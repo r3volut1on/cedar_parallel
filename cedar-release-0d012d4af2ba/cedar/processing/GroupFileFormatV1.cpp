@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -179,6 +179,7 @@ void cedar::proc::GroupFileFormatV1::writeDataConnections
        cedar::aux::ConfigurationNode& root
      ) const
 {
+#pragma acc kernels
   for (auto data_connection : group->getDataConnections())
   {
     this->writeDataConnection(root, data_connection);
@@ -191,6 +192,7 @@ void cedar::proc::GroupFileFormatV1::writeSteps
        cedar::aux::ConfigurationNode& steps
      ) const
 {
+#pragma acc kernels
   for (auto& name_element_pair : group->getElements())
   {
     auto element = name_element_pair.second;
@@ -219,6 +221,7 @@ void cedar::proc::GroupFileFormatV1::writeTriggers
        cedar::aux::ConfigurationNode& triggers
      ) const
 {
+#pragma acc kernels
   for (auto& name_element_pair : group->getElements())
   {
     auto element = name_element_pair.second;
@@ -243,6 +246,7 @@ void cedar::proc::GroupFileFormatV1::writeRecords
   if (group->isRoot())
   {
     std::map<std::string, cedar::unit::Time> dataMap = cedar::aux::RecorderSingleton::getInstance()->getRegisteredData();
+#pragma acc kernels
     for (auto iter = dataMap.begin(); iter != dataMap.end(); ++iter)
     {
       cedar::aux::ConfigurationNode recorder_node(cedar::aux::toString<cedar::unit::Time>(iter->second));
@@ -257,6 +261,7 @@ void cedar::proc::GroupFileFormatV1::writeGroups
        cedar::aux::ConfigurationNode& groups
      ) const
 {
+#pragma acc kernels
   for (auto& name_element_pair : group->getElements())
   {
     auto element = name_element_pair.second;
@@ -322,6 +327,7 @@ void cedar::proc::GroupFileFormatV1::read
      * it.
      */
     cedar::aux::ConfigurationNode root_copy = root;
+
     for (auto parameter : group->getParameters())
     {
       auto param_iter = root_copy.find(parameter->getName());
@@ -395,6 +401,7 @@ void cedar::proc::GroupFileFormatV1::writeParameterLinks
      )
      const
 {
+#pragma acc kernels
   for (const auto& link_info : group->mParameterLinks)
   {
     cedar::aux::ConfigurationNode link_node;
@@ -434,6 +441,7 @@ void cedar::proc::GroupFileFormatV1::writeParameterLinks
 
 void cedar::proc::GroupFileFormatV1::writeScripts(cedar::proc::ConstGroupPtr group, cedar::aux::ConfigurationNode& node) const
 {
+#pragma acc kernels
   for (auto script : group->getOrderedScripts())
   {
     std::string type = cedar::proc::CppScriptDeclarationManagerSingleton::getInstance()->getTypeId(script);
@@ -454,6 +462,7 @@ void cedar::proc::GroupFileFormatV1::writeScripts(cedar::proc::ConstGroupPtr gro
 
 void cedar::proc::GroupFileFormatV1::writeCustomParameters(cedar::proc::ConstGroupPtr group, cedar::aux::ConfigurationNode& customParameters) const
 {
+#pragma acc kernels
   for (auto parameter : group->getCustomParameters())
   {
     cedar::aux::ConfigurationNode custom_parameter;
@@ -474,6 +483,7 @@ void cedar::proc::GroupFileFormatV1::readCustomParameters
        std::vector<std::string>& /* exceptions */
      )
 {
+#pragma acc kernels
   for (const auto& param_iter : customParameters)
   {
     const auto& node = param_iter.second;
@@ -504,6 +514,7 @@ void cedar::proc::GroupFileFormatV1::readScripts
   std::vector<std::string>& /* exceptions */
 )
 {
+#pragma acc kernels
   for (const auto& link_iter : root)
   {
     const auto& node = link_iter.second;
@@ -533,6 +544,7 @@ void cedar::proc::GroupFileFormatV1::readParameterLinks
        std::vector<std::string>& /* exceptions */
      )
 {
+#pragma acc kernels
   for (const auto& link_iter : root)
   {
     const auto& node = link_iter.second;
@@ -640,6 +652,7 @@ void cedar::proc::GroupFileFormatV1::readRecords
     cedar::aux::RecorderSingleton::getInstance()->clear();
     // create a new map to get a better data structure
     std::map<std::string, cedar::unit::Time> data;
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator node_iter = root.begin();
          node_iter != root.end();
          ++node_iter)
@@ -647,6 +660,7 @@ void cedar::proc::GroupFileFormatV1::readRecords
       data[node_iter->first] = node_iter->second.get_value<cedar::unit::Time>();
     }
 
+#pragma acc kernels
     for (auto entry : data)
     {
       // decide if the entry is of old or new format
@@ -739,6 +753,7 @@ void cedar::proc::GroupFileFormatV1::readDataConnections
        std::vector<std::string>& exceptions
      )
 {
+#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin();
       iter != root.end();
       ++iter)
@@ -771,6 +786,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
        std::vector<std::string>& exceptions
      )
 {
+#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin();
       iter != root.end();
       ++iter)
@@ -822,6 +838,8 @@ void cedar::proc::GroupFileFormatV1::readTriggers
     trigger->resetChangedStates(false);
   }
 
+#pragma acc kernels
+{
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin();
       iter != root.end();
       ++iter)
@@ -832,6 +850,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
       cedar::proc::TriggerPtr trigger
         = group->getElement<cedar::proc::Trigger>(trigger_node.get_child("name").get_value<std::string>());
       const cedar::aux::ConfigurationNode& listeners = trigger_node.get_child("listeners");
+
 
       for (cedar::aux::ConfigurationNode::const_iterator listener_iter = listeners.begin();
           listener_iter != listeners.end();
@@ -870,6 +889,7 @@ void cedar::proc::GroupFileFormatV1::readTriggers
     }
   }
 }
+}
 
 void cedar::proc::GroupFileFormatV1::readSteps
      (
@@ -878,6 +898,7 @@ void cedar::proc::GroupFileFormatV1::readSteps
        std::vector<std::string>& exceptions
      )
 {
+#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin();
       iter != root.end();
       ++iter)
@@ -948,6 +969,7 @@ void cedar::proc::GroupFileFormatV1::readGroups
        std::vector<std::string>& exceptions
      )
 {
+#pragma acc kernels
   for (const auto& name_config_pair : root)
   {
     const std::string& group_name = name_config_pair.first;

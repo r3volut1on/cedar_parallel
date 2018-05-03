@@ -135,6 +135,7 @@ void cedar::proc::experiment::gui::StepPropertyParameter::updateSteps()
 {
   mpElement->clear();
   std::vector<std::string> steps = SupervisorSingleton::getInstance()->getExperiment()->getGroupSteps();
+#pragma acc kernels
   for (std::string step : steps)
   {
     mpElement->addItem(QString::fromStdString(step));
@@ -174,6 +175,7 @@ void cedar::proc::experiment::gui::StepPropertyParameter::updateProperties()
     }
   }
 
+#pragma acc kernels
   for (std::string property : properties)
   {
     mpProperty->addItem(QString::fromStdString(property));

@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -129,12 +129,13 @@ bool cedar::proc::experiment::Experiment::checkValidity(std::vector<std::string>
 
   bool all_valid = true;
 
+#pragma acc kernels
   for (unsigned int i = 0; i < this->_mActionSequences->size(); ++i)
   {
     bool valid = this->_mActionSequences->at(i)->checkValidity(errors, warnings);
     all_valid = all_valid && valid;
   }
- 
+
   // recording should not be running:
   if (cedar::aux::RecorderSingleton::getInstance()->isRunning() )
   {
@@ -185,6 +186,7 @@ void cedar::proc::experiment::Experiment::setTrialCount(unsigned int repetitions
 
 void cedar::proc::experiment::Experiment::preExperiment()
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSequences->size(); ++i)
   {
     this->_mActionSequences->at(i)->preExperiment();
@@ -193,6 +195,7 @@ void cedar::proc::experiment::Experiment::preExperiment()
 
 void cedar::proc::experiment::Experiment::postExperiment()
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSequences->size(); ++i)
   {
     this->_mActionSequences->at(i)->postExperiment();
@@ -267,6 +270,7 @@ void cedar::proc::experiment::Experiment::startTrial()
   cedar::aux::GlobalClockSingleton::getInstance()->start();
   mTrialIsRunning = true;
   // reset all action sequences
+#pragma acc kernels
   for (size_t i = 0; i < this->_mActionSequences->size(); ++i)
   {
     this->_mActionSequences->at(i)->prepareTrial();
@@ -295,6 +299,7 @@ void cedar::proc::experiment::Experiment::addActionSequence(cedar::proc::experim
 std::vector<cedar::proc::experiment::ActionSequencePtr> cedar::proc::experiment::Experiment::getActionSequences()
 {
   std::vector<cedar::proc::experiment::ActionSequencePtr> ret;
+#pragma acc kernels
   for (unsigned int i = 0; i < _mActionSequences->size(); i++)
   {
     ret.push_back(this->_mActionSequences->at(i));
@@ -352,6 +357,7 @@ void cedar::proc::experiment::Experiment::stopTrial(ResetType::Id reset, bool st
 
 void cedar::proc::experiment::Experiment::executeActionSequences()
 {
+#pragma acc kernels
   for (ActionSequencePtr action_sequence: this->getActionSequences())
   {
     action_sequence->run();
@@ -363,6 +369,7 @@ void cedar::proc::experiment::Experiment::removeActionSequence
   cedar::proc::experiment::ActionSequencePtr actionSequence
 )
 {
+
   for (unsigned int i = 0; i < _mActionSequences->size(); i++)
   {
     if (this->_mActionSequences->at(i) == actionSequence)
@@ -384,6 +391,7 @@ std::vector<std::string> cedar::proc::experiment::Experiment::getGroupSteps()
                );
 
   std::vector<std::string> path_strings;
+#pragma acc kernels
   for (const auto& path : paths)
   {
     path_strings.push_back(path.toString());
@@ -409,6 +417,7 @@ bool cedar::proc::experiment::Experiment::trialIsRunning() const
 void cedar::proc::experiment::Experiment::saveGroupState()
 {
   this->mGroupState.clear();
+#pragma acc kernels
   for (auto name_element_pair : this->mGroup->getElements())
   {
     if (auto element = boost::dynamic_pointer_cast<cedar::proc::Element>(name_element_pair.second))
@@ -423,6 +432,7 @@ void cedar::proc::experiment::Experiment::saveGroupState()
 //!@todo This should be called loadGroupState() (or rename saveGroupState to storeGroupState, this one to restoreGroupState)
 void cedar::proc::experiment::Experiment::resetGroupState()
 {
+#pragma acc kernels
   for (auto name_element_pair : this->mGroup->getElements())
   {
     if (auto element = boost::dynamic_pointer_cast<cedar::proc::Element>(name_element_pair.second))

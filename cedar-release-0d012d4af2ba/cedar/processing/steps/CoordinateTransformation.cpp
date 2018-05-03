@@ -364,6 +364,7 @@ void cedar::proc::steps::CoordinateTransformation::compute(const cedar::proc::Ar
     dst_sizes[dim_1] = output.size[dim_1];
     dst_sizes[dim_sliced] = 1;
 
+#pragma acc kernels
     for (int d3 = 0; d3 < this->mInput->getData().size[dim_sliced]; ++d3)
     {
       range[dim_sliced].start = d3;
@@ -503,6 +504,8 @@ void cedar::proc::steps::CoordinateTransformation::createCartPolarMapForward()
   cv::Mat& forward_map_x = this->mMapX->getData();
   cv::Mat& forward_map_y = this->mMapY->getData();
 
+#pragma acc kernels
+{
   for (unsigned int angle = 0; angle < angular_size; ++angle)
   {
     for (unsigned int rho = 0; rho < distance_size; ++rho)
@@ -513,6 +516,7 @@ void cedar::proc::steps::CoordinateTransformation::createCartPolarMapForward()
       forward_map_y.at<float>(angle, rho) = y;
     }
   }
+}
 
   // convert maps to faster fixed point representation
   convertMap();
@@ -534,6 +538,8 @@ void cedar::proc::steps::CoordinateTransformation::createCartPolarMapBackward()
   backward_map_x = cv::Mat(map_rows, map_cols, CV_32F);
   backward_map_y = cv::Mat(map_rows, map_cols, CV_32F);
 
+#pragma acc kernels
+{
   for (unsigned int row = 0; row < map_rows; ++row)
   {
     for (unsigned int col = 0; col < map_cols; ++col)
@@ -552,6 +558,7 @@ void cedar::proc::steps::CoordinateTransformation::createCartPolarMapBackward()
       backward_map_y.at<float>(row, col) = angle * static_cast<float>(this->_mSamplesPerDegree->getValue());
     }
   }
+}
   this->mMapX->setData(backward_map_x);
   this->mMapY->setData(backward_map_y);
 
@@ -590,6 +597,8 @@ void cedar::proc::steps::CoordinateTransformation::createCartLogPolarMapForward(
   forward_map_x = cv::Mat(angular_size, distance_size, CV_32F);
   forward_map_y = cv::Mat(angular_size, distance_size, CV_32F);
 
+#pragma acc kernels
+{
   for (unsigned int angle = 0; angle < angular_size; ++angle)
   {
     for (unsigned int rho = 0; rho < distance_size; ++rho)
@@ -602,6 +611,7 @@ void cedar::proc::steps::CoordinateTransformation::createCartLogPolarMapForward(
       forward_map_y.at<float> (angle, rho) = y;
     }
   }
+}
   this->mMapX->setData(forward_map_x);
   this->mMapY->setData(forward_map_y);
 
@@ -633,6 +643,8 @@ void cedar::proc::steps::CoordinateTransformation::createCartLogPolarMapBackward
     offset = 1.0f;
   }
 
+#pragma acc kernels
+{
   for (unsigned int r = 0; r < map_rows; ++r)
   {
     for (unsigned int c = 0; c < map_cols; ++c)
@@ -654,6 +666,7 @@ void cedar::proc::steps::CoordinateTransformation::createCartLogPolarMapBackward
       backward_map_y.at<float>(r, c) = angle * this->_mSamplesPerDegree->getValue();
     }
   }
+}
   this->mMapX->setData(backward_map_x);
   this->mMapY->setData(backward_map_y);
 
@@ -715,7 +728,7 @@ void cedar::proc::steps::CoordinateTransformation::inputConnectionChanged(const 
 
   // remember old values to recognize if output properties changed
   cv::Mat old_output = this->mOutput->getData();
-  
+
   this->createMap();
   this->mOutput->copyAnnotationsFrom(this->mInput);
   this->applyAnnotations();
@@ -728,4 +741,3 @@ void cedar::proc::steps::CoordinateTransformation::inputConnectionChanged(const 
     emitOutputPropertiesChangedSignal("result");
   }
 }
-

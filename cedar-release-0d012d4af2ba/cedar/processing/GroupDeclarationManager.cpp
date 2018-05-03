@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -139,6 +139,7 @@ cedar::proc::ConstGroupDeclarationPtr cedar::proc::GroupDeclarationManager::getD
 
 cedar::proc::ConstGroupDeclarationPtr cedar::proc::GroupDeclarationManager::getDeclarationNoThrow(const std::string& name) const
 {
+//#pragma acc kernels
   for (const auto& name_declaration_pair : this->mDeclarations)
   {
     if (name_declaration_pair.first == name)

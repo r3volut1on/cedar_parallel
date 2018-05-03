@@ -175,6 +175,7 @@ void cedar::proc::steps::MatrixSlice::setRanges(const std::vector<cv::Range>& ra
   bool lower_blocked = this->_mRangeLower->blockSignals(true);
   bool upper_blocked = this->_mRangeUpper->blockSignals(true);
 
+#pragma acc kernels
   for (size_t d = 0; d < ranges.size(); ++d)
   {
     this->_mRangeUpper->setValue(d, ranges.at(d).end);
@@ -194,6 +195,7 @@ void cedar::proc::steps::MatrixSlice::readConfiguration(const cedar::aux::Config
   cedar::proc::Step::readConfiguration(node);
 
   this->mStoredLimits.clear();
+#pragma acc kernels
   for (size_t i = 0; i < std::min(this->_mRangeLower->size(), this->_mRangeUpper->size()); ++i)
   {
     this->mStoredLimits.push_back
@@ -228,6 +230,7 @@ void cedar::proc::steps::MatrixSlice::updateDimensionality()
   this->_mRangeLower->resize(matrix_dim);
   this->_mRangeUpper->resize(matrix_dim);
 
+#pragma acc kernels
   for (unsigned int d = old_dim; d < matrix_dim && d < this->mStoredLimits.size(); ++d)
   {
     const cedar::aux::math::Limits<unsigned int>& limits = this->mStoredLimits.at(d);
@@ -327,6 +330,7 @@ void cedar::proc::steps::MatrixSlice::allocateOutputMatrix()
 
   if (dimensionality > 1)
   {
+#pragma acc kernels
     for (unsigned int d = 0; d < dimensionality; ++d)
     {
       apply_range(d, d, input);

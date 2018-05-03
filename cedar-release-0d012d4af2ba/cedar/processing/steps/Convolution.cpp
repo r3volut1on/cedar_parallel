@@ -250,6 +250,7 @@ void cedar::proc::steps::Convolution::inputConnectionChanged(const std::string& 
     std::vector<bool> blocked(list->size());
 
     // Block signals from the kernel because they might otherwise call onTrigger (via kernelChanged -> recompute), which leads to trouble in inputConnectionChanged.
+#pragma acc kernels
     for (size_t i = 0; i < list->size(); ++i)
     {
       blocked[i] = list->getKernel(i)->blockSignals(true);
@@ -258,6 +259,7 @@ void cedar::proc::steps::Convolution::inputConnectionChanged(const std::string& 
     this->inputDimensionalityChanged();
 
     // restore blocked state for each kernel
+#pragma acc kernels
     for (size_t i = 0; i < list->size(); ++i)
     {
       list->getKernel(i)->blockSignals(blocked[i]);
@@ -296,6 +298,7 @@ void cedar::proc::steps::Convolution::inputConnectionChanged(const std::string& 
 void cedar::proc::steps::Convolution::inputDimensionalityChanged()
 {
   unsigned int new_dimensionality = this->getDimensionality();
+#pragma acc kernels
   for (size_t i = 0; i < this->_mKernels->size(); ++i)
   {
     this->_mKernels->at(i)->setDimensionality(new_dimensionality);
@@ -344,6 +347,7 @@ void cedar::proc::steps::Convolution::slotKernelAdded(size_t kernelIndex)
 void cedar::proc::steps::Convolution::transferKernelsToConvolution()
 {
   this->getConvolution()->getKernelList()->clear();
+#pragma acc kernels
   for (size_t kernel = 0; kernel < this->_mKernels->size(); ++ kernel)
   {
     this->addKernelToConvolution(this->_mKernels->at(kernel));

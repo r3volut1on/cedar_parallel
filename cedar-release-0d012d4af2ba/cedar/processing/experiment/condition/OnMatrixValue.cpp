@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -154,8 +154,11 @@ bool cedar::proc::experiment::condition::OnMatrixValue::check() const
         unsigned int counter = 0;
 
         // Iterate through all matrix elements
+#pragma acc kernels
+{
         for (int x = 0; x < matrix.rows; x++)
         {
+//#pragma acc kernels
           for (int y = 0; y < matrix.cols; y++)
           {
             double current_val =value->getValue<double>(x,y);
@@ -184,6 +187,7 @@ bool cedar::proc::experiment::condition::OnMatrixValue::check() const
             }
           }
         }
+      }
         if (counter >= _mNumberOfElements->getValue())
         {
           return true;
