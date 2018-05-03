@@ -64,6 +64,7 @@ cedar::aux::PluginDeclarationList::PluginDeclarationList()
 
 void cedar::aux::PluginDeclarationList::setSource(const std::string& source)
 {
+#pragma acc kernels
   for (size_t i = 0; i < this->mDeclarations.size(); ++i)
   {
     this->mDeclarations.at(i)->setSource(source);
@@ -93,6 +94,7 @@ void cedar::aux::PluginDeclarationList::readDescription(const std::string& fileP
 
   const cedar::aux::ConfigurationNode& root = descriptions.get_child("plugin");
 
+#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator node_iter = root.begin();
        node_iter != root.end();
        ++node_iter)
@@ -118,6 +120,7 @@ void cedar::aux::PluginDeclarationList::readDescription(const std::string& fileP
 
 void cedar::aux::PluginDeclarationList::readDeclarations(const cedar::aux::ConfigurationNode& declarations)
 {
+#pragma acc kernels
   for (cedar::aux::ConfigurationNode::const_iterator declaration_iter = declarations.begin();
       declaration_iter != declarations.end();
        ++declaration_iter)
@@ -184,6 +187,7 @@ void cedar::aux::PluginDeclarationList::readDeclaration(const cedar::aux::Config
 cedar::aux::PluginDeclarationPtr
   cedar::aux::PluginDeclarationList::findPluginDeclaration(const std::string& className) const
 {
+//#pragma acc kernels
   for (size_t i = 0; i < this->mDeclarations.size(); ++i)
   {
     if (this->mDeclarations.at(i)->getClassName() == className)
@@ -197,6 +201,7 @@ cedar::aux::PluginDeclarationPtr
 
 void cedar::aux::PluginDeclarationList::declareAll() const
 {
+#pragma acc kernels
   for (auto decl_iter = this->mDeclarations.begin(); decl_iter != this->mDeclarations.end(); ++decl_iter)
   {
     cedar::aux::PluginDeclarationPtr declaration = *decl_iter;

@@ -87,6 +87,7 @@ void cedar::dev::sensors::camera::BackendCvVideoCapture::createCaptureObject()
 void cedar::dev::sensors::camera::BackendCvVideoCapture::readCameraProperties()
 {
   int num_properties = cedar::dev::sensors::camera::Property::type().list().size();
+#pragma acc kernels
   for (int i=0; i<num_properties; i++)
   {
     cedar::dev::sensors::camera::Property::Id prop_id

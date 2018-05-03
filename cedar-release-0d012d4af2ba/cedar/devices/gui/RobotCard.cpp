@@ -290,6 +290,7 @@ void cedar::dev::gui::RobotCard::robotDropped(const QString& robotTypeName)
   }
 
   int selected = 0;
+#pragma acc kernels
   for (size_t i = 0; i < configuration_names.size(); ++i)
   {
     const std::string configuration = configuration_names.at(i);

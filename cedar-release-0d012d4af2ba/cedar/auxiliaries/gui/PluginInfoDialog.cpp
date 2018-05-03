@@ -88,6 +88,7 @@ void cedar::aux::gui::PluginInfoDialog::updateWidgets()
   {
     this->mpReadInfoBtn->setEnabled(false);
     auto declarations = this->mPlugin->getDeclaration();
+#pragma acc kernels
     for (size_t i = 0; i < declarations->size(); ++i)
     {
       auto declaration = declarations->at(i);
@@ -127,6 +128,7 @@ void cedar::aux::gui::PluginInfoDialog::addDeclarationToPage
 
 int cedar::aux::gui::PluginInfoDialog::getCategoryPageId(const std::string& category) const
 {
+//#pragma acc kernels
   for (int i = 0; i < this->mpDeclarationsTab->count(); ++i)
   {
     if (this->mpDeclarationsTab->tabText(i).toStdString() == category)

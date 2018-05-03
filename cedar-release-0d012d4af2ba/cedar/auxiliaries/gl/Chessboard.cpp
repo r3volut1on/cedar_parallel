@@ -69,13 +69,15 @@ mNumberOfColumns(cols)
 void cedar::aux::gl::Chessboard::draw()
 {
   prepareDraw();
-  
+
   // draw object
   if (mIsVisible)
   {
     double l = mLength/mNumberOfRows;
     double w = mWidth/mNumberOfColumns;
     glTranslated(l/2, w/2, 0);
+#pragma acc kernels
+{
     for (int i=0; i < mNumberOfRows; i++)
     {
       for (int j=0; j < mNumberOfColumns; j++)
@@ -94,7 +96,9 @@ void cedar::aux::gl::Chessboard::draw()
       glTranslated(l, -mWidth, 0);
     } // end for (rows)
   }
+  }
 }
+
 
 void cedar::aux::gl::Chessboard::setLength(double value)
 {

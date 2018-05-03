@@ -255,6 +255,7 @@ public:
   //!@brief list all types registered at the factory manager
   void listTypes(std::vector<std::string>& types) const
   {
+#pragma acc kernels
     for(auto iter = this->mRegisteredFactories.begin(); iter != this->mRegisteredFactories.end(); ++iter)
     {
       types.push_back(iter->first);

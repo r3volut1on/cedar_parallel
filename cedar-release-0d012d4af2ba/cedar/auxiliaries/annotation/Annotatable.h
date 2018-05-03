@@ -102,6 +102,7 @@ public:
   template <typename T>
   bool hasAnnotation() const
   {
+
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *annotation = this->mAnnotations[i].get();
@@ -150,6 +151,7 @@ private:
   template <typename T>
   size_t findAnnotation() const
   {
+
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
       const cedar::aux::annotation::Annotation *annotation = this->mAnnotations[i].get();
@@ -168,6 +170,7 @@ private:
   size_t findAnnotation(cedar::aux::annotation::AnnotationPtr annotation) const
   {
     const cedar::aux::annotation::Annotation *that_annotation = annotation.get();
+
 
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {
@@ -188,6 +191,7 @@ private:
   bool hasAnnotation(cedar::aux::annotation::AnnotationPtr annotation) const
   {
     const cedar::aux::annotation::Annotation *that_annotation = annotation.get();
+
 
     for (size_t i = 0; i < this->mAnnotations.size(); ++i)
     {

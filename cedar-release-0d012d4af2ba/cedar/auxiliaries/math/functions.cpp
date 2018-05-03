@@ -56,6 +56,7 @@ cv::Mat cedar::aux::math::boxMatrix
         )
 {
   std::vector<int> matrix_sizes_int(matrixSizes.size());
+#pragma acc kernels
   for (unsigned int i = 0; i < matrixSizes.size(); ++i)
   {
     matrix_sizes_int.at(i) = static_cast<int>(matrixSizes.at(i));
@@ -69,6 +70,7 @@ cv::Mat cedar::aux::math::boxMatrix
     = cv::Mat(static_cast<int>(dimensionality), &matrix_sizes_int.front(), CV_32F, cv::Scalar(referenceLevel));
 
   std::vector<int> box_widths_int(widths.size());
+#pragma acc kernels
   for (unsigned int i = 0; i < widths.size(); ++i)
   {
     unsigned int left = leftBounds.at(i);
@@ -94,6 +96,7 @@ cv::Mat cedar::aux::math::boxMatrix
   cv::Mat box = cv::Mat(static_cast<int>(dimensionality), &box_widths_int.front(), CV_32F, cv::Scalar(boxAmplitude));
 
   std::vector<cv::Range> box_ranges(dimensionality);
+//#pragma acc kernels
   for (unsigned int i = 0; i < dimensionality; ++i)
   {
     unsigned int left = leftBounds.at(i);
@@ -129,6 +132,7 @@ cv::Mat cedar::aux::math::gaussMatrix
   cv::Mat output;
   std::vector<cv::Mat> kernel_parts;
   kernel_parts.resize(dimensionality);
+#pragma acc kernels{
   for (size_t dim = 0; dim < dimensionality; ++dim)
   {
     kernel_parts.at(dim) = cv::Mat(static_cast<int>(matrixSizes.at(dim)), 1, CV_32F);
@@ -136,6 +140,7 @@ cv::Mat cedar::aux::math::gaussMatrix
 
     if (cyclic) // is this a cyclic kernel? (only check once)
     {
+//#pragma acc kernels
       for (int row = 0; row < kernel_parts.at(dim).rows; ++row)
       {
         double position = row - static_cast<double>(centers.at(dim));
@@ -158,6 +163,7 @@ cv::Mat cedar::aux::math::gaussMatrix
     }
     else // nothing special to do here
     {
+//#pragma acc kernels
       for (int row = 0; row < kernel_parts.at(dim).rows; ++row)
       {
         kernel_parts.at(dim).at<float>(row, 0)
@@ -165,9 +171,11 @@ cv::Mat cedar::aux::math::gaussMatrix
       }
     }
   }
+}
   kernel_parts.at(0) *= amplitude;
   // assemble the input
   std::vector<int> sizes(static_cast<size_t>(dimensionality));
+#pragma acc kernels
   for (unsigned int i = 0; i < dimensionality; i++)
   {
     sizes[i] = matrixSizes.at(i);
@@ -184,6 +192,7 @@ cv::Mat cedar::aux::math::gaussMatrix
   std::vector<int> position(static_cast<size_t>(dimensionality));
   unsigned int max_index = 1;
   double max_index_d = 1.0;
+#pragma acc kernels
   for (unsigned int dim = 0; dim < dimensionality; dim++)
   {
     position[dim] = 0;
@@ -194,9 +203,11 @@ cv::Mat cedar::aux::math::gaussMatrix
     }
   }
   max_index = static_cast<unsigned int>(max_index_d);
+//#pragma acc kernels
   for (unsigned int i = 0; i < max_index; i++)
   {
     float value = 1.0;
+//#pragma acc kernels
     for (unsigned int dim = 0; dim < dimensionality; dim++)
     {
       value *= kernel_parts.at(dim).at<float>(position.at(dim), 0);
@@ -211,6 +222,7 @@ cv::Mat cedar::aux::math::gaussMatrix
     }
     // increment index
     position[0]++;
+//#pragma acc kernels
     for (unsigned int dim = 0; dim < dimensionality; dim++)
     {
       if (position[dim] >= static_cast<int>(sizes[dim]))

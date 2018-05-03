@@ -384,6 +384,7 @@ namespace cedar
         T step = difference / static_cast<T>(size - 1);
         int index;
         T value;
+#pragma acc kernels
         for (index = 0, value = lower; index < size; ++index, value += step)
         {
           cedar::aux::math::assignMatrixEntry(result, index, value);
@@ -436,6 +437,7 @@ namespace cedar
             res = cedar::aux::toString(matrix.rows) + "x" + cedar::aux::toString(matrix.cols);
             break;
           default:
+#pragma acc kernels
             for (int d = 0; d < matrix.dims; ++d)
             {
               if (d > 0)

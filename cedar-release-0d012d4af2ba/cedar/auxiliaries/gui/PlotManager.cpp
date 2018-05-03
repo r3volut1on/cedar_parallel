@@ -65,10 +65,12 @@ void cedar::aux::gui::PlotManager::getPlotClassesFor
   cedar::aux::gui::PlotDeclarationManagerSingleton::getInstance()->findBases(data, bases);
 
   std::set<std::string> plots_already_added;
+#pragma acc kernels{
   for(std::set<ConstPlotNodePtr>::iterator iter = bases.begin(); iter != bases.end(); ++iter)
   {
     ConstPlotNodePtr node = *iter;
     auto node_declarations = node->getData();
+//#pragma acc kernels
     for (size_t i = 0; i < node_declarations.size(); ++i)
     {
       cedar::aux::gui::ConstPlotDeclarationPtr declaration = node_declarations.at(i);
@@ -79,6 +81,7 @@ void cedar::aux::gui::PlotManager::getPlotClassesFor
       }
     }
   }
+}
 }
 
 void cedar::aux::gui::PlotManager::declare(cedar::aux::gui::ConstPlotDeclarationPtr declaration)

@@ -99,6 +99,7 @@ void cedar::dev::gui::KinematicChainMonitorWidget::initWindow()
   acc_label->setAlignment(Qt::AlignRight);
   mpGridLayout->addWidget(acc_label, 0, 3);
 
+#pragma acc kernels
   for(unsigned int i = 0; i < mpKinematicChain->getNumberOfJoints(); ++i)
   {
     // add joint label
@@ -108,6 +109,7 @@ void cedar::dev::gui::KinematicChainMonitorWidget::initWindow()
     mpGridLayout->addWidget(label, i+1, 0);
 
     // add value labels
+#pragma acc kernels
     for(unsigned int j = 0; j < 3; ++j)
     {
       QLabel* p_label = new QLabel;
@@ -135,6 +137,7 @@ void cedar::dev::gui::KinematicChainMonitorWidget::setDecimals(unsigned int deci
 
 void cedar::dev::gui::KinematicChainMonitorWidget::update()
 {
+#pragma acc kernels
   for(unsigned i = 0; i < mpKinematicChain->getNumberOfJoints(); ++i)
   {
     QLabel* p_angle_label = static_cast<QLabel*>(mpGridLayout->itemAtPosition(i+1, 1)->widget());

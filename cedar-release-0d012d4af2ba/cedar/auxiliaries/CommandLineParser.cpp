@@ -123,6 +123,7 @@ void cedar::aux::CommandLineParser::setParsedFlag(const std::string& longName, b
   else
   {
     // erase all occurrences of longName
+#pragma acc kernels
     for (auto iter = this->mParsedFlags.begin(); iter != this->mParsedFlags.end();)
     {
       if (*iter == longName)
@@ -146,6 +147,7 @@ void cedar::aux::CommandLineParser::readConfigFromFile(const cedar::aux::Path& p
   if (include_iter != root.not_found())
   {
     auto includes = include_iter->second;
+#pragma acc kernels
     for (auto include_iter = includes.begin(); include_iter != includes.end(); ++include_iter)
     {
       const std::string& include = include_iter->second.get_value<std::string>();
@@ -159,6 +161,7 @@ void cedar::aux::CommandLineParser::readConfigFromFile(const cedar::aux::Path& p
 
 void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationNode& root)
 {
+#pragma acc kernels{
   for (auto node_iter = root.begin(); node_iter != root.end(); ++node_iter)
   {
     const std::string& group_name = node_iter->first;
@@ -175,6 +178,7 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
     if (flags_iter != group.not_found())
     {
       auto flags_node = flags_iter->second;
+//#pragma acc kernels
       for (auto iter = flags_node.begin(); iter != flags_node.end(); ++iter)
       {
         auto long_name = iter->first;
@@ -202,6 +206,7 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
     if (values_iter != group.not_found())
     {
       auto values_node = values_iter->second;
+//#pragma acc kernels
       for (auto iter = values_node.begin(); iter != values_node.end(); ++iter)
       {
         auto long_name = iter->first;
@@ -211,10 +216,12 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
     }
   }
 }
+}
 
 void cedar::aux::CommandLineParser::writeConfigToFile(const cedar::aux::Path& path) const
 {
   cedar::aux::ConfigurationNode root;
+#pragma acc kernels
   for (auto iter = this->mGroups.begin(); iter != this->mGroups.end(); ++iter)
   {
     std::string group_name = iter->first;
@@ -252,6 +259,7 @@ void cedar::aux::CommandLineParser::writeGroup
   cedar::aux::ConfigurationNode flags_node;
   cedar::aux::ConfigurationNode values_node;
 
+#pragma acc kernels
   for (auto iter = group.begin(); iter != group.end(); ++iter)
   {
     auto option_name = *iter;
@@ -389,6 +397,7 @@ void cedar::aux::CommandLineParser::defineOption
 void cedar::aux::CommandLineParser::addOptionToGroup(const std::string& groupName, const std::string& longName)
 {
   // remove option from all other groups
+#pragma acc kernels
   for (auto iter = this->mGroups.begin(); iter != this->mGroups.end(); ++iter)
   {
     auto set = iter->second;
@@ -455,6 +464,7 @@ void cedar::aux::CommandLineParser::parse(int argc, char* argv[], bool terminati
   this->mParsedValues.clear();
   this->mParsedFlags.clear();
 
+#pragma acc kernels
   for (int i = 0; i < argc; ++i)
   {
     this->mArguments.push_back(std::string(argv[i]));
@@ -462,6 +472,7 @@ void cedar::aux::CommandLineParser::parse(int argc, char* argv[], bool terminati
 
   STATE state = STATE_PLAIN;
   std::string current_option;
+//#pragma acc kernels
   for (size_t i = 1; i < this->mArguments.size(); ++i)
   {
     auto string = this->mArguments.at(i);
@@ -502,6 +513,7 @@ void cedar::aux::CommandLineParser::parse(int argc, char* argv[], bool terminati
           else
           {
             // series of short names
+//#pragma acc kernels
             for (size_t i = 1; i < string.size(); ++i)
             {
               char short_name = string.at(i);
@@ -618,6 +630,7 @@ bool cedar::aux::CommandLineParser::shortNameExists(char shortName) const
 
 bool cedar::aux::CommandLineParser::hasShortNameFor(const std::string& longName) const
 {
+//#pragma acc kernels
   for (auto iter = this->mAbbreviations.begin(); iter != this->mAbbreviations.end(); ++iter)
   {
     if (iter->second == longName)
@@ -650,6 +663,7 @@ const std::string& cedar::aux::CommandLineParser::getValue(const std::string& lo
 
 char cedar::aux::CommandLineParser::getShortNameFor(const std::string& longName) const
 {
+//#pragma acc kernels
   for (auto iter = this->mAbbreviations.begin(); iter != this->mAbbreviations.end(); ++iter)
   {
     if (iter->second == longName)
@@ -681,6 +695,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
   this->writeHeading(stream, "Options", '=');
   stream << std::endl;
 
+#pragma acc kernels
   for (auto group_iter = this->mGroups.begin(); group_iter != this->mGroups.end(); ++group_iter)
   {
     auto group = group_iter->first;
@@ -692,6 +707,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       stream << std::endl;
     }
 
+#pragma acc kernels{
     for (auto iter = options.begin(); iter != options.end(); ++iter)
     {
       auto long_name = *iter;
@@ -723,6 +739,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       {
         stream << "    Possible Values are: ";
         bool first = true;
+//#pragma acc kernels
         for (auto value : this->mEnumValues.find(long_name)->second->list())
         {
           if (first)
@@ -739,6 +756,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       }
 
       stream << std::endl;
+    }
     } // option iter
 
     stream << "-----" << std::endl << std::endl;
@@ -751,6 +769,7 @@ void cedar::aux::CommandLineParser::writeConfigurationValues(std::ostream& strea
   stream << " The following parameters are chosen:" << std::endl;
   stream << "--------------------------------------" << std::endl;
 
+#pragma acc kernels
   for (auto option_it = this->mDescriptions.begin(); option_it != this->mDescriptions.end(); ++option_it)
   {
     const std::string& long_name = option_it->first;
@@ -800,6 +819,7 @@ void cedar::aux::CommandLineParser::writeSummary(std::ostream& stream) const
   {
     stream << "The following flags were parsed: ";
 
+#pragma acc kernels
     for (auto iter = this->mParsedFlags.begin(); iter != this->mParsedFlags.end(); ++iter)
     {
       if (iter != this->mParsedFlags.begin())
@@ -815,6 +835,7 @@ void cedar::aux::CommandLineParser::writeSummary(std::ostream& stream) const
   {
     stream << "The following values were parsed:" << std::endl;
 
+#pragma acc kernels
     for (auto iter = this->mParsedValues.begin(); iter != this->mParsedValues.end(); ++iter)
     {
       stream << "--" << iter->first << ": " << iter->second << std::endl;
@@ -825,6 +846,7 @@ void cedar::aux::CommandLineParser::writeSummary(std::ostream& stream) const
   if (!this->mUnparsedValues.empty())
   {
     stream << "The following unparsed values were found:" << std::endl;
+#pragma acc kernels
     for (const auto& unparsed : this->mUnparsedValues)
     {
       stream << unparsed << std::endl;

@@ -144,6 +144,7 @@ bool cedar::aux::gui::HistoryPlot0D::canAppend(cedar::aux::ConstDataPtr data) co
 
 bool cedar::aux::gui::HistoryPlot0D::canDetach(cedar::aux::ConstDataPtr data) const
 {
+#pragma acc kernels
   for (const auto& plot_data : this->mPlotData)
   {
     if (plot_data.mData == data)
@@ -174,6 +175,7 @@ void cedar::aux::gui::HistoryPlot0D::advanceHistory()
 {
   // update the markers for the current value
 #ifdef CEDAR_USE_QWT
+#pragma acc kernels
   for (auto& plot_data : this->mPlotData)
   {
     QReadLocker data_locker(&plot_data.mData->getLock());
@@ -203,6 +205,7 @@ void cedar::aux::gui::HistoryPlot0D::advanceHistory()
   this->mTimeOfLastUpdate = time_now;
 
   // add current value to history
+#pragma acc kernels
   for (auto& plot_data : this->mPlotData)
   {
     QReadLocker data_locker(&plot_data.mData->getLock());
@@ -269,6 +272,7 @@ void cedar::aux::gui::HistoryPlot0D::advanceHistory()
 
     std::vector<double> time_values;
     time_values.resize(plot_data.mXLabels.size());
+#pragma acc kernels
     for (size_t i = 0; i < plot_data.mXLabels.size(); ++i)
     {
       time_values.at(i) = (plot_data.mXLabels.at(i) - time_now) / (1.0 * cedar::unit::second);
@@ -354,6 +358,7 @@ void cedar::aux::gui::HistoryPlot0D::doAppend(cedar::aux::ConstDataPtr data, con
 
 void cedar::aux::gui::HistoryPlot0D::doDetach(cedar::aux::ConstDataPtr data)
 {
+#pragma acc kernels
   for (auto iter = mPlotData.begin(); iter != mPlotData.end(); )
   {
     if (iter->mData == data)

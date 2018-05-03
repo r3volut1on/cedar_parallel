@@ -73,6 +73,7 @@ void cedar::aux::annotation::Annotatable::setAnnotation(cedar::aux::annotation::
 void cedar::aux::annotation::Annotatable::copyAnnotationsFrom(cedar::aux::annotation::ConstAnnotatablePtr other)
 {
   this->mAnnotations.clear();
+#pragma acc kernels
   for (size_t i = 0; i < other->mAnnotations.size(); ++i)
   {
     if (!other->mAnnotations[i]->excludeFromCopying())
@@ -90,6 +91,7 @@ std::string cedar::aux::annotation::Annotatable::getDescription() const
   clean_type = cedar::aux::replace(clean_type, ">", "&gt;");
   description += "Type: <b>" + clean_type + "</b>";
 
+//#pragma acc kernels
   for (size_t i = 0; i < this->mAnnotations.size(); ++i)
   {
     description += "<hr />";

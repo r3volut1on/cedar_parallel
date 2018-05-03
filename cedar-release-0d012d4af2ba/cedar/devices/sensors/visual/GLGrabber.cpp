@@ -131,6 +131,7 @@ void cedar::dev::sensors::visual::GLGrabber::onCleanUp()
 
   // delete all pointer-references to external widgets
   unsigned int num_channels = getNumChannels();
+#pragma acc kernels
   for(unsigned int channel = 0; channel < num_channels; ++channel)
   {
     getGLChannel(channel)->mpQGLWidget = NULL;

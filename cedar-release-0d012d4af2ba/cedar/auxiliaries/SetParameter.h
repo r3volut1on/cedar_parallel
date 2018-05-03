@@ -99,6 +99,7 @@ public:
   void readFromNode(const cedar::aux::ConfigurationNode& root)
   {
     this->mValues.clear();
+#pragma acc kernels
     for (cedar::aux::ConfigurationNode::const_iterator iter = root.begin(); iter != root.end(); ++iter)
     {
       this->mValues.insert(iter->second.get_value<T>());
@@ -109,6 +110,7 @@ public:
   void writeToNode(cedar::aux::ConfigurationNode& root) const
   {
     cedar::aux::ConfigurationNode vector_node;
+#pragma acc kernels
     for (typename std::set<T>::const_iterator iter = this->mValues.begin(); iter != this->mValues.end(); ++iter)
     {
       cedar::aux::ConfigurationNode value_node;

@@ -234,6 +234,7 @@ void cedar::aux::gl::ObjectVisualization::loadVertexData
     QTextStream text_stream(&data);
     QString line;
     float scale = 0.001f; // mm -> m
+
     for (unsigned int i = 0; i < numberOfVertices; i++)
     {
       line = text_stream.readLine();
@@ -264,6 +265,7 @@ void cedar::aux::gl::ObjectVisualization::loadIndexData
     QTextStream text_stream(&data);
     QString line;
     QString number;
+
     for (unsigned int i=0; i<numberOfFaces; i++)
     {
       line = text_stream.readLine();
