@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -81,7 +81,7 @@ mMainWindowState(new cedar::aux::StringParameter(this, "mainWindowState", ""))
 {
   cedar::aux::ConfigurablePtr ui_settings(new cedar::aux::Configurable());
   this->addConfigurableChild("ui", ui_settings);
-
+  
   ui_settings->addConfigurableChild("log", mLog);
   ui_settings->addConfigurableChild("steps", mSteps);
   ui_settings->addConfigurableChild("tools", mTools);
@@ -312,7 +312,6 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 {
   std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> messages;
 
-#pragma acc kernels
   for (auto message : this->mOneTimeMessages)
   {
     unsigned int major_minor_version = CEDAR_MAKE_VERSION(CEDAR_VERSION_MAJOR, CEDAR_VERSION_MINOR, 0);
@@ -332,14 +331,12 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Settings::getRecentOneTimeMessages() const
 {
   std::multimap<unsigned int, OneTimeMessagePtr> messages_by_version;
-#pragma acc kernels
   for (auto message : this->mOneTimeMessages)
   {
     messages_by_version.insert(std::make_pair(message->mVersion, message));
   }
 
   std::vector<OneTimeMessagePtr> messages;
-#pragma acc kernels
   for (auto iter = messages_by_version.rbegin(); iter != messages_by_version.rend(); ++iter)
   {
     messages.push_back(iter->second);
@@ -349,7 +346,6 @@ std::vector<cedar::proc::gui::Settings::OneTimeMessagePtr> cedar::proc::gui::Set
 
 void cedar::proc::gui::Settings::markAsRead(const std::vector<OneTimeMessagePtr>& messages)
 {
-#pragma acc kernels
   for (auto message : messages)
   {
     this->_mReadOneTimeMessages->insert(message->mId);
@@ -392,7 +388,6 @@ void cedar::proc::gui::Settings::userDefinedColorStringsChanged()
 {
   this->mUserDefinedColors.clear();
 
-#pragma acc kernels
   for (const auto& string : this->_mUserDefinedColors->getValue())
   {
     UserDefinedColorPtr color(new UserDefinedColor(string));
@@ -508,7 +503,6 @@ void cedar::proc::gui::Settings::appendArchitectureFileToHistory(const std::stri
   }
   else
   {
-#pragma acc kernels
     for (size_t i = 0; i < this->mRecentArchitectureFiles->size(); ++i)
     {
       const std::string& value = this->mRecentArchitectureFiles->at(i);
@@ -553,7 +547,7 @@ void cedar::proc::gui::Settings::storeMainWindow(QMainWindow *pWindow)
   QByteArray window_state = pWindow->saveState();
   QByteArray window_state_hex = window_state.toHex();
   mMainWindowState->setValue(window_state_hex.constData());
-
+  
   QByteArray window_geometry = pWindow->saveGeometry();
   QByteArray window_geometry_hex = window_geometry.toHex();
   mMainWindowGeometry->setValue(window_geometry_hex.constData());
@@ -567,7 +561,7 @@ void cedar::proc::gui::Settings::restoreMainWindow(QMainWindow *pWindow)
   {
     std::cout << "Could not restore state of the main window." << std::endl;
   }
-
+  
   QByteArray window_geometry_hex(mMainWindowGeometry->getValue().c_str());
   QByteArray window_geometry = QByteArray::fromHex(window_geometry_hex);
   if (!pWindow->restoreGeometry(window_geometry))

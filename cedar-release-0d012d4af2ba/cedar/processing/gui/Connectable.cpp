@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -174,7 +174,6 @@ mShowingTriggerColor(false)
 cedar::proc::gui::Connectable::~Connectable()
 {
   this->hideTriggerChains();
-#pragma acc kernels
   for(auto child_widget : mChildWidgets)
   {
     child_widget->close();
@@ -353,7 +352,6 @@ unsigned int cedar::proc::gui::Connectable::getNumberOfConnections(cedar::proc::
   }
 
   unsigned int count = 0;
-#pragma acc kernels
   for (const auto& slot : connectable->getOrderedDataSlots(role))
   {
     count += slot->getDataConnections().size();
@@ -410,8 +408,6 @@ void cedar::proc::gui::Connectable::setConnectionsVisible(bool visible, bool mod
   roles.push_back(cedar::proc::DataRole::INPUT);
   roles.push_back(cedar::proc::DataRole::OUTPUT);
 
-#pragma acc kernels
-{
   for (auto role : roles)
   {
     for (const auto& name_slot_pair : this->mSlotMap[role])
@@ -426,7 +422,6 @@ void cedar::proc::gui::Connectable::setConnectionsVisible(bool visible, bool mod
     }
   }
 }
-}
 
 void cedar::proc::gui::Connectable::hideInConnections()
 {
@@ -439,8 +434,6 @@ void cedar::proc::gui::Connectable::hideInConnections()
   bool has_single_collection = true;
   // hide the normal connections of this item (note, that output connections are automatically hidden as they are
   // children of this graphics item)
-#pragma acc kernels
-{
   for (const auto& name_slot_pair : this->mSlotMap[cedar::proc::DataRole::INPUT])
   {
     for (auto connection : name_slot_pair.second->getConnections())
@@ -458,7 +451,6 @@ void cedar::proc::gui::Connectable::hideInConnections()
       }
     }
   }
-}
 
   // this should not happen: there should be only one incoming collection
   CEDAR_ASSERT(has_single_collection);
@@ -466,8 +458,6 @@ void cedar::proc::gui::Connectable::hideInConnections()
   // look for outgoing collections
   has_single_collection = true;
   cedar::proc::gui::CouplingCollection* outgoing_collection = nullptr;
-#pragma acc kernels
-{
   for (const auto& name_slot_pair : this->mSlotMap[cedar::proc::DataRole::OUTPUT])
   {
     for (auto connection : name_slot_pair.second->getConnections())
@@ -485,7 +475,6 @@ void cedar::proc::gui::Connectable::hideInConnections()
       }
     }
   }
-}
 
   // this should not happen: there should be only one outgoing collection
   CEDAR_ASSERT(has_single_collection);
@@ -646,8 +635,6 @@ void cedar::proc::gui::Connectable::showTriggerChains()
     return;
   }
 
-#pragma acc kernels
-{
   for (const auto& depth_triggerable_set_pair : trigger_chain)
   {
     auto depth = depth_triggerable_set_pair.first;
@@ -679,11 +666,9 @@ void cedar::proc::gui::Connectable::showTriggerChains()
     }
   }
 }
-}
 
 void cedar::proc::gui::Connectable::hideTriggerChains()
 {
-#pragma acc kernels
   for (auto p_item : this->mTriggerChainVisualization)
   {
     delete p_item;
@@ -830,7 +815,6 @@ void cedar::proc::gui::Connectable::addDecoration(cedar::proc::gui::Connectable:
 
 void cedar::proc::gui::Connectable::removeDecoration(cedar::proc::gui::Connectable::DecorationPtr decoration)
 {
-#pragma acc kernels
   for (auto iter = this->mDecorations.begin(); iter != this->mDecorations.end();)
   {
     if (*iter == decoration)
@@ -852,8 +836,6 @@ void cedar::proc::gui::Connectable::setReadOnly(bool readOnly)
 
   this->setFlag(QGraphicsItem::ItemIsMovable, !readOnly);
 
-#pragma acc kernels
-{
   for (const auto& role_map_pair : this->mSlotMap)
   {
     for (const auto& name_slot_pair : role_map_pair.second)
@@ -862,7 +844,6 @@ void cedar::proc::gui::Connectable::setReadOnly(bool readOnly)
       slot->setReadOnly(readOnly);
     }
   }
-}
 }
 
 void cedar::proc::gui::Connectable::setIconBounds(const qreal& x, const qreal& y, const qreal& size)
@@ -891,8 +872,6 @@ void cedar::proc::gui::Connectable::sizeChanged()
 
 void cedar::proc::gui::Connectable::itemSelected(bool selected)
 {
-#pragma acc kernels
-{
   for (auto role_iter = this->mSlotMap.begin(); role_iter != this->mSlotMap.end(); ++role_iter)
   {
     auto slot_map = role_iter->second;
@@ -902,7 +881,6 @@ void cedar::proc::gui::Connectable::itemSelected(bool selected)
       slot->setHighlightedBySelection(selected);
     }
   }
-}
 }
 
 const cedar::proc::gui::Connectable::DataSlotNameMap&
@@ -1055,8 +1033,6 @@ bool cedar::proc::gui::Connectable::isRoleDisplayed(cedar::proc::DataRole::Id ro
 
 void cedar::proc::gui::Connectable::addDataItems()
 {
-#pragma acc kernels
-{
   for (const auto& id : cedar::proc::DataRole::type().list())
   {
     if (!isRoleDisplayed(id))
@@ -1072,7 +1048,6 @@ void cedar::proc::gui::Connectable::addDataItems()
       }
     }
   }
-}
 
   this->updateAttachedItems();
 }
@@ -1208,8 +1183,6 @@ void cedar::proc::gui::Connectable::updateDataSlotPositions()
   add_origins[cedar::proc::DataRole::OUTPUT] = QPointF(this->width() + M_DATA_SLOT_PADDING, this->getInputOutputSlotOffset());
   add_directions[cedar::proc::DataRole::OUTPUT] = QPointF(0, 1);
 
-#pragma acc kernels
-{
   for (DataSlotMap::iterator role_it = mSlotMap.begin(); role_it != mSlotMap.end(); ++role_it)
   {
     cedar::proc::DataRole::Id role = role_it->first;
@@ -1250,7 +1223,6 @@ void cedar::proc::gui::Connectable::updateDataSlotPositions()
     }
   }
 }
-}
 
 void cedar::proc::gui::Connectable::updateDecorationPositions()
 {
@@ -1280,7 +1252,6 @@ void cedar::proc::gui::Connectable::updateDecorationPositions()
 
   QPointF offset_dir(-1, 0);
   qreal distance = 15.0;
-#pragma acc kernels
   for (size_t i = 0; i < this->mDecorations.size(); ++i)
   {
     DecorationPtr decoration = this->mDecorations[i];
@@ -1300,7 +1271,6 @@ void cedar::proc::gui::Connectable::demagnetizeSlots()
 
   bool changes = false;
   auto slot_map = slot_map_iter->second;
-#pragma acc kernels
   for (auto slot_iter = slot_map.begin(); slot_iter != slot_map.end(); ++slot_iter)
   {
     cedar::proc::gui::DataSlotItem* p_slot = slot_iter->second;
@@ -1338,7 +1308,6 @@ void cedar::proc::gui::Connectable::magnetizeSlots(const QPointF& mousePositionI
 
   bool changes = false;
   auto slot_map = slot_map_iter->second;
-#pragma acc kernels
   for (auto slot_iter = slot_map.begin(); slot_iter != slot_map.end(); ++slot_iter)
   {
     cedar::proc::gui::DataSlotItem* p_slot = slot_iter->second;
@@ -1437,13 +1406,11 @@ void cedar::proc::gui::Connectable::buildConnectTriggerMenu
   auto triggers = group->listLoopedTriggers();
 
   std::map<std::string, cedar::proc::LoopedTriggerPtr> sorted_triggers;
-#pragma acc kernels
   for (auto trigger : triggers)
   {
     sorted_triggers[trigger->getName()] = trigger;
   }
 
-#pragma acc kernels
   for (const auto& name_trigger_pair : sorted_triggers)
   {
     auto trigger = name_trigger_pair.second;
@@ -1508,8 +1475,6 @@ void cedar::proc::gui::Connectable::fillConnectableMenu(QMenu& menu, QGraphicsSc
 
 void cedar::proc::gui::Connectable::fillDataSerialization(QMenu* pMenu)
 {
-#pragma acc kernels
-{
   for (auto role_enum : cedar::proc::DataRole::type().list())
   {
     if (role_enum.id() == cedar::proc::DataRole::INPUT)
@@ -1550,7 +1515,6 @@ void cedar::proc::gui::Connectable::fillDataSerialization(QMenu* pMenu)
       action->setEnabled(false);
     }
   }
-}
 }
 
 void cedar::proc::gui::Connectable::saveDataClicked()
@@ -1600,7 +1564,6 @@ void cedar::proc::gui::Connectable::fillDisplayStyleMenu(QMenu* pMenu)
 
   p_sub_menu->setEnabled(!this->isReadOnly());
 
-#pragma acc kernels
   for (const cedar::aux::Enum& e : cedar::proc::gui::Connectable::DisplayMode::type().list())
   {
     //!@todo Reenable this mode and fully implement it
@@ -1699,8 +1662,6 @@ void cedar::proc::gui::Connectable::fillPlotMenu(QMenu& menu, QGraphicsSceneCont
   std::map<QAction*, cedar::aux::Enum> action_type_map;
   bool has_data = false;
 
-#pragma acc kernels
-{
   for (std::vector<cedar::aux::Enum>::const_iterator enum_it = cedar::proc::DataRole::type().list().begin();
       enum_it != cedar::proc::DataRole::type().list().end();
       ++enum_it)
@@ -1733,7 +1694,6 @@ void cedar::proc::gui::Connectable::fillPlotMenu(QMenu& menu, QGraphicsSceneCont
       // that's ok, a step may not have any data in a certain role.
     }
   }
-}
 
   if (!has_data)
   {
@@ -1758,7 +1718,6 @@ void cedar::proc::gui::Connectable::fillDefinedPlots(QMenu& menu, const QPoint& 
 #ifdef DEBUG
     bool found = false;
 #endif
-#pragma acc kernels
     for (size_t i = 0; i < elem_decl->definedPlots().size(); ++i)
     {
       const std::string& plot_name = elem_decl->definedPlots()[i].mName;
@@ -1800,7 +1759,6 @@ void cedar::proc::gui::Connectable::fillDefinedPlots(QMenu& menu, const QPoint& 
     p_defined_plots->addSeparator();
 
     // list all defined plots, if available
-#pragma acc kernels
     for (size_t i = 0; i < elem_decl->definedPlots().size(); ++i)
     {
       const std::string& plot_name = elem_decl->definedPlots()[i].mName;
@@ -1829,8 +1787,6 @@ void cedar::proc::gui::Connectable::fillPlots
        QMenu* pMenu//,
        //std::map<QAction*, std::pair<cedar::aux::gui::ConstPlotDeclarationPtr, cedar::aux::Enum> >& declMap
      )
-{
-#pragma acc kernels
 {
   for (const cedar::aux::Enum& e : cedar::proc::DataRole::type().list())
   {
@@ -1882,7 +1838,6 @@ void cedar::proc::gui::Connectable::fillPlots
       }
     }
   }
-}
 }
 
 void cedar::proc::gui::Connectable::addRoleSeparator(const cedar::aux::Enum& e, QMenu* pMenu)
@@ -2010,7 +1965,6 @@ void cedar::proc::gui::Connectable::closeAllPlots()
 
 void cedar::proc::gui::Connectable::toggleVisibilityOfPlots(bool visible)
 {
-#pragma acc kernels
   for (auto childWidget : mChildWidgets)
   {
     childWidget->setVisible(visible);
@@ -2019,7 +1973,6 @@ void cedar::proc::gui::Connectable::toggleVisibilityOfPlots(bool visible)
 
 void cedar::proc::gui::Connectable::closeAllChildWidgets()
 {
-#pragma acc kernels
   for (auto childWidget : mChildWidgets)
   {
     childWidget->close();
@@ -2034,8 +1987,6 @@ void cedar::proc::gui::Connectable::plotAll()
 
   // get datalist of step
   cedar::proc::ElementDeclaration::DataList data = cedar::proc::ElementDeclaration::DataList();
-#pragma acc kernels
-{
   for (const cedar::aux::Enum& e : cedar::proc::DataRole::type().list())
   {
     if (this->getConnectable()->hasSlotForRole(e.id()))
@@ -2048,7 +1999,6 @@ void cedar::proc::gui::Connectable::plotAll()
       }
     }
   }
-}
 
   auto p_plot_widget = new cedar::proc::gui::PlotWidget(this->getConnectable(), data);
   auto p_dock_widget = this->createDockWidgetForPlots(this->getNameForTitle(), p_plot_widget, p_sender->data().toPoint());
@@ -2134,7 +2084,6 @@ void cedar::proc::gui::Connectable::handleContextMenuAction(QAction* action, QGr
 
 void cedar::proc::gui::Connectable::writeOpenChildWidgets(cedar::aux::ConfigurationNode& node) const
 {
-#pragma acc kernels
   for (auto childWidget : mChildWidgets)
   {
     // all widgets in the mChildWidgets Vector should be QDockWidgets that contain a QWidget

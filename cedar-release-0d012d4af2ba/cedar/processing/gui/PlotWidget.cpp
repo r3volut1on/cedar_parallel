@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -109,7 +109,6 @@ void cedar::proc::gui::PlotWidgetPrivate::LabeledPlot::openPlotFromDeclaration(c
     try
     {
       auto declarations = cedar::aux::gui::PlotDeclarationManagerSingleton::getInstance()->find(mpData)->getData();
-#pragma acc kernels
       for (auto declaration : declarations)
       {
         if (declaration->getClassName() == declarationToFind)
@@ -168,7 +167,6 @@ void cedar::proc::gui::PlotWidgetPrivate::LabeledPlot::openPlotFromDeclaration(c
     {
       if (auto multi = dynamic_cast<cedar::aux::gui::MultiPlotInterface*>(this->mpPlotter))
       {
-#pragma acc kernels
         for (auto data_name_pair : mMultiPlotData)
         {
           const auto& data = data_name_pair.first;
@@ -213,7 +211,6 @@ void cedar::proc::gui::PlotWidgetPrivate::LabeledPlot::fillPlotOptions(QMenu* me
   try
   {
     auto declarations = cedar::aux::gui::PlotDeclarationManagerSingleton::getInstance()->find(mpData)->getData();
-#pragma acc kernels
     for (auto declaration : declarations)
     {
       auto action = menu->addAction(QString::fromStdString(declaration->getClassName()));
@@ -244,10 +241,9 @@ mConnectable(connectable),
 mGridSpacing(2),
 mColumns(2),
 mpLayout(new QGridLayout())
-{
+{  
   // make a copy of the data to be plotted
   this->mDataList.clear();
-#pragma acc kernels
   for (const auto& plot_data : data)
   {
     this->mDataList.push_back(boost::make_shared<cedar::proc::PlotData>(*plot_data));
@@ -268,7 +264,6 @@ mpLayout(new QGridLayout())
 
   // make all columns have the same stretch factor
   //!@todo Shouldn't this happen every time the plot is filled, i.e., within fillGridWithPlots?
-#pragma acc kernels
   for (int column = 0; column < mpLayout->columnCount(); ++column)
   {
     this->mpLayout->setColumnStretch(static_cast<size_t>(column), 1);
@@ -277,7 +272,6 @@ mpLayout(new QGridLayout())
 
 cedar::proc::gui::PlotWidget::~PlotWidget()
 {
-#pragma acc kernels
   for(auto connection : this->mSignalConnections)
   {
     connection.disconnect();
@@ -314,7 +308,6 @@ void cedar::proc::gui::PlotWidget::processSlot
 
   LabeledPlotPtr p_current_labeled_plot;
   bool do_append = false;
-#pragma acc kernels
   for (auto plot_grid_map_item : this->mPlotGridMap)
   {
     auto p_labeled_plot = plot_grid_map_item.second;
@@ -362,7 +355,6 @@ void cedar::proc::gui::PlotWidget::fillGridWithPlots()
   };
 
   // iterate over all data slots
-
   for (auto data_item : mDataList)
   {
     try
@@ -379,7 +371,6 @@ void cedar::proc::gui::PlotWidget::fillGridWithPlots()
       {
         // could check if it's a collection with p_input_slot->isCollection();
         // but if it's not this loop should have just one iteration ...
-#pragma acc kernels
         for (size_t i = 0; i < p_input_slot->getDataCount(); ++i)
         {
           process_if_set(p_input_slot->getData(i), data_item);
@@ -445,7 +436,6 @@ void cedar::proc::gui::PlotWidget::fillGridWithPlots()
   }
 
   // remove empty slots from the datalist
-#pragma acc kernels
   for (auto& invalid_data_item : invalid_data)
   {
     mDataList.erase(std::remove(mDataList.begin(), mDataList.end(), invalid_data_item), mDataList.end());
@@ -672,7 +662,6 @@ void cedar::proc::gui::PlotWidget::removeFromQGridlayout(QLayoutItem* item)
 {
   this->mpLayout->removeItem(item);
   QLayout* sublayout = item->layout();
-#pragma acc kernels
   for (int i = 0; i < sublayout->count(); ++i)
   {
     if (sublayout->itemAt(i)->widget() != nullptr)
@@ -710,8 +699,6 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
   root.put_child("data_list", serialize(this->mDataList));
 
   cedar::aux::ConfigurationNode plot_settings;
-#pragma acc kernels
-{
   for (int row = 0; row < this->mpLayout->rowCount(); ++row)
   {
     for (int col = 0; col < this->mpLayout->columnCount(); ++col)
@@ -748,7 +735,6 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
       }
     }
   }
-}
 
   if (!plot_settings.empty())
   {
@@ -760,15 +746,14 @@ void cedar::proc::gui::PlotWidget::writeConfiguration(cedar::aux::ConfigurationN
 cedar::aux::ConfigurationNode cedar::proc::gui::PlotWidget::serialize(const cedar::proc::ElementDeclaration::DataList& dataList) const
 {
   cedar::aux::ConfigurationNode serialized_data;
-
-#pragma acc kernels
+  
   for (auto data_item: dataList)
   {
     cedar::aux::ConfigurationNode value_node;
     data_item->writeConfiguration(value_node);
     serialized_data.push_back(cedar::aux::ConfigurationNode::value_type("", value_node));
   }
-
+  
   return serialized_data;
 }
 
@@ -780,17 +765,17 @@ void cedar::proc::gui::PlotWidget::createAndShowFromConfiguration(const cedar::a
   int height = node.get<int>("height");
   int x = node.get<int>("position_x");
   int y = node.get<int>("position_y");
-
+  
   auto serialized_data_list = node.get_child("data_list");
   cedar::proc::ElementDeclaration::DataList data_list;
-
+  
   for (auto data_item : serialized_data_list)
   {
     auto p_plot_data = cedar::proc::PlotDataPtr(new cedar::proc::PlotData());
     p_plot_data->readConfiguration(data_item.second);
     data_list.push_back(p_plot_data);
   }
-
+  
   auto p_plot_widget = new cedar::proc::gui::PlotWidget(pConnectable->getConnectable(), data_list);
   pConnectable->addPlotWidget(p_plot_widget, x, y, width, height);
 
@@ -799,7 +784,6 @@ void cedar::proc::gui::PlotWidget::createAndShowFromConfiguration(const cedar::a
   auto settings_iter = node.find("plot configurations");
   if (settings_iter != node.not_found())
   {
-#pragma acc kernels
     for (auto cfg_iter : settings_iter->second)
     {
       auto cfg = cfg_iter.second;
@@ -823,6 +807,7 @@ void cedar::proc::gui::PlotWidget::createAndShowFromConfiguration(const cedar::a
       {
         continue;
       }
+
       for (int i = 0; i < layout->count(); ++i)
       {
         auto item = dynamic_cast<QWidgetItem*>(layout->itemAt(i));

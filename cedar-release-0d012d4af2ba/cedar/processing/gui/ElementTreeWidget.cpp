@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -159,7 +159,6 @@ void cedar::proc::gui::ElementTreeWidget::setGroup(cedar::proc::GroupPtr group)
 
 void cedar::proc::gui::ElementTreeWidget::addGroup(cedar::proc::GroupPtr group)
 {
-#pragma acc kernels
   for (const auto& name_element_pair : group->getElements())
   {
     this->translateElementAddedSignal(name_element_pair.second);
@@ -209,12 +208,10 @@ void cedar::proc::gui::ElementTreeWidget::addElement(cedar::proc::ElementPtr ele
 
 void cedar::proc::gui::ElementTreeWidget::disconnectSignals()
 {
-#pragma acc kernels
   for (auto connection : this->mElementAddedConnections)
   {
     connection.disconnect();
   }
-#pragma acc kernels
   for (auto connection : this->mElementRemovedConnections)
   {
     connection.disconnect();
@@ -318,8 +315,6 @@ QTreeWidgetItem* cedar::proc::gui::ElementTreeWidget::getGroupItem(const std::st
   CEDAR_ASSERT(!path.empty());
 
   QTreeWidgetItem* p_last = this->invisibleRootItem();
-#pragma acc kernels
-{
   for (size_t path_index = 0; path.getElementCount() > 0 && path_index < path.getElementCount() - 1; ++path_index)
   {
     std::string component = path[path_index];
@@ -353,7 +348,6 @@ QTreeWidgetItem* cedar::proc::gui::ElementTreeWidget::getGroupItem(const std::st
     }
     p_last = p_item;
   }
-}
 
   return p_last;
 }

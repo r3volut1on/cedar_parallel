@@ -95,8 +95,6 @@ void cedar::proc::gui::RecorderWidget::refreshWidget()
   displayed_roles.push_back(cedar::proc::DataRole::BUFFER);
   displayed_roles.push_back(cedar::proc::DataRole::OUTPUT);
 
-#pragma acc kernels
-{
   for (auto role : displayed_roles)
   {
     if (!this->mConnectable->hasSlotForRole(role))
@@ -118,7 +116,6 @@ void cedar::proc::gui::RecorderWidget::refreshWidget()
       QObject::connect(property, SIGNAL(changed()), this, SIGNAL(settingsChanged()));
     }
   }
-}
 
   mMainLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
@@ -130,7 +127,7 @@ void cedar::proc::gui::RecorderWidget::clear()
 }
 
 void cedar::proc::gui::RecorderWidget::clearLayout()
-{
+{ 
   QLayoutItem *item;
   while ((item = mMainLayout->takeAt(0)) != NULL)
   {
@@ -144,7 +141,7 @@ void cedar::proc::gui::RecorderWidget::clearLayout()
 }
 
 void cedar::proc::gui::RecorderWidget::createHeader(const std::string& name)
-{
+{  
   QHBoxLayout* step_name_layout = new QHBoxLayout();
   //Create step name.
   QLabel* step_name = new QLabel(QString(name.c_str()));
@@ -155,16 +152,16 @@ void cedar::proc::gui::RecorderWidget::createHeader(const std::string& name)
   step_name_layout->addWidget(step_name);
 
   mMainLayout->addLayout(step_name_layout);
-
+  
 
   QHBoxLayout* row_headers = new QHBoxLayout();
   // Create header for the slot names.
   QLabel* label = new QLabel("Slot name");
   row_headers->addWidget(label);
-
+  
   // Create spacer.
   QWidget* empty = new QWidget();
-  empty->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+  empty->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);  
   row_headers->addWidget(empty);
 
   // Create row header for record time.
@@ -175,13 +172,13 @@ void cedar::proc::gui::RecorderWidget::createHeader(const std::string& name)
   // Create spacer row.
   QHBoxLayout* spacer_layout = new QHBoxLayout();
   QWidget* empty2 = new QWidget();
-  empty2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+  empty2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);  
   spacer_layout->addWidget(empty2);
   mMainLayout->addLayout(spacer_layout);
 }
 
 void cedar::proc::gui::RecorderWidget::createRoleSection(const std::string& name)
-{
+{     
   QHBoxLayout* role_font_layout = new QHBoxLayout();
 
   // Create role name.

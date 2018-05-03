@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -157,7 +157,6 @@ cedar::proc::gui::ElementList::TabBase(pParent)
 
   // first, go trough all element declaration entries and put them in the map, thus ordering them
   auto entries = ElementManagerSingleton::getInstance()->getDeclarations();
-#pragma acc kernels
   for (const auto& base_declaration : entries)
   {
     auto declaration = boost::dynamic_pointer_cast<cedar::proc::ConstElementDeclaration>(base_declaration);
@@ -167,7 +166,6 @@ cedar::proc::gui::ElementList::TabBase(pParent)
 
   // also go through all group declarations
   auto group_entries = cedar::proc::GroupDeclarationManagerSingleton::getInstance()->getDefinitions();
-#pragma acc kernels
   for (auto group_entry : group_entries)
   {
     auto declaration = group_entry.second;
@@ -177,7 +175,6 @@ cedar::proc::gui::ElementList::TabBase(pParent)
   // add declarations to the list
   this->clear();
   std::vector<cedar::aux::ConstPluginDeclarationPtr> to_add;
-#pragma acc kernels
   for (const auto& name_params_pair : ordered_entries)
   {
     const auto& declaration = name_params_pair.second;
@@ -454,7 +451,6 @@ QStandardItem* cedar::proc::gui::ElementList::TabBase::makeItemFromGroupDeclarat
 void cedar::proc::gui::ElementList::TabBase::addEntries(const std::vector<cedar::aux::ConstPluginDeclarationPtr>& entries)
 {
   bool blocked = this->model()->blockSignals(true);
-#pragma acc kernels
   for (const auto& declaration : entries)
   {
     QStandardItem* p_item = nullptr;
@@ -501,7 +497,6 @@ void cedar::proc::gui::ElementList::CategoryTab::update()
 
   // first, go trough all element declaration entries and put them in the map, thus ordering them
   auto entries = ElementManagerSingleton::getInstance()->getCategoryEntries(this->mCategoryName);
-#pragma acc kernels
   for (const auto& base_declaration : entries)
   {
     auto declaration = boost::dynamic_pointer_cast<cedar::proc::ConstElementDeclaration>(base_declaration);
@@ -511,7 +506,6 @@ void cedar::proc::gui::ElementList::CategoryTab::update()
 
   // also go through all group declarations
   auto group_entries = cedar::proc::GroupDeclarationManagerSingleton::getInstance()->getDefinitions();
-#pragma acc kernels
   for (auto group_entry : group_entries)
   {
     auto declaration = group_entry.second;
@@ -523,7 +517,6 @@ void cedar::proc::gui::ElementList::CategoryTab::update()
 
   // then, actually add the entries
   std::vector<cedar::aux::ConstPluginDeclarationPtr> to_add;
-#pragma acc kernels
   for (const auto& name_params_pair : ordered_entries)
   {
     const auto& declaration = name_params_pair.second;
@@ -538,7 +531,6 @@ void cedar::proc::gui::ElementList::FavoritesTab::update()
   std::vector<std::string> favorites = cedar::proc::gui::SettingsSingleton::getInstance()->getFavedElements();
 
   std::multimap<std::string, cedar::aux::ConstPluginDeclarationPtr> ordered_list;
-#pragma acc kernels
   for (const auto& class_name : favorites)
   {
     // see if the given declaration is an element declaration
@@ -559,7 +551,6 @@ void cedar::proc::gui::ElementList::FavoritesTab::update()
   }
 
   std::vector<cedar::aux::ConstPluginDeclarationPtr> to_add;
-#pragma acc kernels
   for (const auto& name_declaration_pair : ordered_list)
   {
     to_add.push_back(name_declaration_pair.second);
@@ -599,7 +590,6 @@ QStandardItem* cedar::proc::gui::ElementList::TabBase::makeItem
     QPainter overlayer(&result);
     overlayer.drawPixmap(0, 0, icon_pm);
 
-#pragma acc kernels
     for (size_t i = 0; i < decorations.size(); ++i)
     {
       QIcon decoration(decorations.at(i));
@@ -658,8 +648,6 @@ void cedar::proc::gui::ElementList::reset()
   this->mpFavoritesTab->update();
 
   //!@todo This is inefficient; instead of resetting the entire list every time, just update each tab and create new ones if necessary
-#pragma acc kernels
-{
   for (const auto& category_name : cedar::proc::ElementManagerSingleton::getInstance()->listCategories())
   {
     CategoryTab *p_tab;
@@ -701,7 +689,6 @@ void cedar::proc::gui::ElementList::reset()
     }
   }
 }
-}
 
 void cedar::proc::gui::ElementList::updateSearchResults(QString searchText)
 {
@@ -714,7 +701,6 @@ void cedar::proc::gui::ElementList::updateSearchResults(QString searchText)
   {
     // remove the tab to "hide" it (qt has no method for hiding individual tabs)
     int tab_index = -1;
-#pragma acc kernels
     for (int i = 0; i < this->count(); ++i)
     {
       if (this->widget(i) == this->mpSearchResultTab)
@@ -745,7 +731,6 @@ void cedar::proc::gui::ElementList::updateSearchResults(QString searchText)
 
     // find out the index of the search result tab
     int tab_index = -1;
-#pragma acc kernels
     for (int i = 0; i < this->count(); ++i)
     {
       if (this->widget(i) == this->mpSearchResultTab)
@@ -768,7 +753,6 @@ void cedar::proc::gui::ElementList::updateSearchResults(QString searchText)
 
 void cedar::proc::gui::ElementList::SearchResultsTab::update(const std::string& searchFilter)
 {
-#pragma acc kernels
   for (int row = 0; row < this->model()->rowCount(); ++row)
   {
     QStandardItem* item = cedar::aux::asserted_cast<QStandardItem*>(cedar::aux::asserted_cast<QStandardItemModel*>(this->model())->item(row, 0));

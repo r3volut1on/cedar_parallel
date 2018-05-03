@@ -63,7 +63,6 @@ mGroup(group)
   QObject::connect(this->mpRemoveButton, SIGNAL(clicked()), this, SLOT(removeRowClicked()));
 
   const auto& plots = this->mGroup->getArchitectureWidgets();
-#pragma acc kernels
   for (const auto& name_path_pair : plots)
   {
     const auto& name = name_path_pair.first;
@@ -100,14 +99,12 @@ void cedar::proc::gui::ArchitectureWidgetList::removeRowClicked()
   std::set<int> rows_to_delete;
   auto selected_items = this->mpTable->selectedItems();
 
-#pragma acc kernels
   for (auto item : selected_items)
   {
     rows_to_delete.insert(item->row());
   }
 
   // delete in reverse so that we don't need to care about row indices moving around as a consequence of deleting things
-#pragma acc kernels
   for (auto row_it = rows_to_delete.rbegin(); row_it != rows_to_delete.rend(); ++row_it)
   {
     int row = *row_it;
@@ -119,7 +116,6 @@ void cedar::proc::gui::ArchitectureWidgetList::dialogAccepted()
 {
   std::map<std::string, cedar::aux::Path> new_widgets;
 
-#pragma acc kernels
   for (int row = 0; row < this->mpTable->rowCount(); ++row)
   {
     std::string name = this->mpTable->item(row, 0)->text().toStdString();

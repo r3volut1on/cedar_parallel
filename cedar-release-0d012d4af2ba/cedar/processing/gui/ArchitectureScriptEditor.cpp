@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -156,7 +156,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::scriptStatusChanged(QString new
   auto script = dynamic_cast<cedar::proc::CppScript*>(QObject::sender());
   CEDAR_DEBUG_ASSERT(script);
 
-#pragma acc kernels
   for (int row = 0; row < this->mpScriptList->rowCount(); ++row)
   {
     if (this->mpScriptList->item(row, M_NAME_COL)->text() == QString::fromStdString(script->getName()))
@@ -176,7 +175,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::scriptNameChanged()
   std::string new_name = name_parameter->getValue();
   auto items = this->mpScriptList->findItems(QString::fromStdString(old_name), Qt::MatchExactly);
 
-#pragma acc kernels
   for (auto item : items)
   {
     if (item->column() == M_NAME_COL)
@@ -192,7 +190,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::refreshScriptList()
 {
   this->mpScriptList->setRowCount(0);
 
-#pragma acc kernels
   for (auto script : this->mGroup->getGroup()->getOrderedScripts())
   {
     this->addScriptToList(QString::fromStdString(script->getName()));
@@ -235,7 +232,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::translateScriptRemovedSignal(co
 void cedar::proc::gui::ArchitectureScriptEditor::removeScriptFromList(const QString& scriptName)
 {
   auto items = this->mpScriptList->findItems(scriptName, Qt::MatchExactly);
-#pragma acc kernels
   for (auto item : items)
   {
     if (item->column() == M_NAME_COL)
@@ -268,8 +264,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::fillTypeComboBox()
   auto manager = cedar::proc::CppScriptDeclarationManagerSingleton::getInstance();
 
   bool selected = false;
-#pragma acc kernels
-{
   for (const auto& category : manager->listCategories())
   {
     this->mpTypeSelector->addItem(QString::fromStdString(category));
@@ -290,7 +284,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::fillTypeComboBox()
       }
     }
   }
-}
 }
 
 void cedar::proc::gui::ArchitectureScriptEditor::setComboBoxItemEnabled(int index, bool enabled)
@@ -331,7 +324,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::removeClicked()
 {
   auto selected = this->mpScriptList->selectedItems();
   std::set<std::string> scripts_to_remove;
-#pragma acc kernels
   for (auto item : selected)
   {
     if (item->column() == M_NAME_COL)
@@ -343,7 +335,6 @@ void cedar::proc::gui::ArchitectureScriptEditor::removeClicked()
   if (!scripts_to_remove.empty())
   {
     this->mpConfigurationEditor->clear();
-#pragma acc kernels
     for (const auto& script_name : scripts_to_remove)
     {
       this->mGroup->getGroup()->removeScript(script_name);

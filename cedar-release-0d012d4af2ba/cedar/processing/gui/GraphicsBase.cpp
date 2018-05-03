@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -126,7 +126,6 @@ cedar::proc::gui::GraphicsBase::~GraphicsBase()
     delete *this->mConnections.begin();
   }
 
-#pragma acc kernels
   for (auto resize_handle : this->mpResizeHandles)
   {
     delete resize_handle;
@@ -423,7 +422,6 @@ void cedar::proc::gui::GraphicsBase::addConnection(cedar::proc::gui::Connection*
 void cedar::proc::gui::GraphicsBase::removeConnection(cedar::proc::gui::Connection* pConnection)
 {
   std::vector<Connection*>::iterator it;
-#pragma acc kernels
   for (it = mConnections.begin(); it != mConnections.end(); it++)
   {
     if (*it == pConnection)
@@ -446,7 +444,6 @@ void cedar::proc::gui::GraphicsBase::removeAllConnections()
   this->disconnect();
   // then, delete the graphical representation of the connections
   std::vector<cedar::proc::gui::Connection*> delete_later;
-#pragma acc kernels
   for (std::vector<cedar::proc::gui::Connection*>::iterator it = mConnections.begin(); it != mConnections.end(); ++it)
   {
     if ((*it)->getSource() == this)
@@ -462,7 +459,6 @@ void cedar::proc::gui::GraphicsBase::removeAllConnections()
     delete *it;
   }
   // delete all own connections
-#pragma acc kernels
   for (size_t i = 0; i < delete_later.size(); ++i)
   {
     this->removeConnection(delete_later.at(i));
@@ -788,7 +784,6 @@ QVariant cedar::proc::gui::GraphicsBase::itemChange(GraphicsItemChange change, c
     {
       this->updateConnections();
 
-#pragma acc kernels
       for (size_t i = 0; i < this->mpResizeHandles.size(); ++i)
       {
         this->mpResizeHandles.at(i)->updatePosition();
@@ -800,7 +795,7 @@ QVariant cedar::proc::gui::GraphicsBase::itemChange(GraphicsItemChange change, c
       }
       break;
     }
-
+    
     case QGraphicsItem::ItemSelectedHasChanged:
     {
       this->itemSelectedChanged(value.toBool());
@@ -833,7 +828,6 @@ void cedar::proc::gui::GraphicsBase::updateResizeHandles(bool show)
 {
   if (this->canResize() && show)
   {
-#pragma acc kernels
     for (size_t i = 0; i < cedar::proc::gui::ResizeHandle::directions().size(); ++i)
     {
       this->mpResizeHandles.push_back
@@ -855,7 +849,6 @@ void cedar::proc::gui::GraphicsBase::updateResizeHandles(bool show)
 
 void cedar::proc::gui::GraphicsBase::clearResizeHandles()
 {
-#pragma acc kernels
   for (size_t i = 0; i < this->mpResizeHandles.size(); ++i)
   {
     delete this->mpResizeHandles.at(i);
@@ -872,7 +865,6 @@ bool cedar::proc::gui::GraphicsBase::canResize() const
 void cedar::proc::gui::GraphicsBase::updateConnections()
 {
   QList<QGraphicsItem*> children = this->childItems();
-
   for (int i = 0; i < children.size(); ++i)
   {
     if (cedar::proc::gui::GraphicsBase* child = dynamic_cast<cedar::proc::gui::GraphicsBase*>(children[i]))
@@ -880,7 +872,6 @@ void cedar::proc::gui::GraphicsBase::updateConnections()
       child->updateConnections();
     }
   }
-#pragma acc kernels
   for (size_t i = 0; i < this->mConnections.size(); ++i)
   {
     this->mConnections.at(i)->update();

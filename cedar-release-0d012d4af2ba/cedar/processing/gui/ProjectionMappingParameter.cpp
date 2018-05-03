@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
-
+ 
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -215,7 +215,6 @@ void cedar::proc::gui::ProjectionMappingParameter::propertyChanged()
     = boost::dynamic_pointer_cast<cedar::proc::ProjectionMappingParameter>(this->getParameter());
 
   // delete all the combo boxes
-#pragma acc kernels
   for (size_t i = 0; i < this->mComboBoxes.size(); ++i)
   {
     delete this->mComboBoxes.at(i);
@@ -270,7 +269,6 @@ void cedar::proc::gui::ProjectionMappingParameter::currentIndexChanged(int)
   cedar::proc::ProjectionMappingParameterPtr parameter;
   parameter = boost::dynamic_pointer_cast<cedar::proc::ProjectionMappingParameter>(this->getParameter());
 
-#pragma acc kernels
   for (size_t i = 0; i < this->mComboBoxes.size(); ++i)
   {
     if (this->mComboBoxes.at(i)->currentIndex() == 0)
