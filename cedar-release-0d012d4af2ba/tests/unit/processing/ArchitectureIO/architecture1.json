@@ -1,0 +1,60 @@
+{
+    "meta": {
+        "format": "1"
+    },
+    "steps": {
+        "TestModuleDoubleConnection": {
+            "name": "doubleStep1"
+        },
+        "TestModuleDoubleConnection": {
+            "name": "doubleStep2"
+        },
+        "LoopedTestModule": {
+            "name": "step1",
+            "param": "1"
+        },
+        "TestModule": {
+            "name": "step2",
+            "param": "2"
+        }
+    },
+    "triggers": {
+        "cedar.processing.LoopedTrigger": {
+            "name": "default trigger",
+            "step size": "0.001 s",
+            "idle time": "1e-05 s",
+            "simulated time": "0.001 s",
+            "loop mode": "Fixed",
+            "start with all": "true"
+        },
+        "cedar.processing.LoopedTrigger": {
+            "name": "trigger",
+            "step size": "0.01 s",
+            "idle time": "1e-05 s",
+            "simulated time": "0.001 s",
+            "loop mode": "Fixed",
+            "start with all": "true",
+            "listeners": [
+                "step1"
+            ]
+        }
+    },
+    "connections": [
+        {
+            "source": "step1.output",
+            "target": "step2.input"
+        },
+        {
+            "source": "doubleStep1.output1",
+            "target": "doubleStep2.input1"
+        },
+        {
+            "source": "doubleStep1.output2",
+            "target": "doubleStep2.input2"
+        }
+    ],
+    "name": "",
+    "connectors": "",
+    "is looped": "true",
+    "time factor": "1"
+}

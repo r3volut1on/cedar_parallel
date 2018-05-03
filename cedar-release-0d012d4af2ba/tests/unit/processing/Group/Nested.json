@@ -1,69 +1,52 @@
 {
-    "meta":
-    {
+    "meta": {
         "format": "1"
     },
-    "steps":
-    {
-        "TestModule":
-        {
+    "steps": {
+        "TestModule": {
             "name": "parent step"
         }
     },
-    "triggers":
-    {
-        "cedar.processing.LoopedTrigger":
-        {
+    "triggers": {
+        "cedar.processing.LoopedTrigger": {
             "name": "default trigger",
             "step size": "0.001 s",
             "idle time": "1e-05 s",
             "simulated time": "0.001 s",
             "loop mode": "Fixed",
             "start with all": "true",
-            "listeners":
-            [
+            "listeners": [
                 "parent step",
                 "network child"
             ]
         }
     },
-    "groups":
-    {
-        "network child":
-        {
-            "meta":
-            {
+    "groups": {
+        "network child": {
+            "meta": {
                 "format": "1"
             },
-            "steps":
-            {
-                "TestModule":
-                {
+            "steps": {
+                "TestModule": {
                     "name": "child step"
                 }
             },
-            "triggers":
-            {
-                "cedar.processing.LoopedTrigger":
-                {
+            "triggers": {
+                "cedar.processing.LoopedTrigger": {
                     "name": "looped_trigger",
                     "step size": "0.001 s",
                     "idle time": "1e-05 s",
                     "simulated time": "0.001 s",
                     "loop mode": "Fixed",
                     "start with all": "true",
-                    "listeners":
-                    [
+                    "listeners": [
                         "child step"
                     ]
                 }
             },
-            "groups":
-            {
-                "network grand child":
-                {
-                    "meta":
-                    {
+            "groups": {
+                "network grand child": {
+                    "meta": {
                         "format": "1"
                     },
                     "name": "network grand child",

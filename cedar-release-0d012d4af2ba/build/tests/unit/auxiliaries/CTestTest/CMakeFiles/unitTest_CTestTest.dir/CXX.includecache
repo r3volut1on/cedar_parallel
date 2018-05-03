@@ -1,0 +1,10 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/promethean/Desktop/tim-test/cedar_parallel/cedar-release-0d012d4af2ba/tests/unit/auxiliaries/CTestTest/main.cpp
+

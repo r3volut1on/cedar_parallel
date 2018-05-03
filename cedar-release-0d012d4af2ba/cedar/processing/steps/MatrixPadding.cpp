@@ -378,7 +378,7 @@ void cedar::proc::steps::MatrixPadding::updateOutputSize()
     const cv::Mat& input = this->mInput->getData();
     std::vector<int> dest_size(static_cast<size_t>(input.dims));
     bool changed = (input.type() != this->mPadded->getData().type());
-
+    
     for (size_t d = 0; d < static_cast<size_t>(input.dims); ++d)
     {
       if (d < this->_mPaddedSize->size())

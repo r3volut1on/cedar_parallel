@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+..//cedar/auxiliaries/systemFunctions.h
+cedar/auxiliaries/lib.h
+../cedar/auxiliaries/cedar/auxiliaries/lib.h
+string
+-
+fstream
+-
+vector
+-
+
+..//cedar/defines.h
+cedar/configuration.h
+../cedar/cedar/configuration.h
+boost/shared_ptr.hpp
+-
+boost/weak_ptr.hpp
+-
+
+/home/promethean/Desktop/tim-test/cedar_parallel/cedar-release-0d012d4af2ba/tests/unit/auxiliaries/SystemFunctions/main.cpp
+cedar/auxiliaries/systemFunctions.h
+/home/promethean/Desktop/tim-test/cedar_parallel/cedar-release-0d012d4af2ba/tests/unit/auxiliaries/SystemFunctions/cedar/auxiliaries/systemFunctions.h
+string
+-
+iostream
+-
+
+cedar/auxiliaries/lib.h
+cedar/defines.h
+cedar/auxiliaries/cedar/defines.h
+
+cedar/configuration.h
+
