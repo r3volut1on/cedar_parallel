@@ -1,0 +1,14 @@
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:165:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:193:5: error: case label ‘cedar::aux::SerializationFormat::Compact’ not within a switch statement
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:207:7: error: break statement not within loop or switch
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:211:23: error: invalid use of ‘this’ at top level
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:212:3: error: expected unqualified-id before ‘this’
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/MatData.cpp:213:1: error: expected declaration before ‘}’ token
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Path.cpp:398:31: error: ‘cedar::aux::Path::M_PROTOCOL_ABSOLUTE_STR’ referenced in target region does not have a mappable type
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Recorder.cpp:294:59: error: invalid exit from OpenMP structured block
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.cpp:217:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.cpp:241:3: error: expected unqualified-id before ‘for’
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/Configurable.cpp:371:20: error: expected declaration before end of line
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Gauss.cpp:154:20: error: expected ‘#pragma acc’ clause before ‘{’ token
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Gauss.cpp:204:3: error: expected unqualified-id before ‘else’
+/home/mkinzler/Documents/cedar_chandan/cedar-release-0d012d4af2ba/cedar/auxiliaries/kernel/Gauss.cpp:208:1: error: expected declaration before ‘}’ token

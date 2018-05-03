@@ -1,7 +1,7 @@
 /*======================================================================================================================
 
     Copyright 2011, 2012, 2013, 2014, 2015 Institut fuer Neuroinformatik, Ruhr-Universitaet Bochum, Germany
- 
+
     This file is part of cedar.
 
     cedar is free software: you can redistribute it and/or modify it under
@@ -471,7 +471,6 @@ bool cedar::aux::conv::FFTW::checkCapability
 
   CEDAR_DEBUG_ASSERT(matrix.dims == kernel.dims);
 
-#pragma acc kernels
   for (int d = 0; d < matrix.dims; ++d)
   {
     if (matrix.size[d] < kernel.size[d])
@@ -533,7 +532,7 @@ void cedar::aux::conv::FFTW::saveWisdom(const std::string& uniqueIdentifier)
                           + uniqueIdentifier + "."
                           + "wisdom";
   path.createDirectories();
-                       
+
   fftw_export_wisdom_to_filename(path.toString().c_str());
 }
 
