@@ -315,12 +315,12 @@ cv::Mat cedar::aux::ColorGradient::applyTo(const cv::Mat& matrix, bool limits, d
 
   const unsigned char* p_in;
   unsigned char* p_converted;
-#pragma acc kernels{
+
   for (int i = 0; i < rows; ++i)
   {
     p_in = in_converted.ptr<unsigned char>(i);
     p_converted = converted.ptr<unsigned char>(i);
-//#pragma acc kernels
+
     for (int j = 0; j < cols; ++j)
     {
       size_t v = static_cast<size_t>(p_in[j]);
@@ -337,7 +337,7 @@ cv::Mat cedar::aux::ColorGradient::applyTo(const cv::Mat& matrix, bool limits, d
       p_converted[3 * j + 2] = mLookupTableR.at(v);
     }
   }
-}
+
 
   if (limits)
   {

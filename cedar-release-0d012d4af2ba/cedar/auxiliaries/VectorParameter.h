@@ -313,7 +313,7 @@ public:
   //!@brief checks if a value is already contained in this vector
   bool contains(const T& value) const
   {
-#pragma acc kernels
+
     for (const_iterator iter = this->begin(); iter != this->end(); ++iter)
     {
       if ((*iter) == value)

@@ -356,7 +356,7 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
   regions.resize(2);
   std::vector<std::vector<cv::Range> > kernel_regions;
   kernel_regions.resize(2);
-#pragma acc kernels
+
   for (size_t dim = 0; dim < cedar::aux::math::getDimensionalityOf(matrix); ++dim)
   {
     int kernel_center = kernel.size[dim]/2;
@@ -387,7 +387,7 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
 #pragma acc kernels
   for (size_t part = 0; part < static_cast<unsigned int>((1 << cedar::aux::math::getDimensionalityOf(matrix))); ++part)
   {
-#pragma acc kernels
+
     for (size_t dim = 0; dim < cedar::aux::math::getDimensionalityOf(matrix); ++dim)
     {
       if (part & (1 << dim))
@@ -411,7 +411,7 @@ cv::Mat cedar::aux::conv::FFTW::padKernel(const cv::Mat& matrix, const cv::Mat& 
 
     // if there are empty ranges (where start == end), skip this part
     bool skip = false;
-#pragma acc kernels
+
     for (auto range : output_index)
     {
       if (range.start == range.end)
@@ -541,7 +541,7 @@ fftw_plan cedar::aux::conv::FFTW::getForwardPlan(unsigned int dimensionality, st
 {
   CEDAR_ASSERT(sizes.size() == dimensionality);
   std::string unique_identifier = cedar::aux::toString(sizes.at(0));
-#pragma acc kernels
+
   for (unsigned int i = 1; i < sizes.size(); ++i)
   {
     unique_identifier += "." + cedar::aux::toString(sizes.at(i));
@@ -613,7 +613,7 @@ fftw_plan cedar::aux::conv::FFTW::getBackwardPlan(unsigned int dimensionality, s
 {
   CEDAR_ASSERT(sizes.size() == dimensionality);
   std::string unique_identifier = cedar::aux::toString(sizes.at(0));
-#pragma acc kernels
+
   for (unsigned int i = 1; i < sizes.size(); ++i)
   {
     unique_identifier += "." + cedar::aux::toString(sizes.at(i));

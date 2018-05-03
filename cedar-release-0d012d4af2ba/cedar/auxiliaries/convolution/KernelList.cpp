@@ -152,7 +152,7 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
     {
       sizes.at(dim) = 0;
     }
-#pragma acc kernels{
+
     for (size_t i = 0; i < this->size(); ++i)
     {
 //#pragma acc kernels
@@ -164,10 +164,9 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
         }
       }
     }
-}
+
     new_combined_kernel = cv::Mat(this->getKernel(0)->getDimensionality(), &sizes.front(), CV_32F);
     new_combined_kernel = 0.0;
-#pragma acc kernels{
     for (size_t i = 0; i < this->size(); ++i)
     {
       // determine ROI
@@ -180,7 +179,7 @@ void cedar::aux::conv::KernelList::calculateCombinedKernel()
       }
       new_combined_kernel(&ranges.front()) += this->getKernel(i)->getKernel();
     }
-  }
+  
   }
   mCombinedKernel->setData(new_combined_kernel);
   write_lock.unlock();

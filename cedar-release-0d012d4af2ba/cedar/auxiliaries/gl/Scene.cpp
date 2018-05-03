@@ -150,7 +150,6 @@ void cedar::aux::gl::Scene::draw()
     glColor3f(1.0, 1.0, 1.0);
     const float numberOfPatches = 100;
     glNormal3f(0.0, 0.0, 1.0);
-#pragma acc kernels{
     for (int j=0; j<numberOfPatches; ++j)
     {
       glBegin(GL_QUAD_STRIP);
@@ -168,7 +167,7 @@ void cedar::aux::gl::Scene::draw()
         }
       glEnd();
     }
-  }
+  
   }
 }
 
