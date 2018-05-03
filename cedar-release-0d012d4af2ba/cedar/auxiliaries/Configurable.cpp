@@ -214,7 +214,8 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
 {
   std::vector<std::string> parameter_paths;
 
-#pragma acc kernels{
+#pragma acc kernels
+{
   for (auto parameter : this->mParameterList)
   {
     parameter_paths.push_back(parameter->getName());
@@ -237,7 +238,6 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
   }
 }
 
-//#pragma acc kernels
   for (const auto& name_child_iter : this->mChildren)
   {
     auto child_parameter_paths = name_child_iter.second->listAllParameters();
@@ -368,7 +368,6 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
   }
 
   // then, check if it belongs to any of the children of this
-#pragma acc kernels
   for (auto name_child_pair : this->mChildren)
   {
     const auto& child_name = name_child_pair.first;
@@ -386,7 +385,8 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
   }
 
   // check if it is part of an object parameter
-#pragma acc kernels{
+#pragma acc kernels
+{
   for (auto parameter : this->mParameterList)
   {
     if (parameter->hasSingleConfigurableChild())

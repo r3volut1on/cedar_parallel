@@ -162,7 +162,8 @@ void cedar::aux::MatData::deserialize(std::istream& stream, cedar::aux::Serializ
       std::vector<int> index(sizes.size(), 0);
       // currently, not implemented for multiple channels
       CEDAR_ASSERT(mat.channels() == 1);
-#pragma acc kernels{
+#pragma acc kernels
+{
       for (const auto& data_str : data_entries)
       {
         switch (mat.type())
@@ -238,14 +239,14 @@ void cedar::aux::MatData::serializeData(std::ostream& stream, cedar::aux::Serial
 
         // get memory address of the element.
         uchar* element = mData.data;
-#pragma acc kernels
+//#pragma acc kernels
         for (int i = 0; i < mData.dims; i++)
         {
           //Addresses an element of the Mat. See OpenCV Documentation.
           element += mData.step[i]*index[i];
         }
         //check data type
-#pragma acc kernels
+//#pragma acc kernels
         for (int i = 0; i < mData.channels(); i++)
         {
           switch (mData.depth())
@@ -296,7 +297,7 @@ void cedar::aux::MatData::serializeData(std::ostream& stream, cedar::aux::Serial
         //!@todo This is slow in multiple ways; a faster approach would be to iterate over the linear memory with a linear index
         //!@todo Also, we have an iterator class for iterating over a 3d matrix
         index[0]++;
-#pragma acc kernels
+//#pragma acc kernels
         for (int i = 0; i < mData.dims-1; i++)
         {
           if (index[i] >= mData.size[i])
@@ -315,7 +316,7 @@ void cedar::aux::MatData::serializeData(std::ostream& stream, cedar::aux::Serial
       CEDAR_ASSERT(this->mData.isContinuous());
       // create a string buffer that will hold the binary representation of all elements
       std::string buffer(this->mData.elemSize() * this->mData.total(), '\0');
-#pragma acc kernels
+//#pragma acc kernels
       for (size_t i = 0; i < mData.total() * this->mData.elemSize(); ++i)
       {
         buffer[i] = this->mData.data[i];

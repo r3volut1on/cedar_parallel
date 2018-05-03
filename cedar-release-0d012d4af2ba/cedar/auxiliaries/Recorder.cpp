@@ -286,7 +286,7 @@ cedar::unit::Time cedar::aux::Recorder::getRecordIntervalTime(const std::string&
 
 cedar::unit::Time cedar::aux::Recorder::getRecordIntervalTime(cedar::aux::ConstDataPtr data) const
 {
-#pragma acc kernels
+
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)

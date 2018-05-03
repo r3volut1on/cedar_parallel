@@ -382,7 +382,7 @@ void cedar::aux::Path::fromString(const std::string& path)
 
   // the path can either start with a specification of the protocol, or be a plain path
   PARSE_STATE state = STATE_PROTOCOL_OR_PATH;
-#pragma acc kernels
+
   for (size_t i = 0; i < path.size(); ++i)
   {
     const char& c = path.at(i);
