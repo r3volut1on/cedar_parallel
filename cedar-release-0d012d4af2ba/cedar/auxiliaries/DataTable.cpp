@@ -223,7 +223,7 @@ std::set<std::string> cedar::aux::DataTable::IndexMap::listIndexNames() const
 {
   std::set<std::string> ids;
 
-#pragma acc kernels
+//#pragma acc kernels
   for (const auto& name_id_pair : this->map.left)
   {
     ids.insert(name_id_pair.first);
@@ -283,7 +283,7 @@ cedar::aux::DataTable::ConstRowCollectionPtr cedar::aux::DataTable::RowCollectio
   CEDAR_ASSERT(table);
   RowCollectionPtr result(new RowCollection(table));
 
-#pragma acc kernels
+//#pragma acc kernels
   for (auto row : this->mRows)
   {
     if (selector(row))
@@ -351,7 +351,7 @@ double cedar::aux::DataTable::RowCollection::sum(const boost::function<double(Co
 {
   double sum = 0.0;
 
-#pragma acc kernels
+//#pragma acc kernels
   for (auto row : this->mRows)
   {
     sum += valueFunction(row);

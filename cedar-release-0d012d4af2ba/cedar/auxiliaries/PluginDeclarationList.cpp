@@ -187,7 +187,7 @@ void cedar::aux::PluginDeclarationList::readDeclaration(const cedar::aux::Config
 cedar::aux::PluginDeclarationPtr
   cedar::aux::PluginDeclarationList::findPluginDeclaration(const std::string& className) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (size_t i = 0; i < this->mDeclarations.size(); ++i)
   {
     if (this->mDeclarations.at(i)->getClassName() == className)

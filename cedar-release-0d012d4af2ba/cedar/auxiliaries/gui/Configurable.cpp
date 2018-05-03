@@ -218,7 +218,7 @@ int cedar::aux::gui::Configurable::getRootIndexForItem(QTreeWidgetItem* pItem) c
     p_root = p_root->parent();
   }
 
-#pragma acc kernels
+//#pragma acc kernels
   for (int i = 0; i < this->mpPropertyTree->topLevelItemCount(); ++i)
   {
     if (this->mpPropertyTree->topLevelItem(i) == p_root)
@@ -645,7 +645,7 @@ QTreeWidgetItem* cedar::aux::gui::Configurable::getItemForParameter(cedar::aux::
 {
   CEDAR_DEBUG_ASSERT(parameter != nullptr);
 
-#pragma acc kernels
+//#pragma acc kernels
   for (QTreeWidgetItemIterator iter(this->mpPropertyTree); *iter != nullptr; ++iter)
   {
     auto item = *iter;

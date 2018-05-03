@@ -304,7 +304,7 @@ bool cedar::aux::Recorder::isRegistered(const std::string& name) const
 
 bool cedar::aux::Recorder::isRegistered(cedar::aux::ConstDataPtr data) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)
@@ -322,7 +322,7 @@ void cedar::aux::Recorder::renameRegisteredData(cedar::aux::ConstDataPtr data, c
   {
     CEDAR_THROW(cedar::aux::RecorderException, "Cannot rename data while recorder is running");
   }
-#pragma acc kernels
+//#pragma acc kernels
   for (auto data_spectator : mDataSpectators)
   {
     if (data_spectator.second->getData() == data)

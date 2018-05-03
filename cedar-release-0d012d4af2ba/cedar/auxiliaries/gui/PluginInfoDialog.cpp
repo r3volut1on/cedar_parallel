@@ -128,7 +128,7 @@ void cedar::aux::gui::PluginInfoDialog::addDeclarationToPage
 
 int cedar::aux::gui::PluginInfoDialog::getCategoryPageId(const std::string& category) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (int i = 0; i < this->mpDeclarationsTab->count(); ++i)
   {
     if (this->mpDeclarationsTab->tabText(i).toStdString() == category)

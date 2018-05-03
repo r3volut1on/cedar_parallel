@@ -465,7 +465,7 @@ std::string cedar::aux::gui::PluginManagerDialog::getPluginNameFromRow(int row) 
 
 int cedar::aux::gui::PluginManagerDialog::getPluginRowFromName(const std::string& pluginName) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (int row = 0; row < this->mpPluginList->rowCount(); ++row)
   {
     if (this->getPluginNameFromRow(row) == pluginName)
@@ -480,12 +480,12 @@ int cedar::aux::gui::PluginManagerDialog::getPluginRowFromName(const std::string
 void cedar::aux::gui::PluginManagerDialog::openInfoDialog()
 {
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
+#pragma acc kernels{
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
+//#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       std::string plugin_name = this->getPluginNameFromRow(row);
@@ -496,16 +496,17 @@ void cedar::aux::gui::PluginManagerDialog::openInfoDialog()
     }
   }
 }
+}
 
 void cedar::aux::gui::PluginManagerDialog::loadSelectedPlugins()
 {
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
+#pragma acc kernels{
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
+//#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       std::string plugin_name = this->getPluginNameFromRow(row);
@@ -518,23 +519,25 @@ void cedar::aux::gui::PluginManagerDialog::loadSelectedPlugins()
     }
   }
 }
+}
 
 void cedar::aux::gui::PluginManagerDialog::removeSelectedPlugins()
 {
   std::vector<std::string> to_remove;
 
   QList<QTableWidgetSelectionRange> ranges = this->mpPluginList->selectedRanges();
-#pragma acc kernels
+#pragma acc kernels{
   for (int i = 0; i < ranges.size(); ++i)
   {
     const QTableWidgetSelectionRange& range = ranges.at(i);
 
-#pragma acc kernels
+//#pragma acc kernels
     for (int row = range.topRow(); row <= range.bottomRow(); ++row)
     {
       to_remove.push_back(this->getPluginNameFromRow(row));
     }
   }
+}
 
 #pragma acc kernels
   for (size_t i = 0; i < to_remove.size(); ++i)

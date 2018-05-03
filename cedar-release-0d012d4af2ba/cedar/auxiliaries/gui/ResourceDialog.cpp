@@ -280,7 +280,7 @@ void cedar::aux::gui::ResourceDialog::appendFiles
 
         // see if the file's extension matches any of the set ones
         bool matched = false;
-#pragma acc kernels
+//#pragma acc kernels
         for (size_t i = 0; i < this->mExtensions.size(); ++i)
         {
           if (extension == this->mExtensions.at(i))

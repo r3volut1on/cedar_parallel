@@ -255,16 +255,16 @@ void cedar::aux::gui::MatrixSlicePlot3D::slicesFromMat(const cv::Mat& mat)
   // for each tile, copy content to right place
   unsigned int max_rows = static_cast<unsigned int>(mat.size[0]);
   unsigned int max_columns = static_cast<unsigned int>(mat.size[1]);
-#pragma acc kernels
+#pragma acc kernels{
   for (unsigned int tile = 0; tile < tiles; ++tile)
   {
     // current tile offset
     unsigned int row_offset = (mat.size[0] + 1) * (tile / columns);
     unsigned int column_offset = (mat.size[1] + 1) * (tile % columns);
-#pragma acc kernels
+//#pragma acc kernels
     for (unsigned int row = 0; row < max_rows; ++row)
     {
-#pragma acc kernels
+//#pragma acc kernels
       for (unsigned int column = 0; column < max_columns; ++column)
       {
         std::vector<int> index;
@@ -280,6 +280,7 @@ void cedar::aux::gui::MatrixSlicePlot3D::slicesFromMat(const cv::Mat& mat)
       }
     }
   }
+}
   if (this->isAutoScaling())
   {
     cv::minMaxLoc(mSliceMatrix, &min, &max);

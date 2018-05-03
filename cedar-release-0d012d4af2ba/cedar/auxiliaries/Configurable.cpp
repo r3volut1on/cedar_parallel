@@ -144,7 +144,7 @@ size_t cedar::aux::Configurable::countAdvanced() const
     }
   }
 
-#pragma acc kernels
+//#pragma acc kernels
   for (auto iter = this->mChildren.begin(); iter != this->mChildren.end(); ++iter)
   {
     cedar::aux::ConfigurablePtr conf = iter->second;
@@ -214,20 +214,20 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
 {
   std::vector<std::string> parameter_paths;
 
-#pragma acc kernels
+#pragma acc kernels{
   for (auto parameter : this->mParameterList)
   {
     parameter_paths.push_back(parameter->getName());
 
     if (parameter->canHaveConfigurableChildren())
     {
-#pragma acc kernels
+//#pragma acc kernels
       for (size_t i = 0; i < parameter->getNumberOfConfigurableChildren(); ++i)
       {
         auto child = parameter->getConfigurableChild(i);
         auto child_parameter_paths = child->listAllParameters();
 
-#pragma acc kernels
+//#pragma acc kernels
         for (auto child_path : child_parameter_paths)
         {
           parameter_paths.push_back(parameter->getName() + "[" + parameter->childIndexToString(i) + "]." + child_path);
@@ -235,13 +235,14 @@ std::vector<std::string> cedar::aux::Configurable::listAllParameters() const
       }
     }
   }
+}
 
-#pragma acc kernels
+//#pragma acc kernels
   for (const auto& name_child_iter : this->mChildren)
   {
     auto child_parameter_paths = name_child_iter.second->listAllParameters();
 
-#pragma acc kernels
+//#pragma acc kernels
     for (auto child_path : child_parameter_paths)
     {
       parameter_paths.push_back(name_child_iter.first + "." + child_path);
@@ -385,7 +386,7 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
   }
 
   // check if it is part of an object parameter
-#pragma acc kernels
+#pragma acc kernels{
   for (auto parameter : this->mParameterList)
   {
     if (parameter->hasSingleConfigurableChild())
@@ -404,7 +405,7 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
     }
     else if (parameter->canHaveConfigurableChildren())
     {
-#pragma acc kernels
+//#pragma acc kernels
       for (size_t i = 0; i < parameter->getNumberOfConfigurableChildren(); ++i)
       {
         auto child = parameter->getConfigurableChild(i);
@@ -421,6 +422,7 @@ std::string cedar::aux::Configurable::findParameterPath(cedar::aux::ParameterPtr
       }
     }
   }
+}
 
   CEDAR_THROW(cedar::aux::NotFoundException, "Could not locate parameter \"" + findParameter->getName() + "\".");
 }
@@ -748,7 +750,7 @@ void cedar::aux::Configurable::writeConfiguration(cedar::aux::ConfigurationNode&
 
 void cedar::aux::Configurable::readConfiguration(const cedar::aux::ConfigurationNode& node)
 {
-#pragma acc kernels
+#pragma acc kernels{
   for (ParameterList::iterator iter = this->mParameterList.begin(); iter != this->mParameterList.end(); ++iter)
   {
     cedar::aux::ParameterPtr& parameter = *iter;
@@ -764,7 +766,7 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
       {
         // if so, see if there is a node for any of them
         const std::vector<std::string>& depr_names = depr_iter->second;
-#pragma acc kernels
+//#pragma acc kernels
         for (auto iter = depr_names.begin(); iter != depr_names.end(); ++iter)
         {
           const std::string& deprecated_name = *iter;
@@ -790,7 +792,7 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
         std::string error_message;
         error_message = "Mandatory parameter " + parameter->getName() + " not found in configuration. Node names are:";
 
-#pragma acc kernels
+//#pragma acc kernels
         for (cedar::aux::ConfigurationNode::const_iterator node_iter = node.begin();
              node_iter != node.end();
              ++node_iter)
@@ -817,6 +819,7 @@ void cedar::aux::Configurable::readConfiguration(const cedar::aux::Configuration
     // reset the changed flag of the parameter
     (*iter)->setChangedFlag(false);
   } // for parameter
+}
 
 #pragma acc kernels
   for (Children::iterator child = this->mChildren.begin(); child != this->mChildren.end(); ++child)

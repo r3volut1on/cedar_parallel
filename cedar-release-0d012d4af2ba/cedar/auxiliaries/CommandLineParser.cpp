@@ -161,7 +161,7 @@ void cedar::aux::CommandLineParser::readConfigFromFile(const cedar::aux::Path& p
 
 void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationNode& root)
 {
-#pragma acc kernels
+#pragma acc kernels{
   for (auto node_iter = root.begin(); node_iter != root.end(); ++node_iter)
   {
     const std::string& group_name = node_iter->first;
@@ -178,7 +178,7 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
     if (flags_iter != group.not_found())
     {
       auto flags_node = flags_iter->second;
-#pragma acc kernels
+//#pragma acc kernels
       for (auto iter = flags_node.begin(); iter != flags_node.end(); ++iter)
       {
         auto long_name = iter->first;
@@ -206,7 +206,7 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
     if (values_iter != group.not_found())
     {
       auto values_node = values_iter->second;
-#pragma acc kernels
+//#pragma acc kernels
       for (auto iter = values_node.begin(); iter != values_node.end(); ++iter)
       {
         auto long_name = iter->first;
@@ -215,6 +215,7 @@ void cedar::aux::CommandLineParser::readConfiguration(cedar::aux::ConfigurationN
       }
     }
   }
+}
 }
 
 void cedar::aux::CommandLineParser::writeConfigToFile(const cedar::aux::Path& path) const
@@ -471,7 +472,7 @@ void cedar::aux::CommandLineParser::parse(int argc, char* argv[], bool terminati
 
   STATE state = STATE_PLAIN;
   std::string current_option;
-#pragma acc kernels
+//#pragma acc kernels
   for (size_t i = 1; i < this->mArguments.size(); ++i)
   {
     auto string = this->mArguments.at(i);
@@ -512,7 +513,7 @@ void cedar::aux::CommandLineParser::parse(int argc, char* argv[], bool terminati
           else
           {
             // series of short names
-#pragma acc kernels
+//#pragma acc kernels
             for (size_t i = 1; i < string.size(); ++i)
             {
               char short_name = string.at(i);
@@ -629,7 +630,7 @@ bool cedar::aux::CommandLineParser::shortNameExists(char shortName) const
 
 bool cedar::aux::CommandLineParser::hasShortNameFor(const std::string& longName) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (auto iter = this->mAbbreviations.begin(); iter != this->mAbbreviations.end(); ++iter)
   {
     if (iter->second == longName)
@@ -662,7 +663,7 @@ const std::string& cedar::aux::CommandLineParser::getValue(const std::string& lo
 
 char cedar::aux::CommandLineParser::getShortNameFor(const std::string& longName) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (auto iter = this->mAbbreviations.begin(); iter != this->mAbbreviations.end(); ++iter)
   {
     if (iter->second == longName)
@@ -706,7 +707,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       stream << std::endl;
     }
 
-#pragma acc kernels
+#pragma acc kernels{
     for (auto iter = options.begin(); iter != options.end(); ++iter)
     {
       auto long_name = *iter;
@@ -738,7 +739,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       {
         stream << "    Possible Values are: ";
         bool first = true;
-#pragma acc kernels
+//#pragma acc kernels
         for (auto value : this->mEnumValues.find(long_name)->second->list())
         {
           if (first)
@@ -755,6 +756,7 @@ void cedar::aux::CommandLineParser::writeHelp(std::ostream& stream) const
       }
 
       stream << std::endl;
+    }
     } // option iter
 
     stream << "-----" << std::endl << std::endl;

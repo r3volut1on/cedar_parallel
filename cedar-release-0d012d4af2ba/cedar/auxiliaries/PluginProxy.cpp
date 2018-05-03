@@ -302,7 +302,7 @@ std::string cedar::aux::PluginProxy::findPluginNoThrow(const std::string& plugin
     return pluginName;
   }
 
-#pragma acc kernels
+//#pragma acc kernels
   for (const auto& workspace : cedar::aux::SettingsSingleton::getInstance()->getPluginSearchPaths())
   {
     std::vector<std::string> searched_sub_paths;
@@ -373,7 +373,7 @@ std::string cedar::aux::PluginProxy::findPluginInWorkspaceNoThrow(const std::str
   subpaths_to_search.push_back("Release");
   subpaths_to_search.push_back(pluginName);
 
-#pragma acc kernels
+//#pragma acc kernels
   for (size_t i = 0; i < subpaths_to_search.size(); ++i)
   {
     const std::string& subpath = subpaths_to_search.at(i);

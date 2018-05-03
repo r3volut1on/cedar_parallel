@@ -162,7 +162,7 @@ void cedar::aux::MatData::deserialize(std::istream& stream, cedar::aux::Serializ
       std::vector<int> index(sizes.size(), 0);
       // currently, not implemented for multiple channels
       CEDAR_ASSERT(mat.channels() == 1);
-#pragma acc kernels
+#pragma acc kernels{
       for (const auto& data_str : data_entries)
       {
         switch (mat.type())
@@ -176,7 +176,7 @@ void cedar::aux::MatData::deserialize(std::istream& stream, cedar::aux::Serializ
             CEDAR_ASSERT(false);
         }
         ++index[0];
-#pragma acc kernels
+//#pragma acc kernels
         for (int i = 0; i < mat.dims - 1; ++i)
         {
           if (index[i] >= mat.size[i])
@@ -186,6 +186,7 @@ void cedar::aux::MatData::deserialize(std::istream& stream, cedar::aux::Serializ
           }
         }
       }
+    }
       break;
     } // case SERIALIZE_CSV
 

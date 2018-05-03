@@ -322,7 +322,7 @@ int cedar::aux::ImageDatabase::FrameAnnotation::getPrevKeyframe(int frame)
 {
   int prevFrame = -1;
   
-#pragma acc kernels
+//#pragma acc kernels
   for(auto iter = this->mFrameAnnotationMapping.begin(); iter!= this->mFrameAnnotationMapping.end(); ++iter)
   {
     //find previous annotation
@@ -342,7 +342,7 @@ int cedar::aux::ImageDatabase::FrameAnnotation::getNextKeyframe(int frame)
 {
   int nextFrame = -1;
   
-#pragma acc kernels
+//#pragma acc kernels
   for(auto iter = this->mFrameAnnotationMapping.begin(); iter!= this->mFrameAnnotationMapping.end(); ++iter)
   {
     //find next annotation
@@ -415,7 +415,7 @@ unsigned int cedar::aux::ImageDatabase::Image::getImageColumns() const
 
 cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageByFilename(const cedar::aux::Path& fileName) const
 {
-#pragma acc kernels
+//#pragma acc kernels
   for (auto image : this->mImages)
   {
     if (image->getFileName() == fileName)
@@ -429,7 +429,7 @@ cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageByFilena
 
 bool cedar::aux::ImageDatabase::isKnownImageExtension(std::string extension)
 {
-#pragma acc kernels
+//#pragma acc kernels
 	for(auto it = M_STANDARD_KNOWN_IMAGE_FILE_EXTENSIONS.begin(); it != M_STANDARD_KNOWN_IMAGE_FILE_EXTENSIONS.end(); ++it)
   {
   	if (extension == *it)
@@ -442,7 +442,7 @@ bool cedar::aux::ImageDatabase::isKnownImageExtension(std::string extension)
 
 bool cedar::aux::ImageDatabase::isKnownVideoExtension(std::string extension)
 {
-#pragma acc kernels
+//#pragma acc kernels
 	for(auto it = M_STANDARD_KNOWN_VIDEO_FILE_EXTENSIONS.begin(); it != M_STANDARD_KNOWN_VIDEO_FILE_EXTENSIONS.end(); ++it)
   {
   	if (extension == *it)
@@ -473,10 +473,10 @@ std::vector<cedar::aux::ImageDatabase::ImagePtr>
   }
 
   std::vector<ImagePtr> ordered_samples;
-#pragma acc kernels
+//#pragma acc kernels
   for (auto current_id : ids)
   {
-#pragma acc kernels
+//#pragma acc kernels
     for (auto image : images)
     {
       if (image->getClassId() == current_id)
@@ -670,11 +670,11 @@ std::set<cedar::aux::ImageDatabase::ImagePtr>
   cedar::aux::ImageDatabase::getImagesWithAllTags(const std::vector<std::string>& tags) const
 {
   std::set<ImagePtr> result;
-#pragma acc kernels
+//#pragma acc kernels
   for (auto image : this->mImages)
   {
     bool has_all_tags = true;
-#pragma acc kernels
+//#pragma acc kernels
     for (const auto& tag : tags)
     {
       if (!image->hasTag(tag))
@@ -752,11 +752,11 @@ void cedar::aux::ImageDatabase::appendImage(ImagePtr sample)
 
 cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageWithFilenameNoPath(const std::string& filenameWithoutExtension)
 {
-#pragma acc kernels
+#pragma acc kernels{
   for (const auto& image : this->mImages)
   {
   	//check images
-#pragma acc kernels
+//#pragma acc kernels
   	for(auto it = M_STANDARD_KNOWN_IMAGE_FILE_EXTENSIONS.begin(); it != M_STANDARD_KNOWN_IMAGE_FILE_EXTENSIONS.end(); ++it)
   	{
   		if (image->getFileName().getFileNameOnly() == filenameWithoutExtension + "." + *it)
@@ -766,7 +766,7 @@ cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageWithFile
     }
     
     //check videos
-#pragma acc kernels
+//#pragma acc kernels
     for(auto it = M_STANDARD_KNOWN_VIDEO_FILE_EXTENSIONS.begin(); it != M_STANDARD_KNOWN_VIDEO_FILE_EXTENSIONS.end(); ++it)
   	{
   		if (image->getFileName().getFileNameOnly() == filenameWithoutExtension + "." + *it)
@@ -775,6 +775,7 @@ cedar::aux::ImageDatabase::ImagePtr cedar::aux::ImageDatabase::findImageWithFile
     	}
     }
   }
+}
   CEDAR_THROW(cedar::aux::NotFoundException, "Could not find sample " + filenameWithoutExtension);
 }
 
@@ -1278,7 +1279,7 @@ void cedar::aux::ImageDatabase::readCOIL100(const cedar::aux::Path& path)
 void cedar::aux::ImageDatabase::readETH80CroppedClose(const cedar::aux::Path& path)
 {
   // check all folders for the right contents
-#pragma acc kernels
+//#pragma acc kernels
   for (const auto& folder : path.listSubdirectories())
   {
     std::string class_and_instance = folder.getLast();
@@ -1292,7 +1293,7 @@ void cedar::aux::ImageDatabase::readETH80CroppedClose(const cedar::aux::Path& pa
     std::string instance = class_and_instance.substr(sep + 1);
 
     auto class_id = this->getOrCreateClass(class_name);
-#pragma acc kernels
+//#pragma acc kernels
     for (const auto& file : folder.listFiles())
     {
       ImagePtr image(new Image());
@@ -1396,15 +1397,16 @@ size_t cedar::aux::ImageDatabase::getTagCount() const
 std::set<std::string> cedar::aux::ImageDatabase::listTags() const
 {
   std::set<std::string> tags;
-#pragma acc kernels
+#pragma acc kernels{
   for (auto image : this->mImages)
   {
-#pragma acc kernels
+//#pragma acc kernels
     for (const auto& tag : image->getTags())
     {
       tags.insert(tag);
     }
   }
+}
   return tags;
 }
 

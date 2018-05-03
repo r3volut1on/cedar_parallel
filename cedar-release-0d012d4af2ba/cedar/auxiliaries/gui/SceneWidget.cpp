@@ -308,7 +308,7 @@ void cedar::aux::gui::SceneWidget::init()
 
   updateObjectSelectionComboBox();
 //  // fill combo box with names of objects in the scene
-#pragma acc kernels
+//#pragma acc kernels
 //  for (int i=0; i<mpScene->getNumberOfObjectVisualizations(); i++)
 //  {
 //    mpComboBoxName->addItem
